@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Real Estate App</title>
+    <meta name="viewport" content="width=deice-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" id='nav_bar'>
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
+        </a>
+        <button data-collapse-toggle="navbar-hamburger" type="button" class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-hamburger" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+        </button>
+        <div class="hidden w-full" id="navbar-hamburger">
+        <ul class="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+            <li>
+            <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded-sm dark:bg-blue-600" aria-current="page">Home</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+    <main class="flex flex-row">
+        <div class='input'>
+                <form class="max-w-sm mx-auto" id="predict-form"  method="GET">
+                <div class="mb-5">
+                    <label for="land_area" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Land Area (m²)</label>
+                    <input type="number" id="land_area" name="land_area" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter land area" required />
+                </div>
+                <div class="mb-5">
+                    <label for="address_line_2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address_line_2</label>
+                    <input type="text" id="address_line_2" name="address_line_2" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter commune" />
+                </div>
+                <div class="mb-5">
+                    <label for="address_locality" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address_locality</label>
+                    <input type="text" id="address_locality" name="address_locality" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter district" />
+                </div>
+                <div class="mb-5">
+                    <label for="address_subdivision" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address_subdivision</label>
+                    <input type="text" id="address_subdivision" name="address_subdivision" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter city" />
+                </div>
+                <button type="submit" id="predict-btn" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Predict</button>            
+            </form>
+            <script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('predict-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const landAreaInput = document.getElementById('land_area');
+        const landArea = parseFloat(landAreaInput.value);
+        if (isNaN(landArea) || landArea <= 0) {
+            document.getElementById('result').innerText = "Please enter a valid land area.";
+            landAreaInput.focus();
+            return;
+        }
+        fetch(`/run-model?land_area=${landArea}`)
+            .then(response => response.json())
+            .then(data => {
+    if(data.price !== undefined) {
+        document.getElementById('result').innerHTML =
+            `<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-4 border border-blue-200 dark:border-blue-700">
+                <div class="flex items-center mb-2">
+                    <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 16v-4"></path>
+                    </svg>
+                    <span class="text-xl font-semibold text-blue-700">Prediction Result</span>
+                </div>
+                <div class="mb-1 text-gray-700 dark:text-gray-200">
+                    <span class="font-medium">Prediction per m²:</span>
+                    <span class="text-blue-600 font-bold">${data.prediction.toLocaleString(undefined, {maximumFractionDigits:2})} $</span>
+                </div>
+                <div class="mb-1 text-gray-700 dark:text-gray-200">
+                    <span class="font-medium">Land area:</span>
+                    <span class="text-green-600 font-bold">${data.land_area}</span>
+                </div>
+                <div class="mb-1 text-gray-700 dark:text-gray-200">
+                    <span class="font-medium">Total price:</span>
+                    <span class="text-pink-600 font-bold text-lg">${data.price.toLocaleString(undefined, {maximumFractionDigits:2})} $</span>
+                </div>
+            </div>`;
+    } else {
+        document.getElementById('result').innerHTML =
+            `<div class="bg-red-100 text-red-700 rounded p-4 mt-4">Prediction error: ${data.error || "Unknown error"}</div>`;
+    }
+})
+    });
+});
+</script>
+        <div id="result" class="mt-4 text-lg font-bold"></div>
+        </div>
+        <div class='map'>
+            <iframe src="{{ url_for('static', filename='map.html') }}" width="100%" height="600" style="border:none;"></iframe>
+        </div>
+    </main>
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+  </body>
+</html>

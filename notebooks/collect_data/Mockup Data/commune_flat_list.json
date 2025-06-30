@@ -1,0 +1,467 @@
+[
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Boeng Keng Kang Ti Bei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Boeng Keng Kang Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Boeng Keng Kang Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Boeng Trabaek"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Olympic"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Phsar Daeum Thkov"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Tonle Basak"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Tumnob Tuek"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Tuol Svay Prey Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Tuol Svay Prey Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Tuol Tumpung Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chamkar Mon",
+    "commune": "Tuol Tumpung Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Chbar Ampov Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Chhbar Ampov Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Kbal Kaoh"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Nirouth"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Preaek Aeng"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Preaek Pra"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Preaek Thmei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chbar Ampov",
+    "commune": "Veal Sbov"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chraoy Chongvar",
+    "commune": "Bak Kaeng"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chraoy Chongvar",
+    "commune": "Chrouy Changvar"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chraoy Chongvar",
+    "commune": "Kaoh Dach"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chraoy Chongvar",
+    "commune": "Preaek Lieb"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Chraoy Chongvar",
+    "commune": "Preaek Ta Sek"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Cheung Aek"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Dangkao"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Kong Noy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Pong Tuek"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Preaek Kampues"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Prey Sa"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Prey Veaeng"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Roluos"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Sak Sampov"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Spean Thma"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Dangkao",
+    "commune": "Tien"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Boeng Reang"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Chakto Mukh"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Chey Chummeah"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Phsar Chas"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Phsar Kandal Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Phsar Kandal Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Phsar Thmei Ti Bei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Phsar Thmei Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Phsar Thmei Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Srah Chak"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Doun Penh",
+    "commune": "Voat Phnum"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Mean Chey",
+    "commune": "Boeng Tumpun"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Mean Chey",
+    "commune": "Chak Angrae Kraom"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Mean Chey",
+    "commune": "Chak Angrae Leu"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Mean Chey",
+    "commune": "Stueng Mean Chey"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Praek Pnov",
+    "commune": "Kouk Roka"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Praek Pnov",
+    "commune": "Ponhea Pon"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Praek Pnov",
+    "commune": "Ponsang"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Praek Pnov",
+    "commune": "Preaek Phnov"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Boeng Proluet"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Mittapheap"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Monourom"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Ou Ruessei Ti Bei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Ou Ruessei Ti Buon"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Ou Ruessei Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Ou Ruessei Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Prampir Meakkakra",
+    "commune": "Veal Vong"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Boeng Thum"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Chaom Chau"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Kakab"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Kamboul"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Kantaok"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Ovlaok"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Phleung Chheh Roteh"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Samraong Kraom"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Snaor"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Pur SenChey",
+    "commune": "Trapeang Krasang"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Russey Keo",
+    "commune": "Chrang Chamreh Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Russey Keo",
+    "commune": "Chrang Chamreh Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Russey Keo",
+    "commune": "Kilomaetr Lekh Prammuoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Russey Keo",
+    "commune": "Ruessei Kaev"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Russey Keo",
+    "commune": "Svay Pak"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Russey Keo",
+    "commune": "Tuol Sangke"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Saensokh",
+    "commune": "Khmuonh"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Saensokh",
+    "commune": "Krang Thnong"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Saensokh",
+    "commune": "Phnom Penh Thmei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Saensokh",
+    "commune": "Tuek Thla"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Boeng Kak Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Boeng Kak Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Boeng Salang"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Phsar Daeum Kor"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Phsar Depou Ti Bei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Phsar Depou Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Phsar Depou Ti Pir"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Tuek L'ak Ti Bei"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Tuek L'ak Ti Muoy"
+  },
+  {
+    "city": "Phnom Penh",
+    "district": "Tuol Kouk",
+    "commune": "Tuek L'ak Ti Pir"
+  }
+]

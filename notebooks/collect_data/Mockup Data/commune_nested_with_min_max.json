@@ -1,0 +1,493 @@
+{
+  "Phnom Penh": {
+    "Chamkar Mon": [
+      {
+        "commune": "Boeng Keng Kang Ti Bei",
+        "min": 2500,
+        "max": 6500
+      },
+      {
+        "commune": "Boeng Keng Kang Ti Muoy",
+        "min": 4500,
+        "max": 9000
+      },
+      {
+        "commune": "Boeng Keng Kang Ti Pir",
+        "min": 2500,
+        "max": 6500
+      },
+      {
+        "commune": "Boeng Trabaek",
+        "min": 1800,
+        "max": 4800
+      },
+      {
+        "commune": "Olympic",
+        "min": 2500,
+        "max": 7600
+      },
+      {
+        "commune": "Phsar Daeum Thkov",
+        "min": 1400,
+        "max": 4800
+      },
+      {
+        "commune": "Tonle Basak",
+        "min": 2300,
+        "max": 6700
+      },
+      {
+        "commune": "Tumnob Tuek",
+        "min": 2500,
+        "max": 7100
+      },
+      {
+        "commune": "Tuol Svay Prey Ti Muoy",
+        "min": 2500,
+        "max": 7100
+      },
+      {
+        "commune": "Tuol Svay Prey Ti Pir",
+        "min": 2500,
+        "max": 6900
+      },
+      {
+        "commune": "Tuol Tumpung Ti Muoy",
+        "min": 2400,
+        "max": 6700
+      },
+      {
+        "commune": "Tuol Tumpung Ti Pir",
+        "min": 2300,
+        "max": 6700
+      }
+    ],
+    "Chbar Ampov": [
+      {
+        "commune": "Chbar Ampov Ti Pir",
+        "min": 400,
+        "max": 2960
+      },
+      {
+        "commune": "Chhbar Ampov Ti Muoy",
+        "min": 400,
+        "max": 2960
+      },
+      {
+        "commune": "Kbal Kaoh",
+        "min": 60,
+        "max": 680
+      },
+      {
+        "commune": "Nirouth",
+        "min": 400,
+        "max": 2370
+      },
+      {
+        "commune": "Preaek Aeng",
+        "min": 160,
+        "max": 1010
+      },
+      {
+        "commune": "Preaek Pra",
+        "min": 160,
+        "max": 1010
+      },
+      {
+        "commune": "Preaek Thmei",
+        "min": 30,
+        "max": 550
+      },
+      {
+        "commune": "Veal Sbov",
+        "min": 160,
+        "max": 1440
+      }
+    ],
+    "Chraoy Chongvar": [
+      {
+        "commune": "Bak Kaeng",
+        "min": 60,
+        "max": 800
+      },
+      {
+        "commune": "Chrouy Changvar",
+        "min": 700,
+        "max": 3100
+      },
+      {
+        "commune": "Kaoh Dach",
+        "min": 20,
+        "max": 300
+      },
+      {
+        "commune": "Preaek Lieb",
+        "min": 340,
+        "max": 2800
+      },
+      {
+        "commune": "Preaek Ta Sek",
+        "min": 160,
+        "max": 900
+      }
+    ],
+    "Dangkao": [
+      {
+        "commune": "Cheung Aek",
+        "min": 100,
+        "max": 760
+      },
+      {
+        "commune": "Dangkao",
+        "min": 130,
+        "max": 2110
+      },
+      {
+        "commune": "Kong Noy",
+        "min": 20,
+        "max": 140
+      },
+      {
+        "commune": "Pong Tuek",
+        "min": 50,
+        "max": 490
+      },
+      {
+        "commune": "Preaek Kampues",
+        "min": 50,
+        "max": 320
+      },
+      {
+        "commune": "Prey Sa",
+        "min": 100,
+        "max": 970
+      },
+      {
+        "commune": "Prey Veaeng",
+        "min": 50,
+        "max": 370
+      },
+      {
+        "commune": "Roluos",
+        "min": 50,
+        "max": 290
+      },
+      {
+        "commune": "Sak Sampov",
+        "min": 80,
+        "max": 970
+      },
+      {
+        "commune": "Spean Thma",
+        "min": 80,
+        "max": 310
+      },
+      {
+        "commune": "Tien",
+        "min": 41,
+        "max": 290
+      }
+    ],
+    "Doun Penh": [
+      {
+        "commune": "Boeng Reang",
+        "min": 2700,
+        "max": 6900
+      },
+      {
+        "commune": "Chakto Mukh",
+        "min": 2500,
+        "max": 8500
+      },
+      {
+        "commune": "Chey Chummeah",
+        "min": 2500,
+        "max": 7400
+      },
+      {
+        "commune": "Phsar Chas",
+        "min": 3400,
+        "max": 6300
+      },
+      {
+        "commune": "Phsar Kandal Ti Muoy",
+        "min": 2600,
+        "max": 11000
+      },
+      {
+        "commune": "Phsar Kandal Ti Pir",
+        "min": 2600,
+        "max": 11000
+      },
+      {
+        "commune": "Phsar Thmei Ti Bei",
+        "min": 2600,
+        "max": 12000
+      },
+      {
+        "commune": "Phsar Thmei Ti Muoy",
+        "min": 2600,
+        "max": 12000
+      },
+      {
+        "commune": "Phsar Thmei Ti Pir",
+        "min": 2600,
+        "max": 12000
+      },
+      {
+        "commune": "Srah Chak",
+        "min": 1900,
+        "max": 5300
+      },
+      {
+        "commune": "Voat Phnum",
+        "min": 2400,
+        "max": 5500
+      }
+    ],
+    "Mean Chey": [
+      {
+        "commune": "Boeng Tumpun",
+        "min": 450,
+        "max": 3800
+      },
+      {
+        "commune": "Chak Angrae Kraom",
+        "min": 750,
+        "max": 2900
+      },
+      {
+        "commune": "Chak Angrae Leu",
+        "min": 850,
+        "max": 3300
+      },
+      {
+        "commune": "Stueng Mean Chey",
+        "min": 450,
+        "max": 4000
+      }
+    ],
+    "Praek Pnov": [
+      {
+        "commune": "Kouk Roka",
+        "min": 140,
+        "max": 1100
+      },
+      {
+        "commune": "Ponhea Pon",
+        "min": 24,
+        "max": 200
+      },
+      {
+        "commune": "Ponsang",
+        "min": 16,
+        "max": 284
+      },
+      {
+        "commune": "Preaek Phnov",
+        "min": 100,
+        "max": 1300
+      }
+    ],
+    "Prampir Meakkakra": [
+      {
+        "commune": "Boeng Proluet",
+        "min": 2600,
+        "max": 7200
+      },
+      {
+        "commune": "Mittapheap",
+        "min": 2000,
+        "max": 5300
+      },
+      {
+        "commune": "Monourom",
+        "min": 2400,
+        "max": 6300
+      },
+      {
+        "commune": "Ou Ruessei Ti Bei",
+        "min": 3300,
+        "max": 7200
+      },
+      {
+        "commune": "Ou Ruessei Ti Buon",
+        "min": 3300,
+        "max": 7200
+      },
+      {
+        "commune": "Ou Ruessei Ti Muoy",
+        "min": 3300,
+        "max": 7200
+      },
+      {
+        "commune": "Ou Ruessei Ti Pir",
+        "min": 3300,
+        "max": 7200
+      },
+      {
+        "commune": "Veal Vong",
+        "min": 2400,
+        "max": 6300
+      }
+    ],
+    "Pur SenChey": [
+      {
+        "commune": "Boeng Thum",
+        "min": 41,
+        "max": 203
+      },
+      {
+        "commune": "Chaom Chau",
+        "min": 360,
+        "max": 2300
+      },
+      {
+        "commune": "Kakab",
+        "min": 270,
+        "max": 2800
+      },
+      {
+        "commune": "Kamboul",
+        "min": 49,
+        "max": 1460
+      },
+      {
+        "commune": "Kantaok",
+        "min": 65,
+        "max": 1458
+      },
+      {
+        "commune": "Ovlaok",
+        "min": 32,
+        "max": 122
+      },
+      {
+        "commune": "Phleung Chheh Roteh",
+        "min": 81,
+        "max": 486
+      },
+      {
+        "commune": "Samraong Kraom",
+        "min": 60,
+        "max": 610
+      },
+      {
+        "commune": "Snaor",
+        "min": 49,
+        "max": 243
+      },
+      {
+        "commune": "Trapeang Krasang",
+        "min": 60,
+        "max": 540
+      }
+    ],
+    "Russey Keo": [
+      {
+        "commune": "Chrang Chamreh Ti Muoy",
+        "min": 550,
+        "max": 1600
+      },
+      {
+        "commune": "Chrang Chamreh Ti Pir",
+        "min": 550,
+        "max": 1600
+      },
+      {
+        "commune": "Kilomaetr Lekh Prammuoy",
+        "min": 550,
+        "max": 1600 
+      },
+      {
+        "commune": "Ruessei Kaev",
+        "min": 450,
+        "max": 2900
+      },
+      {
+        "commune": "Svay Pak",
+        "min": 350,
+        "max": 1000
+      },
+      {
+        "commune": "Tuol Sangke",
+        "min": 600,
+        "max": 3100
+      }
+    ],
+    "Saensokh": [
+      {
+        "commune": "Khmuonh",
+        "min": 280,
+        "max": 1600
+      },
+      {
+        "commune": "Krang Thnong",
+        "min": 280,
+        "max": 1600
+      },
+      {
+        "commune": "Phnom Penh Thmei",
+        "min": 700,
+        "max": 3600
+      },
+      {
+        "commune": "Tuek Thla",
+        "min":  800,
+        "max": 3600
+      }
+    ],
+    "Tuol Kouk": [
+      {
+        "commune": "Boeng Kak Ti Muoy",
+        "min": 2000,
+        "max": 5500
+      },
+      {
+        "commune": "Boeng Kak Ti Pir",
+        "min": 2000,
+        "max": 5500
+      },
+      {
+        "commune": "Boeng Salang",
+        "min": 1600,
+        "max": 4900
+      },
+      {
+        "commune": "Phsar Daeum Kor",
+        "min": 1800,
+        "max": 5000
+      },
+      {
+        "commune": "Phsar Depou Ti Bei",
+        "min": 1800,
+        "max": 5100
+      },
+      {
+        "commune": "Phsar Depou Ti Muoy",
+        "min": 1800,
+        "max": 5000
+      },
+      {
+        "commune": "Phsar Depou Ti Pir",
+        "min": 1800,
+        "max": 5100
+      },
+      {
+        "commune": "Tuek L'ak Ti Bei",
+        "min": 1800,
+        "max": 4700
+      },
+      {
+        "commune": "Tuek L'ak Ti Muoy",
+        "min": 1800,
+        "max": 5000
+      },
+      {
+        "commune": "Tuek L'ak Ti Pir",
+        "min": 1800,
+        "max": 5000
+      }
+    ]
+  }
+}

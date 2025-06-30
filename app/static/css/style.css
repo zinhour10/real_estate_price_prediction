@@ -1,0 +1,25 @@
+body{
+    background-color: #a9cf38;
+}
+#nav_bar{
+    background-color: white;
+}
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.input{
+    width: 30%;
+    padding: 20px 0 0 0;
+}
+.map{
+    width: 70%;
+    padding: 20px 20px 0 0;
+}
+footer{
+    margin-top: 20px;
+}
+#result {
+    margin: 0 40px 0 40px;
+}
