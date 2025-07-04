@@ -4,6 +4,8 @@ from .shared import stored_coords
 from .pipeline import get_features_for_current_coords, predict_with_model, model
 from .features import get_all_features
 
+last_prediction = {}  # <-- Define at module level
+
 def map_routes(app):
     @app.route("/")
     def index():
@@ -32,16 +34,38 @@ def map_routes(app):
         except Exception as e:
             return jsonify({"error": str(e)}), 400
 
+    @app.route("/last-prediction", methods=["GET"])
+    def get_last_prediction():
+        if not last_prediction:
+            return jsonify({"error": "No prediction made yet"}), 400
+        return jsonify(last_prediction)
+
     @app.route("/run-model", methods=["GET"])
     def run_model():
+        global last_prediction  # Only one global statement, at the top!
         try:
-            land_area = float(request.args.get("land_area", 0))            
+            land_area_str = request.args.get("land_area")
+            if not land_area_str:
+                if not last_prediction:
+                    return jsonify({"error": "No prediction made yet"}), 400
+                return jsonify(last_prediction)
+            land_area = float(land_area_str)
+            lat = stored_coords.get('lat')
+            lon = stored_coords.get('lon')
+            if lat is None or lon is None:
+                return jsonify({"error": "Coordinates not set"}), 400
             y_pred = predict_with_model(model)
             price = land_area * y_pred
-            return jsonify(
-                prediction=y_pred,
-                land_area=land_area,
-                price=price
-            )
+            price_lower = price * 0.9
+            price_upper = price * 1.1
+            last_prediction = {
+                "price_per_m2": y_pred,
+                "land_area": land_area,
+                "price": price,
+                "lat": lat,
+                "lon": lon,
+                "price_range": [price_lower, price_upper]
+            }
+            return jsonify(last_prediction)
         except Exception as e:
             return jsonify({"error": str(e)}), 400

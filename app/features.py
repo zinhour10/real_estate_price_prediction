@@ -40,7 +40,7 @@ road_types = [
     'tertiary', 'track', 'trunk', 'trunk_link', 'unclassified', 'unused'
 ]
 
-def get_road_type_features(lat, lon, distance=500):
+def get_road_type_features(lat, lon, distance=100):
     # Create point and project to metric CRS
     point = gpd.GeoDataFrame(
         [{'geometry': Point(lon, lat)}],
@@ -110,7 +110,9 @@ central_places = [
     {"name": "Vattanac_Tower", "lat": 11.5729518, "lon": 104.9170059},
     {"name": "Royal_Palace", "lat": 11.5638469, "lon": 104.9283975},
     {"name": "Sisowath_Riverside_Park", "lat": 11.5694802, "lon": 104.9316061},
-    {"name": "Phnom_Penh_Airport", "lat": 11.5497995, "lon": 104.8375804}
+    {"name": "Phnom_Penh_Airport", "lat": 11.5497995, "lon": 104.8375804},
+    {"name": "Phsar_Chas", "lat": 11.5732803, "lon": 104.9257973},
+    {"name": "Phsar_kandal", "lat": 11.5686593, "lon": 104.9288564}
 ]
 
 def get_central_place_features(lat, lon):
@@ -177,6 +179,8 @@ def get_all_features(lat, lon):
     h_id = address_features.get('h_id')
     features.update(get_h_id_price_stats(h_id))
     features.update(get_road_type_features(lat, lon))
+    features['latitude'] = lat
+    features['longitude'] = lon
     return features
 
 if __name__ == "__main__":

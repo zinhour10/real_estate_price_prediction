@@ -186,6 +186,16 @@
         "commune": "Tien",
         "min": 41,
         "max": 290
+      },
+      {
+        "commune": "Krang Pongro",
+        "min": 40,
+        "max": 310
+      },
+      {
+        "commune": "Prateah Lang",
+        "min": 500,
+        "max": 1461
       }
     ],
     "Doun Penh": [
@@ -287,6 +297,11 @@
         "commune": "Preaek Phnov",
         "min": 100,
         "max": 1300
+      },
+      {
+        "commune": "Samraong",
+        "min": 24,
+        "max": 324
       }
     ],
     "Prampir Meakkakra": [

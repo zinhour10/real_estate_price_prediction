@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_c92b1b6ae3a08b6b1716deff700fe58c {
+                #map_901d2b85f28d30f4d79a8ff3d5b1b155 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -39,14 +39,14 @@
 <body>
     
     
-            <div class="folium-map" id="map_c92b1b6ae3a08b6b1716deff700fe58c" ></div>
+            <div class="folium-map" id="map_901d2b85f28d30f4d79a8ff3d5b1b155" ></div>
         
 </body>
 <script>
     
     
-            var map_c92b1b6ae3a08b6b1716deff700fe58c = L.map(
-                "map_c92b1b6ae3a08b6b1716deff700fe58c",
+            var map_901d2b85f28d30f4d79a8ff3d5b1b155 = L.map(
+                "map_901d2b85f28d30f4d79a8ff3d5b1b155",
                 {
                     center: [11.5750454, 104.9240291],
                     crs: L.CRS.EPSG3857,
@@ -60,17 +60,98 @@
 
         
     
-            var tile_layer_3743475b0783e0d6de8967ebd7e7ec33 = L.tileLayer(
+            var tile_layer_7f280c760753b3436f5879a91db584a1 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_c92b1b6ae3a08b6b1716deff700fe58c);
+            ).addTo(map_901d2b85f28d30f4d79a8ff3d5b1b155);
         
     
-                var lat_lng_popup_c456c6c1f1fb1df8ccbd0de43f643329 = L.popup();
+                var lat_lng_popup_a1ccc78dc38e35e15639762fdd3f699b = L.popup();
                 
-        //custom code
+        // custom code
+            window.map = map_901d2b85f28d30f4d79a8ff3d5b1b155;
+            window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'moveToLocation') {
+                var lat = event.data.lat;
+                var lng = event.data.lng;
+                if (typeof L !== 'undefined' && window.map) {
+                    window.map.setView([lat, lng], 16); // or your preferred zoom
+                    latLngPop({ latlng: { lat: lat, lng: lng } });
+
+                }
+            }
+        });
+
+        // --- Add custom search box to map container ---
+        var searchDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom', map_901d2b85f28d30f4d79a8ff3d5b1b155.getContainer());
+        searchDiv.style.position = 'absolute';
+        searchDiv.style.top = '10px';
+        searchDiv.style.left = '50px';
+        searchDiv.style.zIndex = 1000;
+        searchDiv.innerHTML = `
+            <input id="custom-map-search" type="text" placeholder="Search location..." style="padding:4px 8px; border-radius:4px; border:1px solid #ccc; width:220px;"/>
+            <ul id="custom-search-suggestions" style="background:white; border:1px solid #ccc; border-radius:4px; margin:0; padding:0; list-style:none; position:absolute; width:220px; display:none; max-height:180px; overflow-y:auto;"></ul>
+        `;
+
+        // Prevent map dragging when interacting with search
+        var searchInput = searchDiv.querySelector('#custom-map-search');
+        var suggestions = searchDiv.querySelector('#custom-search-suggestions');
+        L.DomEvent.disableClickPropagation(searchDiv);
+
+        // --- AJAX search with Nominatim ---
+        var searchTimeout = null;
+        searchInput.addEventListener('keyup', function(e) {
+            clearTimeout(searchTimeout);
+            var query = this.value.trim();
+            if (!query) {
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+                return;
+            }
+            searchTimeout = setTimeout(function() {
+                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query))
+                    .then(res => res.json())
+                    .then(data => {
+                        suggestions.innerHTML = '';
+                        if (data.length === 0) {
+                            suggestions.style.display = 'none';
+                            return;
+                        }
+                        data.slice(0, 7).forEach(function(place) {
+                            var li = document.createElement('li');
+                            li.textContent = place.display_name;
+                            li.style.padding = '6px 8px';
+                            li.style.cursor = 'pointer';
+                            li.onmouseover = function() { li.style.background = '#e0e7ff'; };
+                            li.onmouseout = function() { li.style.background = ''; };
+                            li.onclick = function() {
+                                var lat = parseFloat(place.lat);
+                                var lon = parseFloat(place.lon);
+                                map_901d2b85f28d30f4d79a8ff3d5b1b155.setView([lat, lon], 16);
+                                suggestions.innerHTML = '';
+                                suggestions.style.display = 'none';
+                                searchInput.value = place.display_name;
+                            };
+                            suggestions.appendChild(li);
+                        });
+                        suggestions.style.display = 'block';
+                    });
+            }, 250);
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchDiv.contains(e.target)) {
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+            }
+        });
+
+        // --- Only one marker logic ---
+        window.lastAddedMarker = null;
+
         function latLngPop(e) {
-            lat_lng_popup_c456c6c1f1fb1df8ccbd0de43f643329
+            lat_lng_popup_a1ccc78dc38e35e15639762fdd3f699b
                 .setLatLng(e.latlng)
                 .setContent(
                     `<div style='font-family:Arial,sans-serif;'>
@@ -91,17 +172,48 @@
                                         longitude: ${e.latlng.lng}
                                     })
                                 }).then(response => response.json()).then(data => {
-                                    L.marker([${e.latlng.lat}, ${e.latlng.lng}]).addTo(map_c92b1b6ae3a08b6b1716deff700fe58c);
+                                    // Remove old marker if exists
+                                    if (window.lastAddedMarker) {
+                                        map_901d2b85f28d30f4d79a8ff3d5b1b155.removeLayer(window.lastAddedMarker);
+                                    }
+                                    // Add new marker and save reference
+                                    window.lastAddedMarker = L.marker([${e.latlng.lat}, ${e.latlng.lng}]).addTo(map_901d2b85f28d30f4d79a8ff3d5b1b155);
                                     // Fetch features and fill form fields
                                     fetch('/get-features')
                                         .then(response => response.json())
                                         .then(data => {
-                                            if(window.parent.document.getElementById('address_line_2'))
-                                                window.parent.document.getElementById('address_line_2').value = data.address_line_2 || '';
-                                            if(window.parent.document.getElementById('address_locality'))
-                                                window.parent.document.getElementById('address_locality').value = data.address_locality || '';
-                                            if(window.parent.document.getElementById('address_subdivision'))
-                                                window.parent.document.getElementById('address_subdivision').value = data.address_subdivision || '';
+                                            function setDropdown(selectId, value, labelPrefix) {
+                                                var select = window.parent.document.getElementById(selectId);
+                                                if (select) {
+                                                    select.innerHTML = '';
+                                                    var defaultOption = document.createElement('option');
+                                                    defaultOption.selected = true;
+                                                    defaultOption.disabled = true;
+                                                    defaultOption.textContent = 'Choose a ' + labelPrefix;
+                                                    select.appendChild(defaultOption);
+                                                    // Add the new value as an option and select it
+                                                    if (value) {
+                                                        var opt = document.createElement('option');
+                                                        opt.value = value;
+                                                        opt.textContent = value;
+                                                        opt.selected = true;
+                                                        select.appendChild(opt);
+                                                    }
+                                                }
+                                            }
+                                            setDropdown('address_subdivision', data.address_subdivision, 'City');
+                                            setDropdown('address_locality', data.address_locality, 'District');
+                                            setDropdown('address_line_2', data.address_line_2, 'Commune');
+                                            
+                                            var latInput = window.parent.document.getElementById('latitude');
+                                            var lonInput = window.parent.document.getElementById('longitude');
+                                            if (latInput && data.latitude !== undefined) {
+                                                latInput.value = data.latitude;
+                                            }
+                                            if (lonInput && data.longitude !== undefined) {
+                                                lonInput.value = data.longitude;
+                                            }
+                                            
                                         });
                                     console.log(data);
                                 });">
@@ -109,13 +221,13 @@
                         </button>
                     </div>`
                 )
-                .openOn(map_c92b1b6ae3a08b6b1716deff700fe58c);
+                .openOn(map_901d2b85f28d30f4d79a8ff3d5b1b155);
             console.log("Latitude: " + e.latlng.lat.toFixed(4));
             console.log("Longitude: " + e.latlng.lng.toFixed(4));
         }
         // end custom code
     
-                map_c92b1b6ae3a08b6b1716deff700fe58c.on('click', latLngPop);
+                map_901d2b85f28d30f4d79a8ff3d5b1b155.on('click', latLngPop);
             
 </script>
 </html>

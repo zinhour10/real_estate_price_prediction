@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LandValue Pro | Land Price Prediction</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        'primary-dark': '#1d4ed8',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        gray: '#94a3b8',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .map-container {
+            height: 500px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        .input-card, .results-card {
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        .price-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .confidence-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        .info-card {
+            background: #f1f5f9;
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+        .util-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            transition: all 0.3s;
+        }
+        .util-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        .stat-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 0.8rem;
+            text-align: center;
+        }
+        .location-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            background: #dbeafe;
+            border-radius: 50px;
+            font-size: 0.875rem;
+        }
+        .location-section {
+            background: #f1f5f9;
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        
+
+<nav class="bg-white border-gray-200 dark:bg-gray-900">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+    </a>
+    <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+    </button>
+  </div>
+</nav>
+
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Map -->
+            <div class="lg:col-span-2">
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Select Location</h2>
+                    <div class="map-container">
+                        <div id="map" class="h-full w-full"></div>
+                    </div>
+                </div>
+                
+                <!-- Location Details -->
+                <div class="location-section">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Location Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                            <select id="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a City</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">District</label>
+                            <select id="district" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a District</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Commune</label>
+                            <select id="commune" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a Commune</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <span class="location-tag"><i class="fas fa-city text-primary"></i> Los Angeles</span>
+                        <span class="location-tag"><i class="fas fa-map-marker-alt text-primary"></i> Downtown</span>
+                        <span class="location-tag"><i class="fas fa-home text-primary"></i> Central Commune</span>
+                        <span class="location-tag"><i class="fas fa-map-pin text-primary"></i> 34.0522° N, 118.2437° W</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Input and Results -->
+            <div>
+                <!-- Input Card -->
+                <div class="input-card bg-white p-6 mb-6">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-calculator text-primary text-xl mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Enter Coordinates</h3>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Coordinates</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Latitude</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-globe-americas text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="latitude" class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary" value="34.0522">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Longitude</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-globe text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="longitude" class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary" value="-118.2437">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Land Details</label>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Area (m<sup>2</sup>)</label>
+                                <input type="text" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary" value="1.25">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="get-location" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
+                            <i class="fas fa-location-arrow mr-2"></i> My Location
+                        </button>
+                        <button id="copy-coords" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
+                            <i class="fas fa-copy mr-2"></i> Copy
+                        </button>
+                    </div>
+                    
+                    <button id="predict-btn" class="w-full mt-6 bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium flex items-center justify-center">
+                        <i class="fas fa-bolt mr-2"></i> Predict Land Value
+                    </button>
+                </div>
+                
+                <!-- Results Card -->
+                <div class="results-card bg-white p-6">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-chart-line text-primary text-xl mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Prediction Results</h3>
+                    </div>
+                    
+                    <div id="results" class="text-center py-4">
+                        <div class="text-gray-500 mb-4">
+                            <i class="fas fa-map-marker-alt text-2xl mb-2"></i>
+                            <p>Enter coordinates and click "Predict" to see results</p>
+                        </div>
+                        
+                        <div id="result-display" class="hidden">
+                            <div class="price-display text-primary mb-2">$725,000</div>
+                            <div class="confidence-badge bg-blue-100 text-primary mb-6">92% Confidence</div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="info-card">
+                                    <p class="text-sm text-gray-500">Price per Acre</p>
+                                    <p class="font-semibold">$1,250,000</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="text-sm text-gray-500">Prediction Range</p>
+                                    <p class="font-semibold">$650k - $800k</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="text-sm text-gray-500">Last Sale Price</p>
+                                    <p class="font-semibold">$580,000 (2022)</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="text-sm text-gray-500">Market Trend</p>
+                                    <p class="font-semibold text-green-600">+12% YoY</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 gap-3 mb-6">
+                               
+                                <div class="util-btn flex flex-col items-center justify-center p-4 cursor-pointer">
+                                    <i class="fas fa-file-pdf text-primary text-xl mb-2"></i>
+                                    <span class="text-sm">PDF Report</span>
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Model Information -->
+                    <div class="bg-blue-50 rounded-xl p-5">
+                        <h4 class="font-medium text-gray-800 mb-3">Model Information</h4>
+                        <p class="text-sm text-gray-600 mb-4">Our prediction model analyzes land values based on location data and historical transactions.</p>
+                        
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="stat-card">
+                                <div class="text-primary font-bold text-lg">92%</div>
+                                <div class="text-xs text-gray-500">Accuracy</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="text-primary font-bold text-lg">±12%</div>
+                                <div class="text-xs text-gray-500">RMSE</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="text-primary font-bold text-lg">Jan 2025</div>
+                                <div class="text-xs text-gray-500">Updated</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+
+
+<footer class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.</span>
+    </div>
+</footer>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([34.0522, -118.2437], 13);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Add marker with drag functionality
+        const marker = L.marker([34.0522, -118.2437], {
+            draggable: true
+        }).addTo(map);
+        
+        // Update input fields when marker is moved
+        marker.on('dragend', function(e) {
+            const coords = marker.getLatLng();
+            document.getElementById('latitude').value = coords.lat.toFixed(4);
+            document.getElementById('longitude').value = coords.lng.toFixed(4);
+        });
+        
+        // Update marker when input fields change
+        document.getElementById('latitude').addEventListener('change', updateMarker);
+        document.getElementById('longitude').addEventListener('change', updateMarker);
+        
+        function updateMarker() {
+            const lat = parseFloat(document.getElementById('latitude').value);
+            const lng = parseFloat(document.getElementById('longitude').value);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                marker.setLatLng([lat, lng]);
+                map.setView([lat, lng], 13);
+            }
+        }
+        
+        // Get current location
+        document.getElementById('get-location').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    document.getElementById('latitude').value = lat.toFixed(4);
+                    document.getElementById('longitude').value = lng.toFixed(4);
+                    
+                    marker.setLatLng([lat, lng]);
+                    map.setView([lat, lng], 13);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+        
+        // Copy coordinates to clipboard
+        document.getElementById('copy-coords').addEventListener('click', function() {
+            const lat = document.getElementById('latitude').value;
+            const lng = document.getElementById('longitude').value;
+            
+            navigator.clipboard.writeText(`${lat}, ${lng}`)
+                .then(() => {
+                    // Show success message
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        });
+        
+        // Simulate prediction
+        document.getElementById('predict-btn').addEventListener('click', function() {
+            const lat = document.getElementById('latitude').value;
+            const lng = document.getElementById('longitude').value;
+            
+            if (!lat || !lng) {
+                alert('Please enter both latitude and longitude');
+                return;
+            }
+            
+            // Simulate API call delay
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Predicting...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                // Generate realistic land value based on location
+                const baseValue = 500000;
+                const variation = Math.random() * 300000;
+                const landValue = baseValue + variation;
+                
+                // Format as currency
+                const formattedValue = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    maximumFractionDigits: 0
+                }).format(landValue);
+                
+                // Update results display
+                const resultDisplay = document.getElementById('result-display');
+                const resultValue = resultDisplay.querySelector('.price-display');
+                resultValue.textContent = formattedValue;
+                resultDisplay.classList.remove('hidden');
+                
+                // Reset button
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }, 1500);
+        });
+        
+        // Initialize the map view
+        updateMarker();
+    </script>
+    
+</body>
+</html> 

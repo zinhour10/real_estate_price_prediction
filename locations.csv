@@ -1,0 +1,6 @@
+latitude,longitude,price_per_m2,name
+40.7128,-74.006,1000,Point A
+40.7214,-74.0123,1500,Point B
+40.7312,-74.0215,2000,Point C
+40.741,-74.0322,2500,Point D
+40.751,-74.0422,3000,Point E

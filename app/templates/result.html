@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LandValue Pro | Land Price Prediction</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... your styles ... */
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- ... header and map ... -->
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- ... map and location details ... -->
+            <div>
+                <!-- Input Card -->
+                <div class="input-card bg-white p-6 mb-6">
+                    <!-- ... coordinate inputs ... -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Land Details</label>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Area (m<sup>2</sup>)</label>
+                                <input type="number" id="land-area" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="get-location" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
+                            <i class="fas fa-location-arrow mr-2"></i> My Location
+                        </button>
+                        <button id="copy-coords" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
+                            <i class="fas fa-copy mr-2"></i> Copy
+                        </button>
+                    </div>
+                    <button id="predict-btn" class="w-full mt-6 bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium flex items-center justify-center">
+                        <i class="fas fa-bolt mr-2"></i> Predict Land Value
+                    </button>
+                </div>
+                <!-- Results Card -->
+                <div class="results-card bg-white p-6">
+                    <div id="results" class="text-center py-4">
+                        <div id="result-display" class="hidden">
+                            <div class="price-display text-primary mb-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer ... -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Predict button
+        document.getElementById('predict-btn').addEventListener('click', function() {
+            const landArea = parseFloat(document.getElementById('land-area').value);
+
+            if (isNaN(landArea) || landArea <= 0) {
+                alert('Please enter a valid land area');
+                return;
+            }
+
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Predicting...';
+            this.disabled = true;
+
+            fetch(`/run-model?land_area=${landArea}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        const formattedValue = new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            maximumFractionDigits: 0
+                        }).format(data.price);
+
+                        const resultDisplay = document.getElementById('result-display');
+                        resultDisplay.querySelector('.price-display').textContent = formattedValue;
+                        resultDisplay.classList.remove('hidden');
+                    }
+                })
+                .catch(err => {
+                    alert('Prediction failed.');
+                })
+                .finally(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                });
+        });
+
+        // My Location button
+        document.getElementById('get-location').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    document.getElementById('latitude').value = lat.toFixed(6);
+                    document.getElementById('longitude').value = lng.toFixed(6);
+
+                    // Store coordinates in backend
+                    fetch('/store-coord', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            latitude: lat,
+                            longitude: lng
+                        })
+                    });
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+    });
+    </script>
+</body>
+</html>

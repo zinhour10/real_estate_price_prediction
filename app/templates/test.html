@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Map</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        #map-container { position: relative; }
+        #map { height: 600px; }
+        #controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .btn {
+            margin: 5px;
+            padding: 8px 15px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover { background: #3367d6; }
+        #status { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div id="map-container">
+        <div id="map">{{ map_html|safe }}</div>
+        <div id="controls">
+            <button class="btn" id="lasso-btn">Lasso Select</button>
+            <button class="btn" id="box-btn">Box Select</button>
+            <button class="btn" id="delete-btn">Delete Selected</button>
+            <button class="btn" id="reset-btn">Reset Map</button>
+            <div id="status">Ready</div>
+        </div>
+    </div>
+
+    <script>
+        // Store selected point indices
+        let selectedPoints = [];
+        
+        // Get map element
+        const mapDiv = document.getElementById('map');
+        const plot = mapDiv.querySelector('.plotly-graph-div');
+        
+        // Setup event handlers
+        document.getElementById('lasso-btn').addEventListener('click', () => {
+            Plotly.restyle(plot, {'dragmode': 'lasso'});
+        });
+        
+        document.getElementById('box-btn').addEventListener('click', () => {
+            Plotly.restyle(plot, {'dragmode': 'select'});
+        });
+        
+        document.getElementById('delete-btn').addEventListener('click', deleteSelected);
+        document.getElementById('reset-btn').addEventListener('click', resetMap);
+        
+        // Handle point selection
+        plot.on('plotly_selected', (eventData) => {
+            if (eventData) {
+                selectedPoints = eventData.points.map(p => p.pointIndex);
+                updateStatus(`${selectedPoints.length} points selected`);
+            }
+        });
+        
+        // Handle single point click
+        plot.on('plotly_click', (eventData) => {
+            if (eventData && eventData.points) {
+                selectedPoints = eventData.points.map(p => p.pointIndex);
+                updateStatus(`Selected point ${selectedPoints[0] + 1}`);
+            }
+        });
+        
+        // Delete selected points
+        function deleteSelected() {
+            if (selectedPoints.length === 0) {
+                updateStatus('No points selected');
+                return;
+            }
+            
+            updateStatus('Deleting points...');
+            
+            fetch('/delete_points', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({indices: selectedPoints})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateStatus(data.message);
+                    // Reload the page to show updated map
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    updateStatus('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                updateStatus('Error: ' + error.message);
+            });
+        }
+        
+        // Reset map view
+        function resetMap() {
+            Plotly.relayout(plot, {
+                'mapbox.center': {lon: -74.0060, lat: 40.7128},
+                'mapbox.zoom': 10
+            });
+            selectedPoints = [];
+            updateStatus('Map view reset');
+        }
+        
+        // Update status message
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+    </script>
+</body>
+</html>

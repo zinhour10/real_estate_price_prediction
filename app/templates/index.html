@@ -1,108 +1,332 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>My Real Estate App</title>
-    <meta name="viewport" content="width=deice-width, initial-scale=1" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Price Prediction</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="icon" href="{{ url_for('static', filename='img/wing_logo.png') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-  </head>
-  <body>
-    <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" id='nav_bar'>
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
-        </a>
-        <button data-collapse-toggle="navbar-hamburger" type="button" class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-hamburger" aria-expanded="false">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        'primary-dark': '#1d4ed8',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        gray: '#94a3b8',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        
+<nav class="bg-[#a9cf38] border-gray-200 dark:bg-gray-900">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    
+  </div>
+</nav>
+
+<nav class="bg-white border-gray-200 dark:bg-gray-900">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
+    </a>
+    <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
         </svg>
-        </button>
-        <div class="hidden w-full" id="navbar-hamburger">
-        <ul class="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-            <li>
-            <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded-sm dark:bg-blue-600" aria-current="page">Home</a>
-            </li>
-        </ul>
+    </button>
+  </div>
+</nav>
+
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Map -->
+            <div class="lg:col-span-2">
+                <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Select Location</h2>
+                    <div class="map-container">
+                        <div id="map" class="h-full w-full">
+                            <iframe src="{{ url_for('static', filename='map.html') }}" width="100%" height="600" style="border:none;"></iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Location Details -->
+                <div class="location-section">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Location Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label for="address_subdivision" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                            <select id="address_subdivision" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a City</option>
+        
+                            </select>
+                        </div>
+                        <div>
+                            <label for="address_locality"class="block text-sm font-medium text-gray-700 mb-1">District</label>
+                            <select id="address_locality" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a District</option>
+                              
+                            </select>
+                        </div>
+                        <div>
+                            <label for="address_line_2" class="block text-sm font-medium text-gray-700 mb-1">Commune</label>
+                            <select id="address_line_2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Choose a Commune</option>
+                               
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <span id="city-show" class="location-tag"><i class="fas fa-city text-primary"></i></span>
+                        <span id="district-show" class="location-tag"><i class="fas fa-map-marker-alt text-primary"></i></span>
+                        <span id="commune-show"class="location-tag"><i class="fas fa-home text-primary"></i></span>
+                        <span id="location-show"class="location-tag"><i class="fas fa-map-pin text-primary"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Input and Results -->
+            <div>
+                <!-- Input Card -->
+                <div class="input-card bg-white p-6 mb-6">
+                    <div class="flex items-center mb-6">
+                        <i class="fa-solid fa-location-dot text-primary text-xl mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Coordinates</h3>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Latitude</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-globe-americas text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="latitude" class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Longitude</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-globe text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="longitude" class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Land Area</label>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <input type="number" id="land-area" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary" placeholder="Enter land area in square meters">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="get-location" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
+                            <i class="fas fa-location-arrow mr-2"></i> My Location
+                        </button>
+                        <button id="copy-coords" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
+                            <i class="fas fa-copy mr-2"></i> Copy
+                        </button>
+                    </div>
+                    
+                    <button id="predict-btn" class="w-full mt-6 bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium flex items-center justify-center">
+                        <i class="fas fa-bolt mr-2"></i> Predict
+                    </button>
+                    <div id="result" class="mt-4 text-lg text-primary"></div>
+
+                </div>
+                
+                <!-- Results Card -->
+                <div class="results-card bg-white p-6">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-chart-line text-primary text-xl mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Prediction Results</h3>
+                    </div>
+                    
+                    <div id="results" class="text-center py-4">
+                        <div class="text-gray-500 mb-4">
+                            <i class="fas fa-map-marker-alt text-2xl mb-2"></i>
+                            <p>Enter coordinates and click "Predict" to see results</p>
+                        </div>
+                        
+                        <div id="result-display" class="hidden">
+                            <div class="price-display text-primary mb-6"></div>
+                            
+                            <div class="grid">
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="info-card">
+                                        <p class="text-sm text-gray-500">Price per m<sup>2</sup></p>
+                                        <p id="price-per-m2" class="font-semibold"></p>
+                                    </div>
+                                    <div class="info-card">
+                                        <p class="text-sm text-gray-500">Land Area</p>
+                                        <p id="land-area-show" class="font-semibold"></p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 mb-4">
+                                    <div class="info-card">
+                                        <p class="text-sm text-gray-500">Price Range</p>
+                                        <p id="price-range" class="font-semibold"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 h-[50px]">
+                                <div class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
+                                    <i class="fa-solid fa-circle-info text-white text-xl mb-2"></i>
+                                    <span class="text-sm text-white">Detail</span>
+                                </div>
+                                <div class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
+                                    <i class="fas fa-file-pdf text-white text-xl mb-2"></i>
+                                    <span class="text-sm text-white">PDF Report</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Model Information -->
+                    
+                </div>
+            </div>
         </div>
+    </main>
+    
+    <!-- Footer -->
+
+
+<footer class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline"></a>. All Rights Reserved.</span>
     </div>
-    </nav>
-    <main class="flex flex-row">
-        <div class='input'>
-                <form class="max-w-sm mx-auto" id="predict-form"  method="GET">
-                <div class="mb-5">
-                    <label for="land_area" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Land Area (m²)</label>
-                    <input type="number" id="land_area" name="land_area" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter land area" required />
-                </div>
-                <div class="mb-5">
-                    <label for="address_line_2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address_line_2</label>
-                    <input type="text" id="address_line_2" name="address_line_2" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter commune" />
-                </div>
-                <div class="mb-5">
-                    <label for="address_locality" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address_locality</label>
-                    <input type="text" id="address_locality" name="address_locality" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter district" />
-                </div>
-                <div class="mb-5">
-                    <label for="address_subdivision" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">address_subdivision</label>
-                    <input type="text" id="address_subdivision" name="address_subdivision" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Enter city" />
-                </div>
-                <button type="submit" id="predict-btn" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Predict</button>            
-            </form>
-            <script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('predict-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const landAreaInput = document.getElementById('land_area');
-        const landArea = parseFloat(landAreaInput.value);
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('predict-btn').addEventListener('click', function() {
+        const landArea = parseFloat(document.getElementById('land-area').value);
         if (isNaN(landArea) || landArea <= 0) {
-            document.getElementById('result').innerText = "Please enter a valid land area.";
-            landAreaInput.focus();
+            document.getElementById('result').textContent = "Please enter a valid land area.";
             return;
         }
         fetch(`/run-model?land_area=${landArea}`)
             .then(response => response.json())
             .then(data => {
-    if(data.price !== undefined) {
-        document.getElementById('result').innerHTML =
-            `<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-4 border border-blue-200 dark:border-blue-700">
-                <div class="flex items-center mb-2">
-                    <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 16v-4"></path>
-                    </svg>
-                    <span class="text-xl font-semibold text-blue-700">Prediction Result</span>
-                </div>
-                <div class="mb-1 text-gray-700 dark:text-gray-200">
-                    <span class="font-medium">Prediction per m²:</span>
-                    <span class="text-blue-600 font-bold">${data.prediction.toLocaleString(undefined, {maximumFractionDigits:2})} $</span>
-                </div>
-                <div class="mb-1 text-gray-700 dark:text-gray-200">
-                    <span class="font-medium">Land area:</span>
-                    <span class="text-green-600 font-bold">${data.land_area}</span>
-                </div>
-                <div class="mb-1 text-gray-700 dark:text-gray-200">
-                    <span class="font-medium">Total price:</span>
-                    <span class="text-pink-600 font-bold text-lg">${data.price.toLocaleString(undefined, {maximumFractionDigits:2})} $</span>
-                </div>
-            </div>`;
-    } else {
-        document.getElementById('result').innerHTML =
-            `<div class="bg-red-100 text-red-700 rounded p-4 mt-4">Prediction error: ${data.error || "Unknown error"}</div>`;
-    }
-})
+                if (data.error) {
+                    document.getElementById('result').textContent = "Error: " + data.error;
+                    // Hide result card if error
+                    document.getElementById('result-display').classList.add('hidden');
+                } else {
+                    // Hide the default message
+                    document.querySelector('#results > .text-gray-500').style.display = 'none';
+                    // Show the result card
+                    document.getElementById('result-display').classList.remove('hidden');
+                    // Update the price
+                    document.querySelector('.price-display').textContent = `$${data.price.toLocaleString()}`;
+                    document.querySelector('#price-per-m2').textContent = `$${data.price_per_m2.toLocaleString()}`;
+                    document.getElementById('price-range').textContent = `$${Math.round(data.price_range[0]).toLocaleString()} - $${Math.round(data.price_range[1]).toLocaleString()}`;
+                    document.querySelector('#land-area-show').innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
+
+
+                    // Optionally update other fields if your backend returns them
+                    // document.querySelector('.confidence-badge').textContent = data.confidence ? `${data.confidence}% Confidence` : '';
+                    // etc.
+                }
+            })
+            .catch(() => {
+                document.getElementById('result').textContent = "Prediction failed.";
+                document.getElementById('result-display').classList.add('hidden');
+            });
     });
 });
-</script>
-        <div id="result" class="mt-4 text-lg font-bold"></div>
-        </div>
-        <div class='map'>
-            <iframe src="{{ url_for('static', filename='map.html') }}" width="100%" height="600" style="border:none;"></iframe>
-        </div>
-    </main>
-    
 
+
+
+document.getElementById('get-location').addEventListener('click', function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            // Set the input fields
+            document.getElementById('latitude').value = lat.toFixed(6);
+            document.getElementById('longitude').value = lng.toFixed(6);
+
+            // Store coordinates in backend
+            fetch('/store-coord', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    latitude: lat,
+                    longitude: lng
+                })
+            });
+
+            // Move the map in the iframe
+            const mapFrame = document.querySelector('#map iframe');
+            if (mapFrame) {
+                mapFrame.contentWindow.postMessage(
+                    { type: 'moveToLocation', lat: lat, lng: lng },
+                    '*'
+                );
+            }
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+});
+</script>
     
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-  </body>
-</html>
+</body>
+</html> 
