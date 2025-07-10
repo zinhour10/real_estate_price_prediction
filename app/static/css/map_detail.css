@@ -1,0 +1,138 @@
+.map-container {
+    height: 500px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+.input-card, .results-card {
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+.price-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+.confidence-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 500;
+}
+.info-card {
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+}
+.util-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    transition: all 0.3s;
+}
+.util-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+.stat-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 0.8rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+.location-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    background: #e0f2fe;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    border: 1px solid #bae6fd;
+}
+.location-section {
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    padding: 1.2rem;
+    border: 1px solid #e2e8f0;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+}
+.nav-btn {
+    transition: all 0.3s;
+}
+.nav-btn:hover {
+    background-color: #e0f2fe;
+    color: #0077FF;
+}
+.footer-link:hover {
+    color: #0077FF;
+    text-decoration: underline;
+}
+.property-card {
+    transition: all 0.3s;
+    border: 1px solid #e2e8f0;
+}
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 119, 255, 0.15);
+    border-color: #0077FF;
+}
+.tab-btn {
+    transition: all 0.3s;
+}
+.tab-btn.active {
+    background-color: #0077FF;
+    color: white;
+}
+.chart-container {
+    height: 300px;
+}
+.comparison-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.comparison-badge.higher {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+.comparison-badge.lower {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+.comparison-badge.similar {
+    background-color: #e0f2fe;
+    color: #0077FF;
+}
+.map-marker {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.map-marker:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    z-index: 1000;
+}
+.map-marker.selected {
+    width: 50px;
+    height: 50px;
+    z-index: 100;
+}

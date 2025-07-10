@@ -1,6 +1,7 @@
 import folium
 import os
 from .shared import stored_coords
+import requests
 
 import folium.map
 import folium.vector_layers
@@ -205,6 +206,91 @@ def custom_code(popup_variable_name, map_variable_name):
         }}
         // end custom code
     """
+def custom_code_detail(popup_variable_name, map_variable_name):
+    return f"""
+        // custom code
+            
+
+            window.map = {map_variable_name};
+            window.addEventListener('message', function(event) {{
+            if (event.data && event.data.type === 'moveToLocation') {{
+                var lat = event.data.lat;
+                var lng = event.data.lng;
+                if (typeof L !== 'undefined' && window.map) {{
+                    window.map.setView([lat, lng], 16); // or your preferred zoom
+                    latLngPop({{ latlng: {{ lat: lat, lng: lng }} }});
+
+                }}
+            }}
+        }});
+
+        // --- Add custom search box to map container ---
+        var searchDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom', {map_variable_name}.getContainer());
+        searchDiv.style.position = 'absolute';
+        searchDiv.style.top = '10px';
+        searchDiv.style.left = '50px';
+        searchDiv.style.zIndex = 1000;
+        searchDiv.innerHTML = `
+            <input id="custom-map-search" type="text" placeholder="Search location..." style="padding:4px 8px; border-radius:4px; border:1px solid #ccc; width:220px;"/>
+            <ul id="custom-search-suggestions" style="background:white; border:1px solid #ccc; border-radius:4px; margin:0; padding:0; list-style:none; position:absolute; width:220px; display:none; max-height:180px; overflow-y:auto;"></ul>
+        `;
+
+        // Prevent map dragging when interacting with search
+        var searchInput = searchDiv.querySelector('#custom-map-search');
+        var suggestions = searchDiv.querySelector('#custom-search-suggestions');
+        L.DomEvent.disableClickPropagation(searchDiv);
+
+        // --- AJAX search with Nominatim ---
+        var searchTimeout = null;
+        searchInput.addEventListener('keyup', function(e) {{
+            clearTimeout(searchTimeout);
+            var query = this.value.trim();
+            if (!query) {{
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+                return;
+            }}
+            searchTimeout = setTimeout(function() {{
+                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query))
+                    .then(res => res.json())
+                    .then(data => {{
+                        suggestions.innerHTML = '';
+                        if (data.length === 0) {{
+                            suggestions.style.display = 'none';
+                            return;
+                        }}
+                        data.slice(0, 7).forEach(function(place) {{
+                            var li = document.createElement('li');
+                            li.textContent = place.display_name;
+                            li.style.padding = '6px 8px';
+                            li.style.cursor = 'pointer';
+                            li.onmouseover = function() {{ li.style.background = '#e0e7ff'; }};
+                            li.onmouseout = function() {{ li.style.background = ''; }};
+                            li.onclick = function() {{
+                                var lat = parseFloat(place.lat);
+                                var lon = parseFloat(place.lon);
+                                {map_variable_name}.setView([lat, lon], 16);
+                                suggestions.innerHTML = '';
+                                suggestions.style.display = 'none';
+                                searchInput.value = place.display_name;
+                            }};
+                            suggestions.appendChild(li);
+                        }});
+                        suggestions.style.display = 'block';
+                    }});
+            }}, 250);
+        }});
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {{
+            if (!searchDiv.contains(e.target)) {{
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+            }}
+        }});
+        
+        // end custom code
+    """
 def add_popup():
     popup = folium.LatLngPopup()
     return popup
@@ -232,3 +318,81 @@ def create_folium_map():
             html[pend:]
         )
     return "map.html"
+def get_prediction():
+    response = requests.get("http://127.0.0.1:5000/run-model")
+    return response.json()
+
+def get_nearby_properties():
+    response = requests.get("http://127.0.0.1:5000/nearby-properties")
+    return response.json()
+
+def create_folium_map_for_detial():
+    prediction = get_prediction()
+    print("Prediction Data:", prediction)  # Debug print
+    
+    # Set center coordinates based on prediction
+    center_coord = [prediction.get('lat', 11.5736576), prediction.get('lon', 104.923136)]
+    
+    vmap = folium.Map(location=center_coord, zoom_start=15)
+    
+    # Add marker with more visible properties
+    folium.Marker(
+        location=[prediction['lat'], prediction['lon']],
+        tooltip="Click for details",
+        popup=f"""
+            <b>Property Details</b><br>
+            Price: ${prediction['price']:,.2f}<br>
+            Price/m²: ${prediction['price_per_m2']:,.2f}<br>
+            Land Area: {prediction['land_area']}
+        """,
+        icon=folium.Icon(color="red", icon="home", prefix="fa"),
+    ).add_to(vmap)
+    nearby_data = get_nearby_properties()
+    if nearby_data.get('status') != 'success' or not nearby_data.get('results', {}).get('nearby_properties'):
+        print("Warning: No nearby properties found or API error")
+        # Save basic map anyway
+        map_path = os.path.join("app", "static", "map_detail.html")
+        vmap.save(map_path)
+        return map_path    
+    nearby_properties = nearby_data['results']['nearby_properties']
+    for idx, prop in enumerate(nearby_properties):
+        # Different colors based on distance
+        distance = prop.get('distance_km', float('inf'))
+        if distance < 0.5:
+            color = "green"
+        elif distance < 1:
+            color = "blue"
+        else:
+            color = "orange"
+        folium.Marker(
+            location=[prop['latitude'], prop['longitude']],
+            tooltip=f"Nearby Property #{idx+1}",
+            popup=f"""
+                <b>Nearby Property</b><br>
+                Price: ${prop['price']:,.2f}<br>
+                Price/m²: ${prop['price_per_m2']:,.2f}<br>
+                Land Area: {prop['land_area']} m²<br>
+                Distance: {distance:.2f} km<br>
+                ID: {prop['h_id']}<br>
+                <a href="/property-details/{prop['h_id']}" target="_blank">More Details</a>
+            """,
+            icon=folium.Icon(color=color, icon="home", prefix="fa"),
+        ).add_to(vmap)
+        # folium.PolyLine(
+        #     locations=[
+        #         [prediction['lat'], prediction['lon']],
+        #         [prop['latitude'], prop['longitude']]
+        #     ],
+        #     color="gray",
+        #     weight=1.5,
+        #     opacity=0.5,
+        #     tooltip=f"{distance:.2f} km"
+        # ).add_to(vmap)
+    
+    
+    
+    map_path = os.path.join("app", "static", "map_detail.html")
+    vmap.save(map_path)
+    print(f"Map saved to: {map_path}")  # Debug print
+    
+    return "map_detail.html"

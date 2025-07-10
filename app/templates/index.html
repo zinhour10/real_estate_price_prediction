@@ -45,7 +45,7 @@
 
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+    <a href="{{ url_for('index') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
     </a>
     <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
@@ -193,22 +193,30 @@
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 mb-4">
-                                    <div class="info-card">
+                                   <div class="info-card">
                                         <p class="text-sm text-gray-500">Price Range</p>
-                                        <p id="price-range" class="font-semibold"></p>
+                                        <p id="price-range" class="font-semibold text-lg">$920,000 - $1,050,000</p>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                            <div class="bg-primary h-2.5 rounded-full" style="width: 75%"></div>
+                                        </div>
+                                        <div class="flex justify-between text-xs mt-1 text-gray-500">
+                                            <span>Low</span>
+                                            <span>Estimate</span>
+                                            <span>High</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="grid grid-cols-2 gap-3 h-[50px]">
-                                <div class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
+                                <button id="detail-btn" class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
                                     <i class="fa-solid fa-circle-info text-white text-xl mb-2"></i>
                                     <span class="text-sm text-white">Detail</span>
-                                </div>
-                                <div class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
+                                </button>
+                                <button class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
                                     <i class="fas fa-file-pdf text-white text-xl mb-2"></i>
                                     <span class="text-sm text-white">PDF Report</span>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -275,8 +283,6 @@
                     document.querySelector('#price-per-m2').textContent = `$${data.price_per_m2.toLocaleString()}`;
                     document.getElementById('price-range').textContent = `$${Math.round(data.price_range[0]).toLocaleString()} - $${Math.round(data.price_range[1]).toLocaleString()}`;
                     document.querySelector('#land-area-show').innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
-
-
                     // Optionally update other fields if your backend returns them
                     // document.querySelector('.confidence-badge').textContent = data.confidence ? `${data.confidence}% Confidence` : '';
                     // etc.
@@ -326,6 +332,9 @@ document.getElementById('get-location').addEventListener('click', function() {
         alert("Geolocation is not supported by this browser.");
     }
 });
+
+document.getElementById('detail-btn').addEventListener('click', function() {
+    window.location.href = "/detail";});
 </script>
     
 </body>
