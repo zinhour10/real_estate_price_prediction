@@ -151,6 +151,7 @@ def map_routes(app, train_df_param: pd.DataFrame):
     @app.route("/run-model", methods=["GET"])
     def run_model():
         global last_prediction
+        print(last_prediction)
         try:
             land_area_str = request.args.get("land_area")
             if not land_area_str:
@@ -165,10 +166,10 @@ def map_routes(app, train_df_param: pd.DataFrame):
             if lat is None or lon is None:
                 return jsonify({"error": "Coordinates not set"}), 400
                 
-            y_pred = predict_with_model(model)
-            price = land_area * y_pred
-            price_lower = price * 0.9
-            price_upper = price * 1.1
+            y_pred = float(predict_with_model(model))
+            price = float(land_area * y_pred)
+            price_lower = float(price * 0.9)
+            price_upper = float(price * 1.1)
             
             last_prediction = {
                 "price_per_m2": y_pred,

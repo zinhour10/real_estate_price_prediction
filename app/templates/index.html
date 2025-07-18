@@ -270,7 +270,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    document.getElementById('result').textContent = "Error: " + data.error;
+                    console.log("Error: " + data.error);
                     // Hide result card if error
                     document.getElementById('result-display').classList.add('hidden');
                 } else {
@@ -335,6 +335,7 @@ document.getElementById('get-location').addEventListener('click', function() {
 
 document.getElementById('detail-btn').addEventListener('click', function() {
     window.location.href = "/detail";});
+
 </script>
     
 </body>

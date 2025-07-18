@@ -3,6 +3,7 @@ import numpy as np
 import geopandas as gpd
 from shapely.geometry import Point
 import time
+from .shared import stored_coords
 
 
 # Load your training data (the same used for feature selection)
@@ -185,8 +186,9 @@ def get_all_features(lat, lon):
 
 if __name__ == "__main__":
     # Example coordinates (Phnom Penh)
-    lat = 11.575445826234887
-    lon = 104.92218942164058
+ 
+    lat = stored_coords.get('lat')
+    lon = stored_coords.get('lon')
 
     start = time.time()
     features = get_all_features(lat, lon)

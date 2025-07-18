@@ -180,9 +180,7 @@ def custom_code(popup_variable_name, map_variable_name):
                                                     }}
                                                 }}
                                             }}
-                                            setDropdown('address_subdivision', data.address_subdivision, 'City');
-                                            setDropdown('address_locality', data.address_locality, 'District');
-                                            setDropdown('address_line_2', data.address_line_2, 'Commune');
+                                            
                                             
                                             var latInput = window.parent.document.getElementById('latitude');
                                             var lonInput = window.parent.document.getElementById('longitude');
