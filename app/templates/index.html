@@ -320,7 +320,7 @@ document.getElementById('get-location').addEventListener('click', function() {
             });
 
             // Move the map in the iframe
-            const mapFrame = document.querySelector('#map iframe');
+            const mapFrame = document.querySelector('#map `');
             if (mapFrame) {
                 mapFrame.contentWindow.postMessage(
                     { type: 'moveToLocation', lat: lat, lng: lng },
