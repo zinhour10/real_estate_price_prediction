@@ -37,7 +37,6 @@ def generate_valuation_notes(property_feature):
     if nearby_landmarks:
         notes.extend(nearby_landmarks)
     
-    # 2. Specific amenities within 1km - NEW REQUIREMENT
     amenities_1km = []
     # Define the amenities you want to include in 1km radius
     desired_amenities = {
@@ -64,13 +63,11 @@ def generate_valuation_notes(property_feature):
     if amenities_1km:
         notes.append(f"Amenities within 1km: {', '.join(amenities_1km)}")
     
-    # 3. Combined school count within 5km (keeps original functionality)
     school_types = ['pre_school', 'primary_school', 'secondary_school']
     school_count = sum(property_feature.get(f'n_{school}_5km', 0) for school in school_types)
     if school_count > 30:
         notes.append(f"{school_count} schools within 5km")
     
-    # 4. Transportation access
     road_types = []
     important_roads = ['primary', 'secondary', 'motorway', 'trunk']
     
@@ -83,12 +80,10 @@ def generate_valuation_notes(property_feature):
     if road_types:
         notes.append(f"Good access to: {', '.join(road_types)} roads")
     
-    # 5. Property density
     population = property_feature.get('population', 0)
     if population > 10000:
         notes.append(f"High population density area ({population:,.0f} people)")
     
-    # 6. Market comparison
     hex_price = property_feature.get('h_id_price_mean')
     if hex_price:
         notes.append(f"Area average land price: ${hex_price:,.2f} per m²")
@@ -105,7 +100,7 @@ def generate_property_valuation_pdf(output_buffer, property_feature, predict, co
     # Add logo at the top (centered)
     if logo_path and os.path.exists(logo_path):
         try:
-            logo = Image(logo_path, width=2*inch, height=1*inch)
+            logo = Image(logo_path, width=2.2*inch, height=1*inch)
             logo.hAlign = 'CENTER'
             story.append(logo)
             story.append(Spacer(1, 0.1*inch))

@@ -1,7 +1,7 @@
-from flask import render_template, request, jsonify, Response, make_response, send_file, current_app
-from .utils import create_folium_map, create_folium_map_for_detial
+from flask import render_template, session, request, jsonify, Response, make_response, send_file, current_app
+from .utils import create_folium_map, create_folium_map_for_detial, create_folium_map_for_batch_detail
 from .shared import stored_coords
-from .pipeline import get_features_for_current_coords, predict_with_model, model
+from .pipeline import get_features_for_current_coords, predict_with_model, model, predict_batch_with_model
 from .features import get_all_features
 from .find_neighbour import get_neighbour, get_neighbours
 from .to_pdf import generate_property_valuation_pdf
@@ -17,6 +17,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 last_prediction = {}
+latest_batch_results = []
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def map_routes(app, train_df_param: pd.DataFrame):
     # Helper function to get features as dict
@@ -57,6 +60,11 @@ def map_routes(app, train_df_param: pd.DataFrame):
     def detail():
         create_folium_map_for_detial()
         return render_template("detail.html")
+    
+    @app.route("/batch_detail")
+    def batch_details():
+        create_folium_map_for_batch_detail()
+        return render_template("batch_detail.html")
     
     @app.route("/")
     def index():
@@ -220,3 +228,62 @@ def map_routes(app, train_df_param: pd.DataFrame):
                 "status": "error",
                 "message": str(e)
             }), 500
+            
+    @app.route('/upload', methods=['POST'])
+    def upload_csv():
+        global latest_batch_results 
+        data = request.get_json()  # Requires Content-Type: application/json
+        if not data:
+            return jsonify({'error': 'No JSON data received'}), 400
+
+        csv_data = data.get('csvData', [])
+        cleaned_data = [
+            [item.strip('\r') for item in row]
+            for row in csv_data
+            if len(row) > 1  # Skip empty rows
+        ]
+        csv_data = cleaned_data.copy()
+        # print("Received CSV data:", csv_data)  # Debug
+        df = pd.DataFrame(
+            [row[:-1] + [row[-1].strip('\r')] for row in csv_data[1:] if row],
+            columns=[col.strip('\r') for col in csv_data[0]]
+        )
+        df['lat'] = pd.to_numeric(df['lat'])
+        df['lon'] = pd.to_numeric(df['lon'])
+        df['land_area'] = pd.to_numeric(df['land_area'])
+        
+        feature_dicts = df.apply(
+            lambda row: get_all_features(row['lat'], row['lon']), 
+            axis=1
+        )
+        features_df = pd.DataFrame(list(feature_dicts))
+        result_df = pd.concat([df['land_area'], features_df], axis=1)
+        # print("Received CSV data:", df)
+        # result = df.apply(lambda row: {
+        #     **row.to_dict(),
+        #     **get_all_features(row['lat'], row['lon'])
+        # }, axis=1).tolist()
+        # print(result)
+        # print("==============================================")
+        
+        # print(result_df)
+        
+        # Make predictions
+        batch_predict = predict_batch_with_model(model, result_df)
+        final = batch_predict * result_df['land_area']
+        
+        # Build response
+        result_df['price_per_m2'] = batch_predict
+        result_df['price'] = final
+
+        # Convert to JSON format
+        response_data = {
+            'results': result_df.to_dict(orient='records')  # List of dicts per row
+        }
+        latest_batch_results = result_df.to_dict(orient='records')
+
+
+        return jsonify(latest_batch_results)
+    @app.route('/get_latest_batch_predictions', methods=['GET'])
+    def get_latest_batch_predictions():
+        return jsonify({'results': latest_batch_results})

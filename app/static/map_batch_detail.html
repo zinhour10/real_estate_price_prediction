@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_46378129b4034daba6b73bea79a56039 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+
+    <!-- Custom style injected -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
+    
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_46378129b4034daba6b73bea79a56039" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_46378129b4034daba6b73bea79a56039 = L.map(
+                "map_46378129b4034daba6b73bea79a56039",
+                {
+                    center: [11.5750454, 104.9240291],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 15,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_595835c6d91b1d15cd74b4b42850aadd = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_46378129b4034daba6b73bea79a56039);
+        
+    
+            var marker_1021acba1f4a6926c4bf03f1f4500618 = L.marker(
+                [11.578252149251652, 104.91531372070314],
+                {}
+            ).addTo(map_46378129b4034daba6b73bea79a56039);
+        
+    
+            var icon_f510627de865f2c319a93ef583e00953 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_1021acba1f4a6926c4bf03f1f4500618.setIcon(icon_f510627de865f2c319a93ef583e00953);
+        
+    
+            marker_1021acba1f4a6926c4bf03f1f4500618.bindTooltip(
+                `<div>
+                     
+    <div class="p-3">
+       
+<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+    <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
+        <dd class="text-lg font-semibold text-red-600">$ 5,715,985</dd>
+    </div>
+    <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
+        <dd class="text-lg font-semibold">Srah Chak, Doun Penh, Phnom Penh, Cambodia</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
+        <dd class="text-lg font-semibold">1,302</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
+        <dd class="text-lg font-semibold">$ 4,390</dd>
+    </div>
+</dl>
+
+    </div>
+    <div data-popper-arrow></div>
+
+            
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_b5f4e923349e549c3ffe898a3f412546 = L.marker(
+                [11.517705009897712, 104.94415283203126],
+                {}
+            ).addTo(map_46378129b4034daba6b73bea79a56039);
+        
+    
+            var icon_a2e657dbb5a969ca01cc15341cfc97f6 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_b5f4e923349e549c3ffe898a3f412546.setIcon(icon_a2e657dbb5a969ca01cc15341cfc97f6);
+        
+    
+            marker_b5f4e923349e549c3ffe898a3f412546.bindTooltip(
+                `<div>
+                     
+    <div class="p-3">
+       
+<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+    <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
+        <dd class="text-lg font-semibold text-red-600">$ 581,450</dd>
+    </div>
+    <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
+        <dd class="text-lg font-semibold">Preaek Pra, Chbar Ampov, Phnom Penh, Cambodia</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
+        <dd class="text-lg font-semibold">784</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
+        <dd class="text-lg font-semibold">$ 742</dd>
+    </div>
+</dl>
+
+    </div>
+    <div data-popper-arrow></div>
+
+            
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_c6fbe2b371c49e0ec701c8651d738647 = L.marker(
+                [11.55201666081867, 104.87960815429688],
+                {}
+            ).addTo(map_46378129b4034daba6b73bea79a56039);
+        
+    
+            var icon_3c8828d45ed4d5e2177118de1fb21a5b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_c6fbe2b371c49e0ec701c8651d738647.setIcon(icon_3c8828d45ed4d5e2177118de1fb21a5b);
+        
+    
+            marker_c6fbe2b371c49e0ec701c8651d738647.bindTooltip(
+                `<div>
+                     
+    <div class="p-3">
+       
+<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+    <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
+        <dd class="text-lg font-semibold text-red-600">$ 2,067,642</dd>
+    </div>
+    <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
+        <dd class="text-lg font-semibold">Tuek Thla, Saensokh, Phnom Penh, Cambodia</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
+        <dd class="text-lg font-semibold">606</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
+        <dd class="text-lg font-semibold">$ 3,411</dd>
+    </div>
+</dl>
+
+    </div>
+    <div data-popper-arrow></div>
+
+            
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_79151a9c5c1fa9857138f1cc80b9df57 = L.marker(
+                [11.53587052394645, 104.91050720214844],
+                {}
+            ).addTo(map_46378129b4034daba6b73bea79a56039);
+        
+    
+            var icon_ba14777f234fe590dafc724af19a48b5 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_79151a9c5c1fa9857138f1cc80b9df57.setIcon(icon_ba14777f234fe590dafc724af19a48b5);
+        
+    
+            marker_79151a9c5c1fa9857138f1cc80b9df57.bindTooltip(
+                `<div>
+                     
+    <div class="p-3">
+       
+<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+    <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
+        <dd class="text-lg font-semibold text-red-600">$ 5,210,270</dd>
+    </div>
+    <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
+        <dd class="text-lg font-semibold">Boeng Tumpun, Mean Chey, Phnom Penh, Cambodia</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
+        <dd class="text-lg font-semibold">1,651</dd>
+    </div>
+    <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
+        <dd class="text-lg font-semibold">$ 3,156</dd>
+    </div>
+</dl>
+
+    </div>
+    <div data-popper-arrow></div>
+
+            
+                 </div>`,
+                {"sticky": true}
+            );
+        
+</script>
+</html>

@@ -6,6 +6,7 @@ except ImportError:
     from features import get_all_features
 import pandas as pd
 import joblib
+import numpy as np
 
 lat = stored_coords.get('lat')
 lon = stored_coords.get('lon')
@@ -70,3 +71,49 @@ if __name__ == "__main__":
         print("Prediction:", y_pred)
     except Exception as e:
         print("Error during prediction:", e)
+
+def predict_batch_with_model(model, df):
+    """
+    Predicts target values for all rows in a DataFrame using the provided model.
+    
+    Args:
+        model: Trained model with predict() method
+        df: DataFrame containing features (must include all required features)
+    
+    Returns:
+        Series containing predictions for all rows
+    """
+    # Make a copy to avoid modifying original DataFrame
+    df = df.copy()
+    
+    # Apply label encoding to categorical features
+    for col, encoder in label_encoders.items():
+        if col in df.columns:
+            # Create mask for known categories
+            known_categories = df[col].isin(encoder.classes_)
+            # Apply encoding where categories are known, else -1
+            df[col] = np.where(known_categories, 
+                              encoder.transform(df[col]), 
+                              -1)
+            
+            # Debug print for first few rows
+            print(f"Encoded {col}:")
+            print(df[[col]].head())
+            
+            # Reverse decode for verification
+            decoded = np.where(known_categories,
+                             encoder.inverse_transform(df[col]),
+                             "UNKNOWN")
+            print(f"Decoded {col}:")
+            print(pd.Series(decoded).head())
+
+    # Ensure we have all required features in correct order
+    if hasattr(model, 'feature_names_in_'):
+        X = df[model.feature_names_in_]
+    else:
+        X = df[SELECTED_FEATURES]
+    
+    # Make predictions
+    predictions = model.predict(X)
+    
+    return pd.Series(predictions, index=df.index)
