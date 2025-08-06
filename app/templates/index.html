@@ -127,6 +127,7 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4">
               Location Details
             </h3>
+            <!-- Select
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
                 <label
@@ -168,6 +169,7 @@
                 </select>
               </div>
             </div>
+             -->
 
             <div class="flex flex-wrap gap-2">
               <span id="city-show" class="location-tag"
@@ -179,9 +181,11 @@
               <span id="commune-show" class="location-tag"
                 ><i class="fas fa-home text-primary"></i
               ></span>
+              <!--
               <span id="location-show" class="location-tag"
                 ><i class="fas fa-map-pin text-primary"></i
               ></span>
+              -->
             </div>
           </div>
         </div>
@@ -314,7 +318,7 @@
                       <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                         <div
                           class="bg-primary h-2.5 rounded-full"
-                          style="width: 75%"
+                          style="width: 50%"
                         ></div>
                       </div>
                       <div
@@ -331,18 +335,19 @@
                 <div class="grid grid-cols-2 gap-3 h-[50px]">
                   <button
                     id="detail-btn"
-                    class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3"
+                    class="util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3 hover:border-primary/30"
                   >
                     <i
-                      class="fa-solid fa-circle-info text-white text-xl mb-2"
+                      class="fa-solid fa-circle-info text-primary text-xl mb-2"
                     ></i>
-                    <span class="text-sm text-white">Detail</span>
+                    <span class="text-sm">Detail</span>
                   </button>
                   <button
-                    class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3"
+                    onclick="generatePdfReport()"
+                    class="util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3 hover:border-primary/30"
                   >
-                    <i class="fas fa-file-pdf text-white text-xl mb-2"></i>
-                    <span class="text-sm text-white">PDF Report</span>
+                    <i class="fas fa-file-pdf text-primary text-xl mb-2"></i>
+                    <span class="text-sm">PDF Report</span>
                   </button>
                 </div>
               </div>
@@ -353,6 +358,65 @@
         </div>
       </div>
     </main>
+    <div
+      id="popup-modal"
+      tabindex="-1"
+      class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center"
+    >
+      <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <!-- Close button -->
+          <button
+            type="button"
+            class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="popup-modal"
+          >
+            ✕
+          </button>
+
+          <!-- Modal body -->
+          <div class="p-4 md:p-5 text-center">
+            <svg
+              class="mx-auto mb-4 text-[#a9cf38] w-12 h-12 dark:text-gray-200"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <h3
+              class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
+            >
+              Are you sure you want to view the results?
+            </h3>
+            <button
+              id="view-batch"
+              type="button"
+              class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5"
+            >
+              Yes, I'm sure
+            </button>
+            <button
+              type="button"
+              data-modal-hide="popup-modal"
+              id="view-cancel"
+              class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            >
+              No, cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
 
@@ -402,145 +466,6 @@
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document
-          .getElementById("predict-btn")
-          .addEventListener("click", function () {
-            const landArea = parseFloat(
-              document.getElementById("land-area").value
-            );
-            if (isNaN(landArea) || landArea <= 0) {
-              document.getElementById("result").textContent =
-                "Please enter a valid land area.";
-              return;
-            }
-            fetch(`/run-model?land_area=${landArea}`)
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.error) {
-                  console.log("Error: " + data.error);
-                  // Hide result card if error
-                  document
-                    .getElementById("result-display")
-                    .classList.add("hidden");
-                } else {
-                  // Hide the default message
-                  document.querySelector(
-                    "#results > .text-gray-500"
-                  ).style.display = "none";
-                  // Show the result card
-                  document
-                    .getElementById("result-display")
-                    .classList.remove("hidden");
-                  // Update the price
-                  document.querySelector(
-                    ".price-display"
-                  ).textContent = `$${data.price.toLocaleString()}`;
-                  document.querySelector(
-                    "#price-per-m2"
-                  ).textContent = `$${data.price_per_m2.toLocaleString()}`;
-                  document.getElementById(
-                    "price-range"
-                  ).textContent = `$${Math.round(
-                    data.price_range[0]
-                  ).toLocaleString()} - $${Math.round(
-                    data.price_range[1]
-                  ).toLocaleString()}`;
-                  document.querySelector(
-                    "#land-area-show"
-                  ).innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
-                  // Optionally update other fields if your backend returns them
-                  // document.querySelector('.confidence-badge').textContent = data.confidence ? `${data.confidence}% Confidence` : '';
-                  // etc.
-                }
-              })
-              .catch(() => {
-                document.getElementById("result").textContent =
-                  "Prediction failed.";
-                document
-                  .getElementById("result-display")
-                  .classList.add("hidden");
-              });
-          });
-      });
-
-      document
-        .getElementById("get-location")
-        .addEventListener("click", function () {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-              const lat = position.coords.latitude;
-              const lng = position.coords.longitude;
-
-              // Set the input fields
-              document.getElementById("latitude").value = lat.toFixed(6);
-              document.getElementById("longitude").value = lng.toFixed(6);
-
-              // Store coordinates in backend
-              fetch("/store-coord", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  latitude: lat,
-                  longitude: lng,
-                }),
-              });
-
-              // Move the map in the iframe
-              const mapFrame = document.querySelector("#map `");
-              if (mapFrame) {
-                mapFrame.contentWindow.postMessage(
-                  { type: "moveToLocation", lat: lat, lng: lng },
-                  "*"
-                );
-              }
-            });
-          } else {
-            alert("Geolocation is not supported by this browser.");
-          }
-        });
-
-      document
-        .getElementById("detail-btn")
-        .addEventListener("click", function () {
-          window.location.href = "/detail";
-        });
-      document.getElementById("upload-file").addEventListener("click", () => {
-        const fileInput = document.createElement("input");
-        fileInput.type = "file";
-        fileInput.accept = ".csv";
-        fileInput.style.display = "none";
-
-        fileInput.addEventListener("change", async (event) => {
-          const file = event.target.files[0];
-          if (!file) return;
-
-          // Read CSV and convert to JSON
-          const text = await file.text();
-          const rows = text.split("\n").map((row) => row.split(","));
-
-          // Send to Flask as JSON
-          try {
-            const response = await fetch("/upload", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json", // Required for Flask
-              },
-              body: JSON.stringify({ csvData: rows }), // Send parsed data
-            });
-
-            const result = await response.json();
-            console.log("Success:", result);
-          } catch (error) {
-            console.error("Error:", error);
-          }
-        });
-
-        fileInput.click();
-      });
-    </script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
   </body>
 </html>

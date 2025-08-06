@@ -1,4 +1,4 @@
-from flask import render_template, session, request, jsonify, Response, make_response, send_file, current_app
+from flask import render_template, session, request, jsonify, Response, make_response, send_file, current_app, redirect, url_for
 from .utils import create_folium_map, create_folium_map_for_detial, create_folium_map_for_batch_detail
 from .shared import stored_coords
 from .pipeline import get_features_for_current_coords, predict_with_model, model, predict_batch_with_model
@@ -8,6 +8,7 @@ from .to_pdf import generate_property_valuation_pdf
 import pandas as pd
 from io import BytesIO
 import os
+import csv
 import requests
 from datetime import datetime
 import logging
@@ -46,7 +47,7 @@ def map_routes(app, train_df_param: pd.DataFrame):
     # Helper function to get nearby properties as list
     def get_nearby_data():
         try:
-            nearby = get_neighbours(train_df_param, 3)
+            nearby = get_neighbours(train_df_param, 0.5)
             if nearby.empty:
                 return []
             
@@ -58,6 +59,11 @@ def map_routes(app, train_df_param: pd.DataFrame):
 
     @app.route("/detail")
     def detail():
+        api_response = requests.get("http://127.0.0.1:5000/run-model")
+        
+        if api_response.status_code == 400:
+            return redirect(url_for('index'))
+        api_response.raise_for_status()
         create_folium_map_for_detial()
         return render_template("detail.html")
     
@@ -70,15 +76,6 @@ def map_routes(app, train_df_param: pd.DataFrame):
     def index():
         create_folium_map()
         return render_template("index.html")
-    
-    @app.route("/neighbour")
-    def neighbour():
-        neighbour_data_df = get_neighbour(train_df_param)
-        if not neighbour_data_df.empty:
-            neighbour_json_string = neighbour_data_df.to_json(orient='records', indent=4)
-            return Response(neighbour_json_string, mimetype='application/json')
-        else:
-            return jsonify([])
     
     @app.route('/generate-report')
     def generate_report():
@@ -152,9 +149,36 @@ def map_routes(app, train_df_param: pd.DataFrame):
     @app.route("/last-prediction", methods=["GET"])
     def get_last_prediction_route():
         global last_prediction
+        property_data = get_features_data()
         if not last_prediction:
             return jsonify({"error": "No prediction made yet"}), 400
-        return jsonify(last_prediction)
+        combined = {**property_data, **last_prediction}
+
+        return jsonify(combined)
+    
+    def save_to_csv(data, filename='last_prediction.csv'):
+        df_new = pd.DataFrame([data])  # wrap in list to make a 1-row DataFrame
+
+        if os.path.exists(filename):
+            df_existing = pd.read_csv(filename)
+
+            # Combine columns and preserve all (union)
+            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+
+            # Save back (overwrite entire file)
+            df_combined.to_csv(filename, index=False)
+        else:
+            # File doesn't exist, create it with header
+            df_new.to_csv(filename, index=False)
+            
+    @app.route("/save-prediction", methods=["POST"])
+    def save_prediction():
+        data = request.json
+        if not data:
+            return jsonify({"error": "No data received"}), 400
+
+        save_to_csv(data)
+        return jsonify({"message": "Prediction saved to CSV","redirect": url_for("index")})
 
     @app.route("/run-model", methods=["GET"])
     def run_model():
@@ -194,11 +218,18 @@ def map_routes(app, train_df_param: pd.DataFrame):
         except Exception as e:
             logger.error(f"Model error: {str(e)}")
             return jsonify({"error": str(e)}), 400
-            
+    @app.route("/neighbour")
+    def neighbour():
+        neighbour_data_df = get_neighbours(train_df_param, 0.5)
+        if not neighbour_data_df.empty:
+            neighbour_json_string = neighbour_data_df.to_json(orient='records', indent=4)
+            return Response(neighbour_json_string, mimetype='application/json')
+        else:
+            return jsonify([])
     @app.route('/nearby-properties', methods=['GET'])
     def get_nearby_properties_route():
         try:
-            nearby = get_neighbours(train_df_param, 3)
+            nearby = get_neighbours(train_df_param, 0.5)
             
             if nearby.empty:
                 return jsonify({
@@ -232,7 +263,7 @@ def map_routes(app, train_df_param: pd.DataFrame):
     @app.route('/upload', methods=['POST'])
     def upload_csv():
         global latest_batch_results 
-        data = request.get_json()  # Requires Content-Type: application/json
+        data = request.get_json()
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
 
@@ -242,48 +273,75 @@ def map_routes(app, train_df_param: pd.DataFrame):
             for row in csv_data
             if len(row) > 1  # Skip empty rows
         ]
-        csv_data = cleaned_data.copy()
-        # print("Received CSV data:", csv_data)  # Debug
-        df = pd.DataFrame(
-            [row[:-1] + [row[-1].strip('\r')] for row in csv_data[1:] if row],
-            columns=[col.strip('\r') for col in csv_data[0]]
-        )
-        df['lat'] = pd.to_numeric(df['lat'])
-        df['lon'] = pd.to_numeric(df['lon'])
-        df['land_area'] = pd.to_numeric(df['land_area'])
         
-        feature_dicts = df.apply(
-            lambda row: get_all_features(row['lat'], row['lon']), 
-            axis=1
-        )
-        features_df = pd.DataFrame(list(feature_dicts))
-        result_df = pd.concat([df['land_area'], features_df], axis=1)
-        # print("Received CSV data:", df)
-        # result = df.apply(lambda row: {
-        #     **row.to_dict(),
-        #     **get_all_features(row['lat'], row['lon'])
-        # }, axis=1).tolist()
-        # print(result)
-        # print("==============================================")
-        
-        # print(result_df)
-        
-        # Make predictions
-        batch_predict = predict_batch_with_model(model, result_df)
-        final = batch_predict * result_df['land_area']
-        
-        # Build response
-        result_df['price_per_m2'] = batch_predict
-        result_df['price'] = final
+        if not cleaned_data:
+            return jsonify({'error': 'No valid data rows found'}), 400
 
-        # Convert to JSON format
-        response_data = {
-            'results': result_df.to_dict(orient='records')  # List of dicts per row
-        }
-        latest_batch_results = result_df.to_dict(orient='records')
-
-
-        return jsonify(latest_batch_results)
+        headers = [col.strip('\r') for col in cleaned_data[0]]
+        all_results = []
+        
+        for row in cleaned_data[1:]:
+            try:
+                # Create single row DataFrame
+                row_df = pd.DataFrame([row], columns=headers)
+                
+                # Convert numeric columns with strict error handling
+                row_df['lat'] = pd.to_numeric(row_df['lat'], errors='coerce')
+                row_df['lon'] = pd.to_numeric(row_df['lon'], errors='coerce')
+                row_df['land_area'] = pd.to_numeric(row_df['land_area'], errors='coerce')
+                
+                # Skip row if any essential numeric field is invalid
+                if row_df[['lat', 'lon', 'land_area']].isnull().any().any():
+                    continue
+                    
+                # Get all features for this row (ensure this doesn't return None values)
+                features = {
+                    k: v for k, v in get_all_features(
+                        row_df['lat'].iloc[0], 
+                        row_df['lon'].iloc[0]
+                    ).items() 
+                    if pd.notna(v) and v is not None
+                }
+                
+                # Convert row data to dict and clean nulls immediately
+                row_data = {
+                    k: v for k, v in row_df.iloc[0].to_dict().items() 
+                    if pd.notna(v) and v is not None
+                }
+                
+                # Initialize result with cleaned data
+                result_dict = {**row_data, **features}
+                
+                # Only attempt prediction if we have all required fields
+                try:
+                    prediction_df = pd.concat([row_df['land_area'], pd.DataFrame([features])], axis=1)
+                    batch_predict = predict_batch_with_model(model, prediction_df)
+                    final_price = batch_predict * row_df['land_area'].iloc[0]
+                    
+                    # Only add prices if prediction succeeded
+                    if pd.notna(batch_predict[0]):
+                        result_dict.update({
+                            'price_per_m2': float(batch_predict[0]),
+                            'price': float(final_price[0])
+                        })
+                except Exception as e:
+                    print(f"Prediction failed for row: {str(e)}")
+                
+                # Final cleanup pass
+                cleaned_result = {
+                    k: v for k, v in result_dict.items() 
+                    if pd.notna(v) and v is not None and v != ''
+                }
+                
+                if cleaned_result:  # Only add if we have data
+                    all_results.append(cleaned_result)
+                    
+            except Exception as e:
+                print(f"Skipping row due to error: {str(e)}")
+                continue
+        
+        latest_batch_results = all_results
+        return jsonify(all_results)
     @app.route('/get_latest_batch_predictions', methods=['GET'])
     def get_latest_batch_predictions():
         return jsonify({'results': latest_batch_results})

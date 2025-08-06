@@ -48,19 +48,23 @@ def find_popup_slice(html):
 def custom_code(popup_variable_name, map_variable_name):
     return f"""
         // custom code
-            window.map = {map_variable_name};
-            window.addEventListener('message', function(event) {{
+             window.map = {map_variable_name};
+        //zoom to my location
+        // Handle messages from parent window
+        window.addEventListener('message', function(event) {{
+            console.log("Received message:", event.data);
             if (event.data && event.data.type === 'moveToLocation') {{
                 var lat = event.data.lat;
                 var lng = event.data.lng;
                 if (typeof L !== 'undefined' && window.map) {{
-                    window.map.setView([lat, lng], 16); // or your preferred zoom
-                    latLngPop({{ latlng: {{ lat: lat, lng: lng }} }});
-
+                    window.map.setView([lat, lng], 16);
+                    // Also update the popup if needed
+                    if (typeof latLngPop === 'function') {{
+                        latLngPop({{ latlng: L.latLng(lat, lng) }});
+                    }}
                 }}
             }}
         }});
-
         // --- Add custom search box to map container ---
         var searchDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom', {map_variable_name}.getContainer());
         searchDiv.style.position = 'absolute';
@@ -125,6 +129,7 @@ def custom_code(popup_variable_name, map_variable_name):
                 suggestions.style.display = 'none';
             }}
         }});
+       
 
         // --- Only one marker logic ---
         window.lastAddedMarker = null;
@@ -202,13 +207,12 @@ def custom_code(popup_variable_name, map_variable_name):
             console.log("Latitude: " + e.latlng.lat.toFixed(4));
             console.log("Longitude: " + e.latlng.lng.toFixed(4));
         }}
+        
         // end custom code
     """
 def custom_code_detail(popup_variable_name, map_variable_name):
     return f"""
         // custom code
-            
-
             window.map = {map_variable_name};
             window.addEventListener('message', function(event) {{
             if (event.data && event.data.type === 'moveToLocation') {{
@@ -217,7 +221,6 @@ def custom_code_detail(popup_variable_name, map_variable_name):
                 if (typeof L !== 'undefined' && window.map) {{
                     window.map.setView([lat, lng], 16); // or your preferred zoom
                     latLngPop({{ latlng: {{ lat: lat, lng: lng }} }});
-
                 }}
             }}
         }});
@@ -317,11 +320,11 @@ def create_folium_map():
         )
     return "map.html"
 def get_prediction():
-    response = requests.get("/run-model")
+    response = requests.get("http://127.0.0.1:5000/run-model")
     return response.json()
 
 def get_nearby_properties():
-    response = requests.get("/nearby-properties")
+    response = requests.get("http://127.0.0.1:5000/nearby-properties")
     return response.json()
 
 def create_folium_map_for_detial():
@@ -344,6 +347,19 @@ def create_folium_map_for_detial():
             Land Area: {prediction['land_area']}
         """,
         icon=folium.Icon(color="red", icon="home", prefix="fa"),
+    ).add_to(vmap)
+    radius_meters = 500 
+
+    folium.Circle(
+        location=[prediction['lat'], prediction['lon']],
+        radius=radius_meters,  # This is now in meters
+        color="black",
+        weight=1,
+        fill_opacity=0.2,
+        opacity=1,
+        fill_color="green",
+        fill=True,
+        tooltip="1km radius",
     ).add_to(vmap)
     nearby_data = get_nearby_properties()
     if nearby_data.get('status') != 'success' or not nearby_data.get('results', {}).get('nearby_properties'):
@@ -394,50 +410,69 @@ def create_folium_map_for_detial():
     print(f"Map saved to: {map_path}")  # Debug print
     
     return "map_detail.html"
-
-
-def create_folium_map_for_batch_detail(): 
+def create_folium_map_for_batch_detail():
     vmap = folium.Map(location=center_coord, zoom_start=15)
     response = requests.get("http://127.0.0.1:5000/get_latest_batch_predictions")
     data = response.json()
 
     # Access the 'results' list
     results = data.get("results", [])
+    
     for idx, prop in enumerate(results):
+        # Safely get all properties with defaults
+        latitude = prop.get('latitude') or prop.get('lat')
+        longitude = prop.get('longitude') or prop.get('lon')
+        price = prop.get('price')
+        address_line_2 = prop.get('address_line_2', '')
+        address_locality = prop.get('address_locality', '')
+        address_subdivision = prop.get('address_subdivision', '')
+        land_area = prop.get('land_area')
+        price_per_m2 = prop.get('price_per_m2')
+
+        # Skip if we don't have coordinates or any essential field is null/empty
+        if not latitude or not longitude or None in (price, land_area, price_per_m2):
+            continue
+
+        # Format numbers
+        try:
+            price_formatted = f"${float(price):,.0f}"
+            land_area_formatted = f"{float(land_area):,.0f}"
+            price_per_m2_formatted = f"${float(price_per_m2):,.0f}"
+        except (ValueError, TypeError):
+            continue  # Skip if formatting fails
+
         folium.Marker(
-            location=[prop['latitude'], prop['longitude']],
+            location=[latitude, longitude],
             tooltip=f"""
-    <div class="p-3">
-       
+<div class="p-3">
 <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
     <div class="flex flex-col pb-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
-        <dd class="text-lg font-semibold text-red-600">$ {prop['price']:,.0f}</dd>
+        <dd class="text-lg font-semibold text-red-600">{price_formatted}</dd>
     </div>
     <div class="flex flex-col py-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
-        <dd class="text-lg font-semibold">{prop['address_line_2']}, {prop['address_locality']}, {prop['address_subdivision']}, Cambodia</dd>
+        <dd class="text-lg font-semibold">{address_line_2}, {address_locality}, {address_subdivision}, Cambodia</dd>
     </div>
     <div class="flex flex-col pt-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
-        <dd class="text-lg font-semibold">{prop['land_area']:,.0f}</dd>
+        <dd class="text-lg font-semibold">{land_area_formatted}</dd>
     </div>
     <div class="flex flex-col pt-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
-        <dd class="text-lg font-semibold">$ {prop['price_per_m2']:,.0f}</dd>
+        <dd class="text-lg font-semibold">{price_per_m2_formatted}</dd>
     </div>
 </dl>
-
-    </div>
-    <div data-popper-arrow></div>
-
+</div>
+<div data-popper-arrow></div>
             """,
             icon=folium.Icon(color="blue", icon="home", prefix="fa"),
         ).add_to(vmap)
     
     map_path = os.path.join("app", "static", "map_batch_detail.html")
     vmap.save(map_path)
-    print(f"Map saved to: {map_path}")  # Debug print
+    
+    # Add custom head content
     custom_head_content = """
     <!-- Custom style injected -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
@@ -447,6 +482,5 @@ def create_folium_map_for_batch_detail():
     updated_html = html.replace("</head>", f"{custom_head_content}\n</head>")
     with open(map_path, "w", encoding="utf-8") as file:
         file.write(updated_html)
-    print(f"Map with head content appended saved to: {map_path}")
 
     return "map_batch_detail.html"
