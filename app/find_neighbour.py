@@ -172,6 +172,52 @@ def get_neighbours(df_param: pd.DataFrame, max_distance_km=0.5):
         print(f"Missing column in data: {e}")
         return pd.DataFrame()
 
+import pandas as pd
+import requests
+
+def get_neighbours_param(df_param: pd.DataFrame, target_feature: dict, max_distance_km=0.5):
+    """
+    Finds ALL properties within specified distance of target property
+    
+    Args:
+        df_param (pd.DataFrame): Property DataFrame with lat/lon columns
+        target_feature (dict): Dictionary with target property details (must include 'latitude', 'longitude')
+        max_distance_km (float): Maximum distance in kilometers (default 0.5km)
+    
+    Returns:
+        pd.DataFrame: All nearby properties within distance threshold,
+                      with distance in km and all original columns.
+                      Includes target property as first row (if in dataset).
+    """
+    try:
+        # Validate input dictionary
+        if not all(k in target_feature for k in ['latitude', 'longitude']):
+            print("Error: target_feature missing required fields 'latitude' and/or 'longitude'")
+            return pd.DataFrame()
+
+        # Get target coordinates
+        t_lat = target_feature['latitude']
+        t_lon = target_feature['longitude']
+        
+        # Calculate distances to all properties
+        df_param = df_param.copy()
+        df_param['distance_km'] = df_param.apply(
+            lambda row: haversine(t_lon, t_lat, row['longitude'], row['latitude']),
+            axis=1
+        )
+        
+        # Filter properties within specified distance (including target)
+        nearby = df_param[df_param['distance_km'] <= max_distance_km]
+        
+        # Sort by distance (target will be first with distance 0 if it's in the dataset)
+        nearby = nearby.sort_values('distance_km')
+        
+        return nearby
+
+    except KeyError as e:
+        print(f"Missing column in data: {e}")
+        return pd.DataFrame()
+
 
 # def get_neighbours(df_param: pd.DataFrame, max_distance_km=1.0, n_neighbours=1000):
 #     """

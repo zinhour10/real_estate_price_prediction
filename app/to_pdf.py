@@ -7,6 +7,12 @@ from reportlab.lib.units import inch
 from datetime import datetime
 import requests
 import os
+import ast
+import folium
+from io import BytesIO
+from reportlab.platypus import Image as RLImage
+from PIL import Image as PILImage 
+
 from pathlib import Path
 
 # Define Times New Roman font names
@@ -16,6 +22,31 @@ TIMES_BOLD = "Times-Bold"
 distance_columns = ['near_Koh_Pich_in_km', 'near_Russian_Market_in_km', 'near_AEON_Mall_1_in_km', 'near_AEON_Mall_2_in_km', 'near_AEON_Mall_3_in_km', 'near_Bassac_Lane_in_km', 'near_Koh_Norea_in_km', 'near_Camko_City_in_km', 'near_Olympic_Stadium_in_km', 'near_Phsar_Tmey_in_km', 'near_Boeng_Keng_Kang_1_in_km', 'near_Wat_Phnom_in_km', 'near_Chroy_Changvar_Bridge_in_km', 'near_Vattanac_Tower_in_km', 'near_Royal_Palace_in_km', 'near_Sisowath_Riverside_Park_in_km', 'near_Phnom_Penh_Airport_in_km', 'near_Phsar_Chas_in_km', 'near_Phsar_kandal_in_km']
 amenity_columns = ['n_cafe_5km', 'n_gas_station_5km', 'n_hospital_5km', 'n_hotel_5km', 'n_mart_5km', 'n_pre_school_5km', 'n_secondary_school_5km', 'n_primary_school_5km', 'n_university_5km', 'n_seven_eleven_5km', 'n_resturant_5km', 'n_super_market_5km', 'n_borey_5km', 'n_bank_5km', 'n_atm_5km']
 road_columns = ['f_bridleway', 'f_corridor', 'f_cycleway', 'f_disused', 'f_footway', 'f_motorway', 'f_path', 'f_pedestrian', 'f_primary', 'f_residential', 'f_road', 'f_secondary', 'f_service', 'f_steps', 'f_tertiary', 'f_track', 'f_trunk', 'f_trunk_link', 'f_unclassified', 'f_unused']
+
+
+def generate_location_map(lat, lon, zoom_start=19):
+    # Create a folium map centered on the property
+    m = folium.Map(location=[lat, lon], zoom_start=zoom_start)
+    folium.Marker([lat, lon], popup="Property Location", icon=folium.Icon(color="red")).add_to(m)
+    
+    # Save map to HTML and then export as PNG
+    img_data = m._to_png(5)  # higher value = better quality
+    return BytesIO(img_data)
+
+# Inside your PDF function:
+def add_location_map_to_story(story, lat, lon):
+    map_img_buffer = generate_location_map(lat, lon)
+    
+    # Open as PIL image so we can resize if needed
+    pil_img = PILImage.open(map_img_buffer)
+    resized_img = BytesIO()
+    pil_img.save(resized_img, format='PNG')
+    resized_img.seek(0)
+    
+    # Add to PDF
+    map_image = RLImage(resized_img, width=4*inch, height=None)
+    map_image.hAlign = 'CENTER'
+    story.append(map_image)
 
 def generate_valuation_notes(property_feature):
     notes = []
@@ -63,10 +94,10 @@ def generate_valuation_notes(property_feature):
     if amenities_1km:
         notes.append(f"Amenities within 1km: {', '.join(amenities_1km)}")
     
-    school_types = ['pre_school', 'primary_school', 'secondary_school']
-    school_count = sum(property_feature.get(f'n_{school}_5km', 0) for school in school_types)
-    if school_count > 30:
-        notes.append(f"{school_count} schools within 5km")
+    # school_types = ['pre_school', 'primary_school', 'secondary_school']
+    # school_count = sum(property_feature.get(f'n_{school}_5km', 0) for school in school_types)
+    # if school_count > 30:
+    #     notes.append(f"{school_count} schools within 5km")
     
     road_types = []
     important_roads = ['primary', 'secondary', 'motorway', 'trunk']
@@ -86,11 +117,11 @@ def generate_valuation_notes(property_feature):
     
     hex_price = property_feature.get('h_id_price_mean')
     if hex_price:
-        notes.append(f"Area average land price: ${hex_price:,.2f} per m²")
+        notes.append(f"Area average land price in Hexagon: ${hex_price:,.2f} per m²")
     
     return notes
 
-def generate_property_valuation_pdf(output_buffer, property_feature, predict, comparison, logo_path):
+def generate_property_valuation_pdf(output_buffer, property_feature, predict, comparison,confidence, logo_path):
     # Create PDF document
     doc = SimpleDocTemplate(output_buffer, pagesize=letter)
     
@@ -100,7 +131,7 @@ def generate_property_valuation_pdf(output_buffer, property_feature, predict, co
     # Add logo at the top (centered)
     if logo_path and os.path.exists(logo_path):
         try:
-            logo = Image(logo_path, width=2.2*inch, height=1*inch)
+            logo = Image(logo_path, width=2.2*inch, height=0.64*inch)
             logo.hAlign = 'CENTER'
             story.append(logo)
             story.append(Spacer(1, 0.1*inch))
@@ -161,6 +192,7 @@ def generate_property_valuation_pdf(output_buffer, property_feature, predict, co
     
     # Property details section
     story.append(Paragraph("PROPERTY DETAILS", section_style))
+    story.append(Paragraph(f"Coordinates: [{property_feature['latitude']}, {property_feature['longitude']}]", item_style))
     story.append(Paragraph(f"Address: {property_feature['address_line_2']}, {property_feature['address_locality']}, {property_feature['address_subdivision']}", item_style))
     story.append(Paragraph(f"Property Type: Land", item_style))
     story.append(Paragraph(f"Land Area: {predict['land_area']} m2", item_style))
@@ -168,9 +200,11 @@ def generate_property_valuation_pdf(output_buffer, property_feature, predict, co
     # Valuation summary section
     story.append(Paragraph("VALUATION SUMMARY", section_style))
     story.append(Paragraph(f"Market Value Estimate: ${predict['price']:,.0f}", item_style))
+    story.append(Paragraph(f"Price Per Square:  ${predict['price_per_m2']:,.0f}", item_style))
+
     story.append(Paragraph(f"Valuation Method: Real Estate Price Prediction", item_style))
     story.append(Paragraph(f"Valuation Date: {datetime.now().strftime('%B %d, %Y')}", item_style))
-    story.append(Paragraph(f"Confidence Level: 50%", item_style))
+    story.append(Paragraph(f"Confidence Level: {confidence:.2f}%", item_style))
     
     # Comparative market analysis
     story.append(Paragraph("COMPARATIVE MARKET ANALYSIS", section_style))
@@ -306,11 +340,280 @@ def generate_property_valuation_pdf(output_buffer, property_feature, predict, co
     valuation_notes = generate_valuation_notes(property_feature)
     for note in valuation_notes:
         story.append(Paragraph(note, item_style))
+    # ADD MAP
+    # try:
+    #     lat = property_feature.get('latitude')
+    #     lon = property_feature.get('longitude')
+    #     if isinstance(lat, (int, float)) and isinstance(lon, (int, float)):
+    #         story.append(Paragraph("LOCATION MAP", section_style))
+    #         map_img_buffer = generate_location_map(lat, lon)
+    #         pil_img = PILImage.open(map_img_buffer)
+    #         resized_img = BytesIO()
+    #         pil_img.save(resized_img, format='PNG')
+    #         resized_img.seek(0)
+    #         map_image = RLImage(resized_img, width=4*inch, height=4*inch)
+    #         map_image.hAlign = 'CENTER'
+    #         story.append(map_image)
+    #         story.append(Spacer(1, 0.2*inch))
+    #     else:
+    #         story.append(Paragraph("Location coordinates not available", item_style))
+    # except Exception as e:
+    #     story.append(Paragraph(f"Error generating location map: {e}", item_style))
+        
+    # Build the document
+    doc.build(story)
+    output_buffer.seek(0)
+  
+def generate_property_valuation_pdf_batch(output_buffer, property_data, comparison, confidence, logo_path):
+    """Generate a PDF valuation report with proper error handling for comparison data."""
+    # Create PDF document
+    doc = SimpleDocTemplate(output_buffer, pagesize=letter)
+    
+    # Story will hold all the elements of the document
+    story = []
+    
+    # --- ADD LOGO SECTION ---
+    try:
+        if logo_path and os.path.exists(logo_path):
+            logo = Image(logo_path, width=2.2*inch, height=0.64*inch)
+            logo.hAlign = 'CENTER'
+            story.append(logo)
+            story.append(Spacer(1, 0.1*inch))
+        else:
+            story.append(Paragraph("<strong>COMPANY LOGO</strong>", title_style))
+    except Exception as e:
+        print(f"Error loading logo: {e}")
+        story.append(Paragraph("<strong>COMPANY LOGO</strong>", title_style))
+        
+    # Get sample styles and customize them
+    styles = getSampleStyleSheet()
+    
+    # Custom styles with Times New Roman font
+    title_style = ParagraphStyle(
+        name='Title',
+        fontSize=16,
+        leading=20,
+        alignment=TA_CENTER,
+        spaceAfter=12,
+        fontName=TIMES_BOLD
+    )
+    
+    date_style = ParagraphStyle(
+        name='Date',
+        fontSize=10,
+        leading=14,
+        alignment=TA_CENTER,
+        spaceAfter=24,
+        fontName=TIMES_ROMAN
+    )
+    
+    section_style = ParagraphStyle(
+        name='Section',
+        fontSize=12,
+        leading=16,
+        alignment=TA_LEFT,
+        spaceBefore=12,
+        spaceAfter=12,
+        fontName=TIMES_BOLD
+    )
+    
+    item_style = ParagraphStyle(
+        name='Item',
+        fontSize=10,
+        leading=14,
+        alignment=TA_LEFT,
+        leftIndent=40,
+        spaceAfter=8,
+        fontName=TIMES_ROMAN
+    )
+    
+    # Add title
+    story.append(Paragraph("<strong>PROPERTY VALUATION REPORT</strong>", title_style))
+    story.append(Paragraph(f"Generated on {datetime.now().strftime('%B %d, %Y')}", date_style))
+    
+    # Property details section with error handling
+    story.append(Paragraph("PROPERTY DETAILS", section_style))
+    try:
+        story.append(Paragraph(f"Coordinates: [{property_data['latitude']}, {property_data['longitude']}]", item_style))
+        address = f"{property_data.get('address_line_2', 'N/A')}, {property_data.get('address_locality', 'N/A')}, {property_data.get('address_subdivision', 'N/A')}"
+        story.append(Paragraph(f"Address: {address}", item_style))
+        story.append(Paragraph(f"Property Type: {property_data.get('property_type', 'Land')}", item_style))
+        story.append(Paragraph(f"Land Area: {property_data.get('land_area', 'N/A')} m2", item_style))
+    except Exception as e:
+        print(f"Error processing property details: {e}")
+        story.append(Paragraph("Error loading property details", item_style))
+    
+    # Valuation summary section
+    story.append(Paragraph("VALUATION SUMMARY", section_style))
+    try:
+        price = property_data.get('price', 0)
+        price_mer_m2 = property_data.get('price_mer_m2', 0)
+
+        
+        story.append(Paragraph(f"Market Value Estimate: ${price:,.0f}" if isinstance(price, (int, float)) else "Market Value Estimate: N/A", item_style))
+        story.append(Paragraph(f"Price Per Square:  ${price_mer_m2:,.0f}", item_style))
+        story.append(Paragraph(f"Valuation Method: Real Estate Price Prediction", item_style))
+        story.append(Paragraph(f"Valuation Date: {datetime.now().strftime('%B %d, %Y')}", item_style))
+        story.append(Paragraph(f"Confidence Level: {confidence:.2f}%", item_style))
+    except Exception as e:
+        print(f"Error processing valuation summary: {e}")
+        story.append(Paragraph("Error loading valuation summary", item_style))
+    
+    # Comparative market analysis with robust error handling
+    story.append(Paragraph("COMPARATIVE MARKET ANALYSIS", section_style))
+    
+    # Define styles for table cells
+    cell_style = ParagraphStyle(
+        name='TableCell',
+        fontSize=9,
+        leading=11,
+        alignment=TA_LEFT,
+        wordWrap=True,
+        spaceBefore=2,
+        spaceAfter=2,
+        fontName=TIMES_ROMAN
+    )
+    
+    header_cell_style = ParagraphStyle(
+        name='HeaderCell',
+        fontSize=9,
+        leading=11,
+        alignment=TA_CENTER,
+        wordWrap=True,
+        spaceBefore=2,
+        spaceAfter=2,
+        fontName=TIMES_BOLD
+    )
+    
+    # Create table data structure
+    table_data = []
+    headers = ["Attribute"] + [f"Comparable {i+1}" for i in range(3)]
+    table_data.append([Paragraph(header, header_cell_style) for header in headers])
+    
+    # Initialize lists for each attribute
+    addresses = [Paragraph("Address", cell_style)]
+    prices = [Paragraph("Price", cell_style)]
+    price_per_m2 = [Paragraph("Price/m²", cell_style)]
+    sizes = [Paragraph("Land Area", cell_style)]
+    distances = [Paragraph("Distance", cell_style)]
+    populations = [Paragraph("Population", cell_style)]
+    
+    # Validate and clean comparison data
+    valid_comparables = []
+    for comp in comparison[:3]:  # Only take first 3 comparables
+        if isinstance(comp, dict):
+            valid_comparables.append(comp)
+        else:
+            print(f"Warning: Invalid comparable data found: {comp}")
+    
+    # Fill with empty entries if we don't have enough valid comparables
+    valid_comparables.extend([{}] * (3 - len(valid_comparables)))
+    
+    # Process each comparable property with error handling
+    for comp in valid_comparables:
+        try:
+            # Address
+            address_line_2 = comp.get('address_line_2', 'N/A')
+            address_locality = comp.get('address_locality', 'N/A')
+            address_subdivision = comp.get('address_subdivision', 'N/A')
+            address = f"{address_line_2}, {address_locality}, {address_subdivision}"
+            addresses.append(Paragraph(address, cell_style))
+            
+            # Price
+            price = comp.get('price')
+            if isinstance(price, (int, float)):
+                prices.append(Paragraph(f"${price:,.0f}", cell_style))
+            else:
+                prices.append(Paragraph("N/A", cell_style))
+            
+            # Price per m²
+            land_area = comp.get('land_area')
+            if (isinstance(price, (int, float)) and 
+                isinstance(land_area, (int, float)) and 
+                land_area > 0):
+                ppm2 = price / land_area
+                price_per_m2.append(Paragraph(f"${ppm2:,.0f}/m²", cell_style))
+            else:
+                price_per_m2.append(Paragraph("N/A", cell_style))
+            
+            # Land Area
+            size = comp.get('land_area')
+            if isinstance(size, (int, float)):
+                sizes.append(Paragraph(f"{size:,.0f} m²", cell_style))
+            else:
+                sizes.append(Paragraph("N/A", cell_style))
+            
+            # Distance
+            distance = comp.get('distance_km')
+            if isinstance(distance, (int, float)):
+                distances.append(Paragraph(f"{distance:.2f} km", cell_style))
+            else:
+                distances.append(Paragraph("N/A", cell_style))
+            
+            # Population
+            pop = comp.get('population', 'N/A')
+            if isinstance(pop, (int, float)):
+                populations.append(Paragraph(f"{pop:,.0f}", cell_style))
+            else:
+                populations.append(Paragraph("N/A", cell_style))
+                
+        except Exception as e:
+            print(f"Error processing comparable property: {e}")
+            # Add N/A for all fields if there's an error
+            addresses.append(Paragraph("N/A", cell_style))
+            prices.append(Paragraph("N/A", cell_style))
+            price_per_m2.append(Paragraph("N/A", cell_style))
+            sizes.append(Paragraph("N/A", cell_style))
+            distances.append(Paragraph("N/A", cell_style))
+            populations.append(Paragraph("N/A", cell_style))
+    
+    # Add rows to table data
+    table_data.append(addresses)
+    table_data.append(prices)
+    table_data.append(price_per_m2)
+    table_data.append(sizes)
+    table_data.append(distances)
+    table_data.append(populations)
+    
+    # Create table with adjusted column widths
+    col_widths = [
+        1.2 * inch,  # Attribute column
+        (doc.width - 1.2 * inch) / 3.0, 
+        (doc.width - 1.2 * inch) / 3.0,
+        (doc.width - 1.2 * inch) / 3.0
+    ]
+    
+    table = Table(table_data, colWidths=col_widths)
+    table.setStyle(TableStyle([
+        ('GRID', (0,0), (-1,-1), 1, colors.black),
+        ('FONTNAME', (0,0), (-1,-1), TIMES_ROMAN),
+        ('FONTNAME', (0,0), (-1,0), TIMES_BOLD),
+        ('FONTSIZE', (0,0), (-1,-1), 9),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('ALIGN', (0,0), (0,-1), 'LEFT'),
+        ('ALIGN', (1,0), (-1,-1), 'CENTER'),
+        ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+        ('FONTWEIGHT', (0,0), (-1,0), 'BOLD'),
+        ('LEFTPADDING', (0,0), (-1,-1), 3),
+        ('RIGHTPADDING', (0,0), (-1,-1), 3),
+    ]))
+    
+    story.append(table)
+    story.append(Spacer(1, 0.2*inch))
+    
+    # Valuation notes
+    story.append(Paragraph("VALUATION NOTES", section_style))
+    try:
+        valuation_notes = generate_valuation_notes(property_data)
+        for note in valuation_notes:
+            story.append(Paragraph(note, item_style))
+    except Exception as e:
+        print(f"Error generating valuation notes: {e}")
+        story.append(Paragraph("Valuation notes not available", item_style))
     
     # Build the document
     doc.build(story)
     output_buffer.seek(0)
-    
 # script_dir = Path(__file__).parent.absolute()
 
 # # Construct the absolute path to the logo

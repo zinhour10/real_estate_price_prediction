@@ -8,17 +8,34 @@ const priceModule = (() => {
         },
     };
 })();
-
 const price_per_m2_Module = (() => {
     let price_show; // Private variable
+    let min = 0;    // Default minimum
+    let max = Infinity; // Default maximum
 
     return {
         getPrice: () => price_show,
+
         setPrice: (value) => {
+            console.log("price: ", value);
             price_show = value;
         },
+
+        setMin: (value) => {
+            console.log("price min: ", value);
+            min = value;
+        },
+
+        setMax: (value) => {
+            console.log("price max: ", value);
+            max = value;
+        },
+
+        getMin: () => min,
+        getMax: () => max
     };
 })();
+
 
 
 fetch("/run-model")
@@ -37,10 +54,11 @@ fetch("/run-model")
         document.querySelector(
             ".land_area"
         ).innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
-        document.querySelector(".price_range").innerHTML = `$${Math.round(
-            data.price_range[0]
-        ).toLocaleString()} - $${Math.round(
-            data.price_range[1]
+        document.querySelector("#price-min").textContent = `$${Math.trunc(
+            price_per_m2_Module.getMin()
+        ).toLocaleString()}`;
+        document.querySelector("#price-max").textContent = `$${Math.trunc(
+            price_per_m2_Module.getMax()
         ).toLocaleString()}`;
     })
     .catch((error) => {
@@ -66,6 +84,30 @@ fetch("/nearby-properties")
             }
             return maxItem;
         }, null);
+        price_per_m2_Module.setMax(highestItem.price_per_m2);
+
+        const lowestItem = nearby_data.reduce((minItem, currentItem) => {
+            if (!minItem || (currentItem.price_per_m2 || 0) < (minItem.price_per_m2 || 0)) {
+                return currentItem;
+            }
+            return minItem;
+        }, null);
+        price_per_m2_Module.setMin(lowestItem.price_per_m2);
+        const low = price_per_m2_Module.getMin();
+        const high = price_per_m2_Module.getMax();
+        const estimate = price_per_m2_Module.getPrice();
+        document.querySelector("#price-min").textContent = `$${Math.trunc(low).toLocaleString()}`;
+        document.querySelector("#price-max").textContent = `$${Math.trunc(high).toLocaleString()}`;
+
+
+        let widthPercent = 0;
+        if (high !== low) {
+            widthPercent = ((estimate - low) / (high - low)) * 100;
+        }
+        widthPercent = Math.min(Math.max(widthPercent, 0), 100);
+
+        document.querySelector("#pipe").style.width = widthPercent + "%";
+
 
         console.log("Highest item by price_per_m2:", highestItem);
         document.querySelector(

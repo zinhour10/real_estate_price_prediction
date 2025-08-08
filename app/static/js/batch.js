@@ -29,3 +29,45 @@ try {
 } catch (error) {
     console.error("Error uploading CSV data:", error);
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("save-batch").addEventListener("click", function () {
+        alert("Save button clicked!");
+    });
+});
+
+
+
+// document.getElementById("save-batch").addEventListener("click", function () {
+//     alert(0);
+//     fetch("/get_latest_batch_predictions")
+//         .then((response) => response.json())
+//         .then((data) => {
+//             if (data.error) {
+//                 alert(data.error);
+//                 return;
+//             }
+
+//             // Send to backend to save
+//             fetch("/save-prediction-batch", {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                 },
+//                 body: JSON.stringify(data),
+//             })
+//                 .then((response) => response.json())
+//                 .then((result) => {
+//                     window.location.href = result.redirect;
+//                 })
+//                 .catch((err) => {
+//                     console.error("Save failed:", err);
+//                     alert("Save failed.");
+//                 });
+//         })
+//         .catch((err) => {
+//             console.error("Fetch failed:", err);
+//             alert("Could not fetch prediction data.");
+//         });
+// });

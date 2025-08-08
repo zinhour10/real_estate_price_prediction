@@ -20,6 +20,10 @@
       href="{{ url_for('static', filename='css/style.css') }}"
     />
     <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+    <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
     />
@@ -216,12 +220,16 @@
 
               <div class="mb-6">
                 <div class="info-card">
-                  <p class="text-sm text-gray-500">Price Range</p>
-                  <p class="price_range font-semibold text-lg">
-                    $920,000 - $1,050,000
+                  <p class="text-sm text-gray-500">
+                    Price Per M<sup>2</sup> Range
                   </p>
+                  <div class="price_range flex flex-row justify-between">
+                    <p id="price-min" class="font-semibold text-lg"></p>
+                    <p id="price-max" class="font-semibold text-lg">$920,000</p>
+                  </div>
                   <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                     <div
+                      id="pipe"
                       class="bg-primary h-2.5 rounded-full"
                       style="width: 50%"
                     ></div>

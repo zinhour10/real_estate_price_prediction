@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data.error) {
                         console.log("Error: " + data.error);
                         // Hide result card if error
+                        alert("No Previous Data")
                         document
                             .getElementById("result-display")
                             .classList.add("hidden");
@@ -31,20 +32,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         // Update the price
                         document.querySelector(
                             ".price-display"
-                        ).textContent = `$${data.price.toLocaleString()}`;
-                        document.querySelector(
-                            "#price-per-m2"
-                        ).textContent = `$${data.price_per_m2.toLocaleString()}`;
-                        document.getElementById(
-                            "price-range"
-                        ).textContent = `$${Math.round(
-                            data.price_range[0]
-                        ).toLocaleString()} - $${Math.round(
-                            data.price_range[1]
-                        ).toLocaleString()}`;
-                        document.querySelector(
-                            "#land-area-show"
-                        ).innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
+                        ).textContent = `$${Number(data.price).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+                        // document.querySelector(
+                        //     "#price-per-m2"
+                        // ).textContent = `$${data.price_per_m2.toLocaleString()}`;
+                        // document.getElementById(
+                        //     "price-range"
+                        // ).textContent = `$${Math.round(
+                        //     data.price_range[0]
+                        // ).toLocaleString()} - $${Math.round(
+                        //     data.price_range[1]
+                        // ).toLocaleString()}`;
+                        // document.querySelector(
+                        //     "#land-area-show"
+                        // ).innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
                         // Optionally update other fields if your backend returns them
                         // document.querySelector('.confidence-badge').textContent = data.confidence ? `${data.confidence}% Confidence` : '';
                         // etc.

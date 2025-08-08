@@ -10,7 +10,7 @@
     />
     <link
       rel="icon"
-      href="{{ url_for('static', filename='img/wing_logo.png') }}"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
     />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -294,8 +294,12 @@
               </div>
 
               <div id="result-display" class="hidden">
-                <div class="price-display text-primary mb-6"></div>
+                <div class="text-center mb-6">
+                  <div class="price-display text-primary mb-2"></div>
+                  <p class="text-gray-600">Estimated Property Price</p>
+                </div>
 
+                <!--
                 <div class="grid">
                   <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="info-card">
@@ -311,10 +315,17 @@
                   </div>
                   <div class="grid grid-cols-1 mb-4">
                     <div class="info-card">
-                      <p class="text-sm text-gray-500">Price Range</p>
-                      <p id="price-range" class="font-semibold text-lg">
-                        $920,000 - $1,050,000
+                      <p class="text-sm text-gray-500">
+                        Price Per M<sup>2</sup> Range
                       </p>
+                      <div class="price_range flex flex-row justify-between">
+                        <p id="price-min" class="font-semibold text-lg">
+                          $920,000
+                        </p>
+                        <p id="price-max" class="font-semibold text-lg">
+                          $920,000
+                        </p>
+                      </div>
                       <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                         <div
                           class="bg-primary h-2.5 rounded-full"
@@ -331,7 +342,7 @@
                     </div>
                   </div>
                 </div>
-
+                -->
                 <div class="grid grid-cols-2 gap-3 h-[50px]">
                   <button
                     id="detail-btn"

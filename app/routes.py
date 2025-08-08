@@ -3,10 +3,13 @@ from .utils import create_folium_map, create_folium_map_for_detial, create_foliu
 from .shared import stored_coords
 from .pipeline import get_features_for_current_coords, predict_with_model, model, predict_batch_with_model
 from .features import get_all_features
-from .find_neighbour import get_neighbour, get_neighbours
-from .to_pdf import generate_property_valuation_pdf
+from .find_neighbour import get_neighbour, get_neighbours, get_neighbours_param
+from .to_pdf import generate_property_valuation_pdf, generate_property_valuation_pdf_batch
 import pandas as pd
 from io import BytesIO
+import statistics
+import json
+import ast
 import os
 import csv
 import requests
@@ -77,6 +80,16 @@ def map_routes(app, train_df_param: pd.DataFrame):
         create_folium_map()
         return render_template("index.html")
     
+    @app.route('/receive-min-max', methods=['POST'])
+    def receive_min_max():
+        data = request.get_json()
+        min_price = data.get('min_price')
+        max_price = data.get('max_price')
+
+        print(f"Received min price: {min_price}, max price: {max_price}")
+
+        return jsonify({'status': 'success', 'min_price': min_price, 'max_price': max_price})
+    
     @app.route('/generate-report')
     def generate_report():
         try:
@@ -86,6 +99,38 @@ def map_routes(app, train_df_param: pd.DataFrame):
             property_data = get_features_data()
             predict = get_prediction_data()
             comparison = get_nearby_data()
+            # print(comparison)
+            # print(predict)
+            min_price_item = min(comparison, key=lambda x: x['price_per_m2'])
+            max_price_item = max(comparison, key=lambda x: x['price_per_m2'])
+
+            min_price = min_price_item['price_per_m2']
+            max_price = max_price_item['price_per_m2']
+
+            prices = [item['price_per_m2'] for item in comparison]
+            median_price = statistics.median(prices)
+            mean_price = statistics.mean(prices)
+            predicted_price = predict['price_per_m2']
+
+            
+            # print("Min price_per_m2:", min_price)
+            # print("Max price_per_m2:", max_price)
+            # print("Median price_per_m2:", median_price)
+            # print("Mean price_per_m2:", mean_price)
+            #dist = distant
+            price_range = max_price - min_price
+            dist_median = abs(predicted_price - median_price)
+            dist_mean = abs(predicted_price - mean_price)
+            #weight that we set think that importance
+            w1, w2, w3 = 0.4, 0.4, 0.2
+        
+            if mean_price == 0:
+                confidence = 0
+            else:
+                score = 1 - (w1 * dist_median + w2 * dist_mean + w3 * price_range) / mean_price
+                confidence = max(0, min(score * 100, 100))  # clamp between 0 and 100%
+
+            # print(f"Confidence Level: {confidence:.2f}%")
 
             logger.info("Data fetched successfully:")
             # logger.info(f"Property Data keys: {list(property_data.keys())}")
@@ -105,6 +150,7 @@ def map_routes(app, train_df_param: pd.DataFrame):
                 property_data,
                 predict,
                 comparison,
+                confidence,
                 img_path
             )
             buffer.seek(0)
@@ -127,7 +173,83 @@ def map_routes(app, train_df_param: pd.DataFrame):
                 "message": str(e),
                 "details": "Check server logs for more information"
             }), 500
+            
+    
+    
+    @app.route('/generate-report-batch', methods=['POST'])
+    def generate_report_batch():
+        logger.info("🚀 Step 1: Batch PDF generation started")
+        
+        data = request.json
+        if not data or 'results' not in data:
+            logger.error("❌ Step 2: Invalid input data format")
+            return jsonify({"error": "Invalid data format"}), 400
 
+        generated_files = []
+
+        for index, result in enumerate(data['results']):
+            try:
+                property_data = result
+                comparison = get_neighbours_param(train_df_param, property_data)
+                if isinstance(comparison, list):
+                    comparison = pd.DataFrame(comparison)
+                min_price_item = comparison.loc[comparison['price_per_m2'].idxmin()]
+                max_price_item = comparison.loc[comparison['price_per_m2'].idxmax()]
+
+                min_price = min_price_item['price_per_m2']
+                max_price = max_price_item['price_per_m2']
+
+                prices = comparison['price_per_m2'].tolist()
+                median_price = statistics.median(prices)
+                mean_price = statistics.mean(prices)
+                predicted_price = property_data['price_per_m2']
+
+                
+                # print("Min price_per_m2:", min_price)
+                # print("Max price_per_m2:", max_price)
+                # print("Median price_per_m2:", median_price)
+                # print("Mean price_per_m2:", mean_price)
+                #dist = distant
+                price_range = max_price - min_price
+                dist_median = abs(predicted_price - median_price)
+                dist_mean = abs(predicted_price - mean_price)
+                #weight that we set think that importance
+                w1, w2, w3 = 0.4, 0.4, 0.2
+            
+                if mean_price == 0:
+                    confidence = 0
+                else:
+                    score = 1 - (w1 * dist_median + w2 * dist_mean + w3 * price_range) / mean_price
+                    confidence = max(0, min(score * 100, 100))  # clamp between 0 and 100%
+
+                    
+                valid_comparison = [row.to_dict() for _, row in comparison.iterrows()]
+                # print("Data Valid Comparison",valid_comparison)
+                logo_path = os.path.join(current_app.root_path, 'static', 'img', 'wing_logo.png')
+                buffer = BytesIO()
+                generate_property_valuation_pdf_batch(
+                    buffer,
+                    property_data,
+                    valid_comparison,
+                    confidence,
+                    logo_path
+                )
+                pdf_filename = f"report_{index}.pdf"
+                output_path = os.path.join("static", "reports", pdf_filename)
+                os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+                with open(output_path, "wb") as f:
+                    f.write(buffer.getvalue())
+                generated_files.append(pdf_filename)
+
+            except Exception as e:
+                logger.error(f"Failed to generate PDF for item {index}: {e}", exc_info=True)
+                continue
+        return jsonify({
+            "message": f"{len(generated_files)} reports generated successfully.",
+            "reports": generated_files,
+            "redirect": url_for("index")
+        })
     @app.route("/store-coord", methods=["POST"])
     def store_coord():
         data = request.get_json()
@@ -157,18 +279,23 @@ def map_routes(app, train_df_param: pd.DataFrame):
         return jsonify(combined)
     
     def save_to_csv(data, filename='last_prediction.csv'):
-        df_new = pd.DataFrame([data])  # wrap in list to make a 1-row DataFrame
+        df_new = pd.DataFrame([data])
+
+        # Drop 'price_range' if exists in new data
+        if 'price_range' in df_new.columns:
+            df_new = df_new.drop(columns=['price_range'])
 
         if os.path.exists(filename):
             df_existing = pd.read_csv(filename)
 
-            # Combine columns and preserve all (union)
-            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+            # Drop 'price_range' if exists in existing file
+            if 'price_range' in df_existing.columns:
+                df_existing = df_existing.drop(columns=['price_range'])
 
-            # Save back (overwrite entire file)
+            # Combine and save
+            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
             df_combined.to_csv(filename, index=False)
         else:
-            # File doesn't exist, create it with header
             df_new.to_csv(filename, index=False)
             
     @app.route("/save-prediction", methods=["POST"])
@@ -180,10 +307,23 @@ def map_routes(app, train_df_param: pd.DataFrame):
         save_to_csv(data)
         return jsonify({"message": "Prediction saved to CSV","redirect": url_for("index")})
 
+    @app.route("/save-prediction-batch", methods=["POST"])
+    def save_prediction_batch():
+        data = request.json
+        for result in data['results']:
+            save_to_csv(result)
+            
+        # print(data['results'][1])
+        # if not data:
+        #     return jsonify({"error": "No data received"}), 400
+
+        # save_to_csv(data)
+        return jsonify({"message": "Prediction saved to CSV","redirect": url_for("index")})
+
     @app.route("/run-model", methods=["GET"])
     def run_model():
         global last_prediction
-        print(last_prediction)
+        # print(last_prediction)
         try:
             land_area_str = request.args.get("land_area")
             if not land_area_str:

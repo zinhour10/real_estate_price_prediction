@@ -13,6 +13,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/map_detail.css') }}"
     />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
 
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
@@ -49,11 +53,11 @@
         },
       };
     </script>
-   <style>
-  * {
-    background-color: none;
-  }
-</style>
+    <style>
+      * {
+        background-color: none;
+      }
+    </style>
   </head>
   <body class="bg-dark">
     <!-- Header -->
@@ -111,7 +115,7 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Left Column - Map and Input -->
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-3">
           <div
             class="bg-white p-6 rounded-xl shadow-sm mb-6 border border-gray-100"
           >
@@ -132,24 +136,28 @@
               </div>
             </div>
           </div>
-
-          <!-- Property Input Card -->
-
+        </div>
+        <div class="lg:col-span-2">
           <!-- Neighborhood Insights -->
           <div class="location-section mb-6">
             <h3
               class="text-lg font-semibold text-gray-800 mb-4 flex items-center"
             >
-              <i class="fas fa-chart-pie text-primary mr-2"></i> Neighborhood
+              <i class="fas fa-chart-pie text-primary mr-2"></i> Properties
               Insights
             </h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div class="stat-card">
                 <div class="text-2xl font-bold text-primary">8.2%</div>
-                <div class="text-sm text-gray-500">Price Growth (YoY)</div>
+                <div class="text-sm text-gray-500">Price Growth</div>
               </div>
               <div class="stat-card">
-                <div id="properties_sold" class="text-2xl font-bold text-secondary">42</div>
+                <div
+                  id="properties_sold"
+                  class="text-2xl font-bold text-secondary"
+                >
+                  42
+                </div>
                 <div class="text-sm text-gray-500">Properties Sold</div>
               </div>
               <div class="stat-card">
@@ -166,17 +174,13 @@
                 <div class="text-sm text-gray-500">Walk Score</div>
               </div>
             </div>
-
-            <div class="chart-container">
-              <canvas id="neighborhoodChart"></canvas>
-            </div>
           </div>
         </div>
 
         <!-- Right Column - Results and Comparisons -->
         <div>
           <!-- Prediction Results Card -->
-          <div class="results-card bg-white p-6 mb-6">
+          <div class="results-card bg-white p-6">
             <div class="flex items-center justify-between">
               <div class="flex items-center">
                 <div class="bg-primary/10 p-2 rounded-lg mr-3">
@@ -187,71 +191,107 @@
                 </h3>
               </div>
             </div>
+            <div class="grid grid-cols-2 gap-3 mt-4">
+              <button
+                id="batch-pdf"
+                class="util-btn flex flex-col items-center justify-center p-2 cursor-pointer hover:border-primary/30"
+              >
+                <i class="fas fa-file-pdf text-primary text-xl mb-2"></i>
+                <span class="text-sm">PDF Report</span>
+              </button>
+              <script>
+                document
+                  .getElementById("batch-pdf")
+                  .addEventListener("click", function () {
+                    fetch("/get_latest_batch_predictions")
+                      .then((response) => response.json())
+                      .then((data) => {
+                        if (data.error) {
+                          alert(data.error);
+                          return;
+                        }
 
-            <div id="results" class="py-4">
-              <div class="text-center mb-6">
-                <div class="price-display text-primary mb-2"></div>
-                <p class="text-gray-600">Estimated Property Value</p>
-              </div>
+                        // Send to backend to save
+                        fetch("/generate-report-batch", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify(data),
+                        })
+                          .then((response) => response.json())
+                          .then((result) => {
+                            window.location.href = result.redirect;
+                          })
+                          .catch((err) => {
+                            console.error("Save failed:", err);
+                            alert("Save failed.");
+                          });
+                      })
+                      .catch((err) => {
+                        console.error("Fetch failed:", err);
+                        alert("Could not fetch prediction data.");
+                      });
+                  });
+              </script>
+              <button
+                id="save-batch"
+                class="util-btn flex flex-col items-center justify-center p-2 cursor-pointer hover:border-primary/30"
+              >
+                <i
+                  class="fa-solid fa-floppy-disk text-primary text-xl mb-2"
+                ></i>
+                <span class="text-sm">Save</span>
+              </button>
+              <script>
+                document
+                  .getElementById("save-batch")
+                  .addEventListener("click", function () {
+                    fetch("/get_latest_batch_predictions")
+                      .then((response) => response.json())
+                      .then((data) => {
+                        if (data.error) {
+                          alert(data.error);
+                          return;
+                        }
 
-              <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="info-card">
-                  <p class="text-sm text-gray-500">Price per m²</p>
-                  <p class="price_per_m2 font-semibold text-lg">$820.83</p>
-                </div>
-                <div class="info-card">
-                  <p class="text-sm text-gray-500">Land Area</p>
-                  <p class="land_area font-semibold text-lg">1,200 m²</p>
-                </div>
-              </div>
-
-              <div class="mb-6">
-                <div class="info-card">
-                  <p class="text-sm text-gray-500">Price Range</p>
-                  <p class="price_range font-semibold text-lg">
-                    $920,000 - $1,050,000
-                  </p>
-                  <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                    <div
-                      class="bg-primary h-2.5 rounded-full"
-                      style="width: 75%"
-                    ></div>
-                  </div>
-                  <div class="flex justify-between text-xs mt-1 text-gray-500">
-                    <span>Low</span>
-                    <span>Estimate</span>
-                    <span>High</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="generatePdfReport()"
-                  class="util-btn flex flex-col items-center justify-center p-4 cursor-pointer hover:border-primary/30"
-                >
-                  <i class="fas fa-file-pdf text-primary text-xl mb-2"></i>
-                  <span class="text-sm">PDF Report</span>
-                </button>
-                <button
-                  class="util-btn flex flex-col items-center justify-center p-4 cursor-pointer hover:border-primary/30"
-                >
-                  <i class="fas fa-share-alt text-primary text-xl mb-2"></i>
-                  <span class="text-sm">PDF Batch</span>
-                </button>
-              </div>
-
-
+                        // Send to backend to save
+                        fetch("/save-prediction-batch", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify(data),
+                        })
+                          .then((response) => response.json())
+                          .then((result) => {
+                            window.location.href = result.redirect;
+                          })
+                          .catch((err) => {
+                            console.error("Save failed:", err);
+                            alert("Save failed.");
+                          });
+                      })
+                      .catch((err) => {
+                        console.error("Fetch failed:", err);
+                        alert("Could not fetch prediction data.");
+                      });
+                  });
+              </script>
             </div>
           </div>
-          <!-- Comparable Properties -->
-          <!-- Value Trends -->
+        </div>
+        <!-- Comparable Properties -->
+        <!-- Value Trends -->
       </div>
     </main>
 
     <!-- Testimonials Section -->
 
     <!-- Footer -->
-    <footer class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4 border border-blue-50">
+    <footer
+      class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4 border border-blue-50"
+    >
       <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div class="sm:flex sm:items-center sm:justify-between">
           <a
@@ -295,9 +335,6 @@
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src={{ url_for('static', filename='js/batch.js') }}>
-      
-
-    </script>
+    <script src="{{ url_for('static', filename='js/batch.js') }}"></script>
   </body>
 </html>
