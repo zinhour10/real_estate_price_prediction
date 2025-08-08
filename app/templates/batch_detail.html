@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Land Price Prediction</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/map_detail.css') }}"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#0077FF",
+              "primary-dark": "#0066dd",
+              secondary: "#a9cf38",
+              "secondary-dark": "#95b82e",
+              dark: "#1e293b",
+              light: "#f8fafc",
+              gray: "#94a3b8",
+              warning: "#f59e0b",
+              danger: "#ef4444",
+            },
+            fontFamily: {
+              poppins: ["Poppins", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        background-color: none;
+      }
+    </style>
+  </head>
+  <body class="bg-dark">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <nav class="bg-[#a9cf38] border-gray-200 dark:bg-gray-900">
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+        ></div>
+      </nav>
+
+      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+        >
+          <a
+            href="{{ url_for('index') }}"
+            class="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <img
+              src="{{ url_for('static', filename='img/wing_logo.png') }}"
+              class="h-8"
+              alt="Flowbite Logo"
+            />
+          </a>
+          <button
+            data-collapse-toggle="navbar-default"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="navbar-default"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Hero Section -->
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Map and Input -->
+        <div class="lg:col-span-3">
+          <div
+            class="bg-white p-6 rounded-xl shadow-sm mb-6 border border-gray-100"
+          >
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-4 flex items-center"
+            >
+              <i class="fas fa-map-marked-alt text-primary mr-2"></i>
+              Interactive Property Map
+            </h2>
+            <div class="map-container relative">
+              <div id="map" class="h-full w-full rounded-xl">
+                <iframe
+                  src="{{ url_for('static', filename='map_batch_detail.html') }}"
+                  width="100%"
+                  height="600"
+                  style="border: none"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-2">
+          <!-- Neighborhood Insights -->
+          <div class="location-section mb-6">
+            <h3
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center"
+            >
+              <i class="fas fa-chart-pie text-primary mr-2"></i> Properties
+              Insights
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div class="stat-card">
+                <div class="text-2xl font-bold text-primary">8.2%</div>
+                <div class="text-sm text-gray-500">Price Growth</div>
+              </div>
+              <div class="stat-card">
+                <div
+                  id="properties_sold"
+                  class="text-2xl font-bold text-secondary"
+                >
+                  42
+                </div>
+                <div class="text-sm text-gray-500">Properties Sold</div>
+              </div>
+              <div class="stat-card">
+                <div
+                  id="avg_price_per_m2"
+                  class="text-2xl font-bold text-warning"
+                >
+                  $745K
+                </div>
+                <div class="text-sm text-gray-500">Avg. Price</div>
+              </div>
+              <div class="stat-card">
+                <div class="text-2xl font-bold text-primary">92</div>
+                <div class="text-sm text-gray-500">Walk Score</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Results and Comparisons -->
+        <div>
+          <!-- Prediction Results Card -->
+          <div class="results-card bg-white p-6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="bg-primary/10 p-2 rounded-lg mr-3">
+                  <i class="fas fa-chart-line text-primary text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">
+                  Prediction Results
+                </h3>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-4">
+              <button
+                id="batch-pdf"
+                class="util-btn flex flex-col items-center justify-center p-2 cursor-pointer hover:border-primary/30"
+              >
+                <i class="fas fa-file-pdf text-primary text-xl mb-2"></i>
+                <span class="text-sm">PDF Report</span>
+              </button>
+              <script>
+                document
+                  .getElementById("batch-pdf")
+                  .addEventListener("click", function () {
+                    fetch("/get_latest_batch_predictions")
+                      .then((response) => response.json())
+                      .then((data) => {
+                        if (data.error) {
+                          alert(data.error);
+                          return;
+                        }
+
+                        // Send to backend to save
+                        fetch("/generate-report-batch", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify(data),
+                        })
+                          .then((response) => response.json())
+                          .then((result) => {
+                            window.location.href = result.redirect;
+                          })
+                          .catch((err) => {
+                            console.error("Save failed:", err);
+                            alert("Save failed.");
+                          });
+                      })
+                      .catch((err) => {
+                        console.error("Fetch failed:", err);
+                        alert("Could not fetch prediction data.");
+                      });
+                  });
+              </script>
+              <button
+                id="save-batch"
+                class="util-btn flex flex-col items-center justify-center p-2 cursor-pointer hover:border-primary/30"
+              >
+                <i
+                  class="fa-solid fa-floppy-disk text-primary text-xl mb-2"
+                ></i>
+                <span class="text-sm">Save</span>
+              </button>
+              <script>
+                document
+                  .getElementById("save-batch")
+                  .addEventListener("click", function () {
+                    fetch("/get_latest_batch_predictions")
+                      .then((response) => response.json())
+                      .then((data) => {
+                        if (data.error) {
+                          alert(data.error);
+                          return;
+                        }
+
+                        // Send to backend to save
+                        fetch("/save-prediction-batch", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify(data),
+                        })
+                          .then((response) => response.json())
+                          .then((result) => {
+                            window.location.href = result.redirect;
+                          })
+                          .catch((err) => {
+                            console.error("Save failed:", err);
+                            alert("Save failed.");
+                          });
+                      })
+                      .catch((err) => {
+                        console.error("Fetch failed:", err);
+                        alert("Could not fetch prediction data.");
+                      });
+                  });
+              </script>
+            </div>
+          </div>
+        </div>
+        <!-- Comparable Properties -->
+        <!-- Value Trends -->
+      </div>
+    </main>
+
+    <!-- Testimonials Section -->
+
+    <!-- Footer -->
+    <footer
+      class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4 border border-blue-50"
+    >
+      <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+          <a
+            href="https://flowbite.com/"
+            class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
+          >
+            <img
+              src="{{ url_for('static', filename='img/wing_logo.png') }}"
+              class="h-8"
+              alt="Flowbite Logo"
+            />
+          </a>
+          <ul
+            class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
+          >
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">About</a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6"
+                >Privacy Policy</a
+              >
+            </li>
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <hr
+          class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
+        />
+        <span
+          class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
+          >© 2023 <a href="https://flowbite.com/" class="hover:underline"></a>.
+          All Rights Reserved.</span
+        >
+      </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/batch.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+[1] Annamoradnejad, Rahimberdi & Annamoradnejad, Issa. (2022). Machine Learning for Housing Price Prediction. 10.4018/978-1-7998-9220-5.ch163.
+[2] 1822-b.e-ece-batchno-120.pdf
+[3] K. Chanasit, E. Chuangsuwanich, A. Suchato and P. Punyabukkana, "A Real Estate Valuation Model Using Boosted Feature Selection," in IEEE Access, vol. 9, pp. 86938-86953, 2021, doi: 10.1109/ACCESS.2021.3089198.
+[4] V. Mayya, C. King, G. T. Vu and V. Gurupur, "Empirical Study of Feature Selection Methods in Regression for Large-Scale Healthcare Data: A Case Study on Estimating Dental Expenditures," in IEEE Access, vol. 12, pp. 153564-153579, 2024, doi: 10.1109/ACCESS.2024.3482192
+[5] https://www.realestate.com.kh/
+[6] https://cambodia-real-estate.com/
+[7] https://www.kontur.io/datasets/population-dataset/

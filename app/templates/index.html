@@ -1,341 +1,482 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Land Price Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    <link rel="icon" href="{{ url_for('static', filename='img/wing_logo.png') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2563eb',
-                        'primary-dark': '#1d4ed8',
-                        secondary: '#10b981',
-                        dark: '#1e293b',
-                        light: '#f8fafc',
-                        gray: '#94a3b8',
-                        warning: '#f59e0b',
-                        danger: '#ef4444',
-                    },
-                    fontFamily: {
-                        poppins: ['Poppins', 'sans-serif'],
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb",
+              "primary-dark": "#1d4ed8",
+              secondary: "#10b981",
+              dark: "#1e293b",
+              light: "#f8fafc",
+              gray: "#94a3b8",
+              warning: "#f59e0b",
+              danger: "#ef4444",
+            },
+            fontFamily: {
+              poppins: ["Poppins", "sans-serif"],
+            },
+          },
+        },
+      };
     </script>
-</head>
-<body class="bg-gray-50">
+  </head>
+  <body class="bg-gray-50">
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        
-<nav class="bg-[#a9cf38] border-gray-200 dark:bg-gray-900">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    
-  </div>
-</nav>
+      <nav class="bg-[#a9cf38] border-gray-200 dark:bg-gray-900">
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+        ></div>
+      </nav>
 
-<nav class="bg-white border-gray-200 dark:bg-gray-900">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="{{ url_for('index') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
-    </a>
-    <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-  </div>
-</nav>
-
+      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+        >
+          <a
+            href="{{ url_for('index') }}"
+            class="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <img
+              src="{{ url_for('static', filename='img/wing_logo.png') }}"
+              class="h-8"
+              alt="Flowbite Logo"
+            />
+          </a>
+          <button
+            data-collapse-toggle="navbar-default"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="navbar-default"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+      </nav>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column - Map -->
-            <div class="lg:col-span-2">
-                <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Select Location</h2>
-                    <div class="map-container">
-                        <div id="map" class="h-full w-full">
-                            <iframe src="{{ url_for('static', filename='map.html') }}" width="100%" height="600" style="border:none;"></iframe>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Location Details -->
-                <div class="location-section">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Location Details</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div>
-                            <label for="address_subdivision" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                            <select id="address_subdivision" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>Choose a City</option>
-        
-                            </select>
-                        </div>
-                        <div>
-                            <label for="address_locality"class="block text-sm font-medium text-gray-700 mb-1">District</label>
-                            <select id="address_locality" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>Choose a District</option>
-                              
-                            </select>
-                        </div>
-                        <div>
-                            <label for="address_line_2" class="block text-sm font-medium text-gray-700 mb-1">Commune</label>
-                            <select id="address_line_2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>Choose a Commune</option>
-                               
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-wrap gap-2">
-                        <span id="city-show" class="location-tag"><i class="fas fa-city text-primary"></i></span>
-                        <span id="district-show" class="location-tag"><i class="fas fa-map-marker-alt text-primary"></i></span>
-                        <span id="commune-show"class="location-tag"><i class="fas fa-home text-primary"></i></span>
-                        <span id="location-show"class="location-tag"><i class="fas fa-map-pin text-primary"></i></span>
-                    </div>
-                </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Map -->
+        <div class="lg:col-span-2">
+          <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+              Select Location
+            </h2>
+            <div class="map-container">
+              <div id="map" class="h-full w-full">
+                <iframe
+                  src="{{ url_for('static', filename='map.html') }}"
+                  width="100%"
+                  height="600"
+                  style="border: none"
+                ></iframe>
+              </div>
             </div>
-            
-            <!-- Right Column - Input and Results -->
-            <div>
-                <!-- Input Card -->
-                <div class="input-card bg-white p-6 mb-6">
-                    <div class="flex items-center mb-6">
-                        <i class="fa-solid fa-location-dot text-primary text-xl mr-3"></i>
-                        <h3 class="text-xl font-semibold text-gray-800">Coordinates</h3>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs text-gray-500 mb-1">Latitude</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-globe-americas text-gray-400"></i>
-                                    </div>
-                                    <input type="text" id="latitude" class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs text-gray-500 mb-1">Longitude</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-globe text-gray-400"></i>
-                                    </div>
-                                    <input type="text" id="longitude" class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Land Area</label>
-                        <div class="grid grid-cols-1 gap-4">
-                            <div>
-                                <input type="number" id="land-area" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary" placeholder="Enter land area in square meters">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex space-x-3">
-                        <button id="get-location" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
-                            <i class="fas fa-location-arrow mr-2"></i> My Location
-                        </button>
-                        <button id="copy-coords" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center">
-                            <i class="fas fa-copy mr-2"></i> Copy
-                        </button>
-                    </div>
-                    
-                    <button id="predict-btn" class="w-full mt-6 bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium flex items-center justify-center">
-                        <i class="fas fa-bolt mr-2"></i> Predict
-                    </button>
-                    <div id="result" class="mt-4 text-lg text-primary"></div>
+          </div>
 
-                </div>
-                
-                <!-- Results Card -->
-                <div class="results-card bg-white p-6">
-                    <div class="flex items-center mb-6">
-                        <i class="fas fa-chart-line text-primary text-xl mr-3"></i>
-                        <h3 class="text-xl font-semibold text-gray-800">Prediction Results</h3>
-                    </div>
-                    
-                    <div id="results" class="text-center py-4">
-                        <div class="text-gray-500 mb-4">
-                            <i class="fas fa-map-marker-alt text-2xl mb-2"></i>
-                            <p>Enter coordinates and click "Predict" to see results</p>
-                        </div>
-                        
-                        <div id="result-display" class="hidden">
-                            <div class="price-display text-primary mb-6"></div>
-                            
-                            <div class="grid">
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div class="info-card">
-                                        <p class="text-sm text-gray-500">Price per m<sup>2</sup></p>
-                                        <p id="price-per-m2" class="font-semibold"></p>
-                                    </div>
-                                    <div class="info-card">
-                                        <p class="text-sm text-gray-500">Land Area</p>
-                                        <p id="land-area-show" class="font-semibold"></p>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 mb-4">
-                                   <div class="info-card">
-                                        <p class="text-sm text-gray-500">Price Range</p>
-                                        <p id="price-range" class="font-semibold text-lg">$920,000 - $1,050,000</p>
-                                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                                            <div class="bg-primary h-2.5 rounded-full" style="width: 75%"></div>
-                                        </div>
-                                        <div class="flex justify-between text-xs mt-1 text-gray-500">
-                                            <span>Low</span>
-                                            <span>Estimate</span>
-                                            <span>High</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-2 gap-3 h-[50px]">
-                                <button id="detail-btn" class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
-                                    <i class="fa-solid fa-circle-info text-white text-xl mb-2"></i>
-                                    <span class="text-sm text-white">Detail</span>
-                                </button>
-                                <button class="bg-primary util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3">
-                                    <i class="fas fa-file-pdf text-white text-xl mb-2"></i>
-                                    <span class="text-sm text-white">PDF Report</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Model Information -->
-                    
-                </div>
+          <!-- Location Details -->
+          <div class="location-section">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+              Location Details
+            </h3>
+            <!-- Select
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div>
+                <label
+                  for="address_subdivision"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >City</label
+                >
+                <select
+                  id="address_subdivision"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option selected>Choose a City</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  for="address_locality"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >District</label
+                >
+                <select
+                  id="address_locality"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option selected>Choose a District</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  for="address_line_2"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Commune</label
+                >
+                <select
+                  id="address_line_2"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option selected>Choose a Commune</option>
+                </select>
+              </div>
             </div>
+             -->
+
+            <div class="flex flex-wrap gap-2">
+              <span id="city-show" class="location-tag"
+                ><i class="fas fa-city text-primary"></i
+              ></span>
+              <span id="district-show" class="location-tag"
+                ><i class="fas fa-map-marker-alt text-primary"></i
+              ></span>
+              <span id="commune-show" class="location-tag"
+                ><i class="fas fa-home text-primary"></i
+              ></span>
+              <!--
+              <span id="location-show" class="location-tag"
+                ><i class="fas fa-map-pin text-primary"></i
+              ></span>
+              -->
+            </div>
+          </div>
         </div>
+
+        <!-- Right Column - Input and Results -->
+        <div>
+          <!-- Input Card -->
+          <div class="input-card bg-white p-6 mb-6">
+            <div class="flex items-center mb-6">
+              <i class="fa-solid fa-location-dot text-primary text-xl mr-3"></i>
+              <h3 class="text-xl font-semibold text-gray-800">Coordinates</h3>
+            </div>
+
+            <div class="mb-6">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs text-gray-500 mb-1"
+                    >Latitude</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                      <i class="fas fa-globe-americas text-gray-400"></i>
+                    </div>
+                    <input
+                      type="text"
+                      id="latitude"
+                      class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-500 mb-1"
+                    >Longitude</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                      <i class="fas fa-globe text-gray-400"></i>
+                    </div>
+                    <input
+                      type="text"
+                      id="longitude"
+                      class="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Land Area</label
+              >
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <input
+                    type="number"
+                    id="land-area"
+                    class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
+                    placeholder="Enter land area in square meters"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="flex space-x-3">
+              <button
+                id="get-location"
+                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center"
+              >
+                <i class="fas fa-location-arrow mr-2"></i> My Location
+              </button>
+              <button
+                id="upload-file"
+                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-medium flex items-center justify-center"
+              >
+                <i class="fa-solid fa-upload mr-2"></i> Upload
+              </button>
+            </div>
+
+            <button
+              id="predict-btn"
+              class="w-full mt-6 bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium flex items-center justify-center"
+            >
+              <i class="fas fa-bolt mr-2"></i> Predict
+            </button>
+            <div id="result" class="mt-4 text-lg text-primary"></div>
+          </div>
+
+          <!-- Results Card -->
+          <div class="results-card bg-white p-6">
+            <div class="flex items-center mb-6">
+              <i class="fas fa-chart-line text-primary text-xl mr-3"></i>
+              <h3 class="text-xl font-semibold text-gray-800">
+                Prediction Results
+              </h3>
+            </div>
+
+            <div id="results" class="text-center py-4">
+              <div class="text-gray-500 mb-4">
+                <i class="fas fa-map-marker-alt text-2xl mb-2"></i>
+                <p>Enter coordinates and click "Predict" to see results</p>
+              </div>
+
+              <div id="result-display" class="hidden">
+                <div class="text-center mb-6">
+                  <div class="price-display text-primary mb-2"></div>
+                  <p class="text-gray-600">Estimated Property Price</p>
+                </div>
+
+                <!--
+                <div class="grid">
+                  <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="info-card">
+                      <p class="text-sm text-gray-500">
+                        Price per m<sup>2</sup>
+                      </p>
+                      <p id="price-per-m2" class="font-semibold"></p>
+                    </div>
+                    <div class="info-card">
+                      <p class="text-sm text-gray-500">Land Area</p>
+                      <p id="land-area-show" class="font-semibold"></p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 mb-4">
+                    <div class="info-card">
+                      <p class="text-sm text-gray-500">
+                        Price Per M<sup>2</sup> Range
+                      </p>
+                      <div class="price_range flex flex-row justify-between">
+                        <p id="price-min" class="font-semibold text-lg">
+                          $920,000
+                        </p>
+                        <p id="price-max" class="font-semibold text-lg">
+                          $920,000
+                        </p>
+                      </div>
+                      <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                        <div
+                          class="bg-primary h-2.5 rounded-full"
+                          style="width: 50%"
+                        ></div>
+                      </div>
+                      <div
+                        class="flex justify-between text-xs mt-1 text-gray-500"
+                      >
+                        <span>Low</span>
+                        <span>Estimate</span>
+                        <span>High</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                -->
+                <div class="grid grid-cols-2 gap-3 h-[50px]">
+                  <button
+                    id="detail-btn"
+                    class="util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3 hover:border-primary/30"
+                  >
+                    <i
+                      class="fa-solid fa-circle-info text-primary text-xl mb-2"
+                    ></i>
+                    <span class="text-sm">Detail</span>
+                  </button>
+                  <button
+                    onclick="generatePdfReport()"
+                    class="util-btn flex flex-row items-center justify-center p-4 cursor-pointer gap-3 hover:border-primary/30"
+                  >
+                    <i class="fas fa-file-pdf text-primary text-xl mb-2"></i>
+                    <span class="text-sm">PDF Report</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model Information -->
+          </div>
+        </div>
+      </div>
     </main>
-    
+    <div
+      id="popup-modal"
+      tabindex="-1"
+      class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center"
+    >
+      <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <!-- Close button -->
+          <button
+            type="button"
+            class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="popup-modal"
+          >
+            ✕
+          </button>
+
+          <!-- Modal body -->
+          <div class="p-4 md:p-5 text-center">
+            <svg
+              class="mx-auto mb-4 text-[#a9cf38] w-12 h-12 dark:text-gray-200"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <h3
+              class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
+            >
+              Are you sure you want to view the results?
+            </h3>
+            <button
+              id="view-batch"
+              type="button"
+              class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5"
+            >
+              Yes, I'm sure
+            </button>
+            <button
+              type="button"
+              data-modal-hide="popup-modal"
+              id="view-cancel"
+              class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            >
+              No, cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
 
-
-<footer class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4">
-    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+    <footer
+      class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4 border border-blue-50"
+    >
+      <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div class="sm:flex sm:items-center sm:justify-between">
-            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-                <img src="{{ url_for('static', filename='img/wing_logo.png') }}" class="h-8" alt="Flowbite Logo" />
-            </a>
-            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline">Contact</a>
-                </li>
-            </ul>
+          <a
+            href="https://flowbite.com/"
+            class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
+          >
+            <img
+              src="{{ url_for('static', filename='img/wing_logo.png') }}"
+              class="h-8"
+              alt="Flowbite Logo"
+            />
+          </a>
+          <ul
+            class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
+          >
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">About</a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6"
+                >Privacy Policy</a
+              >
+            </li>
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline">Contact</a>
+            </li>
+          </ul>
         </div>
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline"></a>. All Rights Reserved.</span>
-    </div>
-</footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('predict-btn').addEventListener('click', function() {
-        const landArea = parseFloat(document.getElementById('land-area').value);
-        if (isNaN(landArea) || landArea <= 0) {
-            document.getElementById('result').textContent = "Please enter a valid land area.";
-            return;
-        }
-        fetch(`/run-model?land_area=${landArea}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('result').textContent = "Error: " + data.error;
-                    // Hide result card if error
-                    document.getElementById('result-display').classList.add('hidden');
-                } else {
-                    // Hide the default message
-                    document.querySelector('#results > .text-gray-500').style.display = 'none';
-                    // Show the result card
-                    document.getElementById('result-display').classList.remove('hidden');
-                    // Update the price
-                    document.querySelector('.price-display').textContent = `$${data.price.toLocaleString()}`;
-                    document.querySelector('#price-per-m2').textContent = `$${data.price_per_m2.toLocaleString()}`;
-                    document.getElementById('price-range').textContent = `$${Math.round(data.price_range[0]).toLocaleString()} - $${Math.round(data.price_range[1]).toLocaleString()}`;
-                    document.querySelector('#land-area-show').innerHTML = `${data.land_area.toLocaleString()} m<sup>2</sup>`;
-                    // Optionally update other fields if your backend returns them
-                    // document.querySelector('.confidence-badge').textContent = data.confidence ? `${data.confidence}% Confidence` : '';
-                    // etc.
-                }
-            })
-            .catch(() => {
-                document.getElementById('result').textContent = "Prediction failed.";
-                document.getElementById('result-display').classList.add('hidden');
-            });
-    });
-});
-
-
-
-document.getElementById('get-location').addEventListener('click', function() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            // Set the input fields
-            document.getElementById('latitude').value = lat.toFixed(6);
-            document.getElementById('longitude').value = lng.toFixed(6);
-
-            // Store coordinates in backend
-            fetch('/store-coord', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    latitude: lat,
-                    longitude: lng
-                })
-            });
-
-            // Move the map in the iframe
-            const mapFrame = document.querySelector('#map iframe');
-            if (mapFrame) {
-                mapFrame.contentWindow.postMessage(
-                    { type: 'moveToLocation', lat: lat, lng: lng },
-                    '*'
-                );
-            }
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-});
-
-document.getElementById('detail-btn').addEventListener('click', function() {
-    window.location.href = "/detail";});
-</script>
-    
-</body>
-</html> 
+        <hr
+          class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
+        />
+        <span
+          class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
+          >© 2023 <a href="https://flowbite.com/" class="hover:underline"></a>.
+          All Rights Reserved.</span
+        >
+      </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  </body>
+</html>

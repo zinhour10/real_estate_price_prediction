@@ -57,3 +57,8 @@ body {
     font-family: 'Poppins', sans-serif;
     min-height: 100vh;
 }
+
+#radarChart {
+
+    justify-self: center
+  }
