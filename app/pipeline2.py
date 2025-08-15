@@ -1,9 +1,9 @@
 try:
     from .shared import stored_coords
-    from .features import get_all_features
+    from .features_old import get_all_features
 except ImportError:
     from shared import stored_coords
-    from features import get_all_features
+    from app.features_old import get_all_features
 import pandas as pd
 import joblib
 from sklearn.preprocessing import OneHotEncoder
