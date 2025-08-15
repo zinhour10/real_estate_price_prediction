@@ -54,7 +54,7 @@ def get_road_type_features(lat, lon, distance=100):
         features[f'f_{road_type}'] = int(road_type in nearby['fclass'].values)
     return features
 
-# Load all reference data ONCE
+# Load all reference data ONCE 
 cafe_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\cafe_location.csv')
 gas_station_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\gas_station_location.csv')
 hospital_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\hospital_lat_lon.csv')
