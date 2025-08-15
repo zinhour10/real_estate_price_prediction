@@ -4,16 +4,20 @@ try:
 except ImportError:
     from shared import stored_coords
     from features import get_all_features
+from . import shared
 import pandas as pd
 import joblib
 import numpy as np
+import os
 
 lat = stored_coords.get('lat')
 lon = stored_coords.get('lon')
 
 # Update model path to label encoded version
-MODEL_PATH = r"D:\CADT\Internship\Internship-I\real_estate_price_prediction\models\xgboost\xgboost_model_label_v3.joblib"
-LABEL_ENCODERS_PATH = r"D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\processed\label_encoders.pkl"
+# MODEL_PATH = r"D:\CADT\Internship\Internship-I\real_estate_price_prediction\models\xgboost\xgboost_model_label_v3.joblib"
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "../models/xgboost/xgboost_model_label_v3.joblib")
+# LABEL_ENCODERS_PATH = r"D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\processed\label_encoders.pkl"
+LABEL_ENCODERS_PATH = os.path.join(os.path.dirname(__file__), "../data/processed/label_encoders.pkl")
 
 model = joblib.load(MODEL_PATH)
 label_encoders = joblib.load(LABEL_ENCODERS_PATH)

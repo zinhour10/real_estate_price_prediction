@@ -319,168 +319,122 @@ def create_folium_map():
             html[pend:]
         )
     return "map.html"
-def get_prediction():
-    response = requests.get("http://127.0.0.1:5000/run-model")
-    return response.json()
+import os
+import folium
 
-def get_nearby_properties():
-    response = requests.get("http://127.0.0.1:5000/nearby-properties")
-    return response.json()
+# def get_prediction():
+#     # Local import to avoid circular import
+#     from .routes import get_prediction_data
+#     prediction = get_prediction_data()
+#     return prediction
 
-def create_folium_map_for_detial():
-    prediction = get_prediction()
+# def get_nearby_properties():
+#     # Local import to avoid circular import
+#     from .routes import get_nearby_properties_route
+#     nearby_data = get_nearby_properties_route()
+#     return nearby_data
+
+def create_folium_map_for_detial(global_train_df):
+    from .routes import get_prediction_data, get_nearby_properties_data
+    prediction = get_prediction_data()
     print("Prediction Data:", prediction)  # Debug print
-    
-    # Set center coordinates based on prediction
+
+    # Set default center if missing
     center_coord = [prediction.get('lat', 11.5736576), prediction.get('lon', 104.923136)]
     
     vmap = folium.Map(location=center_coord, zoom_start=15)
     
-    # Add marker with more visible properties
+    # Main property marker
     folium.Marker(
-        location=[prediction['lat'], prediction['lon']],
+        location=[prediction.get('lat', 11.5736576), prediction.get('lon', 104.923136)],
         tooltip="Click for details",
         popup=f"""
             <b>Property Details</b><br>
-            Price: ${prediction['price']:,.2f}<br>
-            Price/m²: ${prediction['price_per_m2']:,.2f}<br>
-            Land Area: {prediction['land_area']}
+            Price: ${prediction.get('price', 0):,.2f}<br>
+            Price/m²: ${prediction.get('price_per_m2', 0):,.2f}<br>
+            Land Area: {prediction.get('land_area', 0)}
         """,
         icon=folium.Icon(color="red", icon="home", prefix="fa"),
     ).add_to(vmap)
-    radius_meters = 500 
 
+    radius_meters = 500 
     folium.Circle(
-        location=[prediction['lat'], prediction['lon']],
-        radius=radius_meters,  # This is now in meters
+        location=center_coord,
+        radius=radius_meters,
         color="black",
         weight=1,
         fill_opacity=0.2,
         opacity=1,
         fill_color="green",
         fill=True,
-        tooltip="1km radius",
+        tooltip="500m radius",
     ).add_to(vmap)
-    nearby_data = get_nearby_properties()
+    nearby_data = get_nearby_properties_data(global_train_df)
+    
     if nearby_data.get('status') != 'success' or not nearby_data.get('results', {}).get('nearby_properties'):
         print("Warning: No nearby properties found or API error")
-        # Save basic map anyway
         map_path = os.path.join("app", "static", "map_detail.html")
         vmap.save(map_path)
         return map_path    
+
     nearby_properties = nearby_data['results']['nearby_properties']
     for idx, prop in enumerate(nearby_properties):
-        # Different colors based on distance
         distance = prop.get('distance_km', float('inf'))
-        if distance < 0.5:
-            color = "green"
-        elif distance < 1:
-            color = "blue"
-        else:
-            color = "orange"
+        color = "green" if distance < 0.5 else "blue" if distance < 1 else "orange"
         folium.Marker(
-            location=[prop['latitude'], prop['longitude']],
+            location=[prop.get('latitude', 0), prop.get('longitude', 0)],
             tooltip=f"Nearby Property #{idx+1}",
             popup=f"""
                 <b>Nearby Property</b><br>
-                Price: ${prop['price']:,.2f}<br>
-                Price/m²: ${prop['price_per_m2']:,.2f}<br>
-                Land Area: {prop['land_area']} m²<br>
+                Price: ${prop.get('price', 0):,.2f}<br>
+                Price/m²: ${prop.get('price_per_m2', 0):,.2f}<br>
+                Land Area: {prop.get('land_area', 0)} m²<br>
                 Distance: {distance:.2f} km<br>
-                ID: {prop['h_id']}<br>
-                <a href="/property-details/{prop['h_id']}" target="_blank">More Details</a>
+                ID: {prop.get('h_id', 'N/A')}<br>
+                <a href="/property-details/{prop.get('h_id', '')}" target="_blank">More Details</a>
             """,
             icon=folium.Icon(color=color, icon="home", prefix="fa"),
         ).add_to(vmap)
-        # folium.PolyLine(
-        #     locations=[
-        #         [prediction['lat'], prediction['lon']],
-        #         [prop['latitude'], prop['longitude']]
-        #     ],
-        #     color="gray",
-        #     weight=1.5,
-        #     opacity=0.5,
-        #     tooltip=f"{distance:.2f} km"
-        # ).add_to(vmap)
-    
-    
-    
+
     map_path = os.path.join("app", "static", "map_detail.html")
     vmap.save(map_path)
-    print(f"Map saved to: {map_path}")  # Debug print
-    
+    print(f"Map saved to: {map_path}")
     return "map_detail.html"
-def create_folium_map_for_batch_detail():
-    vmap = folium.Map(location=center_coord, zoom_start=15)
-    response = requests.get("http://127.0.0.1:5000/get_latest_batch_predictions")
-    data = response.json()
 
-    # Access the 'results' list
-    results = data.get("results", [])
-    
+def create_folium_map_for_batch_detail():
+    from .routes import get_latest_batch_predictions_data
+    response = get_latest_batch_predictions_data()
+    results = response.get("results", [])
+    print("results:", results)
+
+    # Default center if needed
+    center_coord = [11.5736576, 104.923136]
+    vmap = folium.Map(location=center_coord, zoom_start=15)
+
     for idx, prop in enumerate(results):
-        # Safely get all properties with defaults
         latitude = prop.get('latitude') or prop.get('lat')
         longitude = prop.get('longitude') or prop.get('lon')
-        price = prop.get('price')
+        if not latitude or not longitude:
+            continue
+        price = prop.get('price', 0)
+        land_area = prop.get('land_area', 0)
+        price_per_m2 = prop.get('price_per_m2', 0)
         address_line_2 = prop.get('address_line_2', '')
         address_locality = prop.get('address_locality', '')
         address_subdivision = prop.get('address_subdivision', '')
-        land_area = prop.get('land_area')
-        price_per_m2 = prop.get('price_per_m2')
-
-        # Skip if we don't have coordinates or any essential field is null/empty
-        if not latitude or not longitude or None in (price, land_area, price_per_m2):
-            continue
-
-        # Format numbers
-        try:
-            price_formatted = f"${float(price):,.0f}"
-            land_area_formatted = f"{float(land_area):,.0f}"
-            price_per_m2_formatted = f"${float(price_per_m2):,.0f}"
-        except (ValueError, TypeError):
-            continue  # Skip if formatting fails
 
         folium.Marker(
             location=[latitude, longitude],
-            tooltip=f"""
-<div class="p-3">
-<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-    <div class="flex flex-col pb-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
-        <dd class="text-lg font-semibold text-red-600">{price_formatted}</dd>
-    </div>
-    <div class="flex flex-col py-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
-        <dd class="text-lg font-semibold">{address_line_2}, {address_locality}, {address_subdivision}, Cambodia</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
-        <dd class="text-lg font-semibold">{land_area_formatted}</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
-        <dd class="text-lg font-semibold">{price_per_m2_formatted}</dd>
-    </div>
-</dl>
-</div>
-<div data-popper-arrow></div>
+            tooltip=f"Property #{idx+1}",
+            popup=f"""
+                <b>Price:</b> ${price:,.0f}<br>
+                <b>Address:</b> {address_line_2}, {address_locality}, {address_subdivision}, Cambodia<br>
+                <b>Land Area:</b> {land_area}<br>
+                <b>Price/m²:</b> {price_per_m2}
             """,
             icon=folium.Icon(color="blue", icon="home", prefix="fa"),
         ).add_to(vmap)
-    
+
     map_path = os.path.join("app", "static", "map_batch_detail.html")
     vmap.save(map_path)
-    
-    # Add custom head content
-    custom_head_content = """
-    <!-- Custom style injected -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
-    """
-    with open(map_path, "r", encoding="utf-8") as file:
-        html = file.read()
-    updated_html = html.replace("</head>", f"{custom_head_content}\n</head>")
-    with open(map_path, "w", encoding="utf-8") as file:
-        file.write(updated_html)
-
     return "map_batch_detail.html"

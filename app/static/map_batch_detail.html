@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_048d12f23f3d24a2c5d6b74883ebf6db {
+                #map_3ec95b4644250b5827ad38f44c19dbc8 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -35,24 +35,20 @@
                 .leaflet-container { font-size: 1rem; }
             </style>
         
-
-    <!-- Custom style injected -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
-    
 </head>
 <body>
     
     
-            <div class="folium-map" id="map_048d12f23f3d24a2c5d6b74883ebf6db" ></div>
+            <div class="folium-map" id="map_3ec95b4644250b5827ad38f44c19dbc8" ></div>
         
 </body>
 <script>
     
     
-            var map_048d12f23f3d24a2c5d6b74883ebf6db = L.map(
-                "map_048d12f23f3d24a2c5d6b74883ebf6db",
+            var map_3ec95b4644250b5827ad38f44c19dbc8 = L.map(
+                "map_3ec95b4644250b5827ad38f44c19dbc8",
                 {
-                    center: [11.5750454, 104.9240291],
+                    center: [11.5736576, 104.923136],
                     crs: L.CRS.EPSG3857,
                     zoom: 15,
                     zoomControl: true,
@@ -64,175 +60,147 @@
 
         
     
-            var tile_layer_9f3f9eac99d1504174f5b1e783c0caef = L.tileLayer(
+            var tile_layer_d96e818018e660871c8f82cd98e0c285 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_048d12f23f3d24a2c5d6b74883ebf6db);
+            ).addTo(map_3ec95b4644250b5827ad38f44c19dbc8);
         
     
-            var marker_9fc70d6da7a6f93f4cdc78a7680a7f8e = L.marker(
+            var marker_d23c8dda9518561e72e29957b649ed7f = L.marker(
                 [11.578252149251652, 104.91531372070314],
                 {}
-            ).addTo(map_048d12f23f3d24a2c5d6b74883ebf6db);
+            ).addTo(map_3ec95b4644250b5827ad38f44c19dbc8);
         
     
-            var icon_5aba4a747d0fd6adf5554c14234bf101 = L.AwesomeMarkers.icon(
+            var icon_b30f8df4a8884dcbf48c5a03180d9384 = L.AwesomeMarkers.icon(
                 {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
             );
-            marker_9fc70d6da7a6f93f4cdc78a7680a7f8e.setIcon(icon_5aba4a747d0fd6adf5554c14234bf101);
+            marker_d23c8dda9518561e72e29957b649ed7f.setIcon(icon_b30f8df4a8884dcbf48c5a03180d9384);
         
     
-            marker_9fc70d6da7a6f93f4cdc78a7680a7f8e.bindTooltip(
-                `<div>
-                     
-<div class="p-3">
-<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-    <div class="flex flex-col pb-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
-        <dd class="text-lg font-semibold text-red-600">$5,715,986</dd>
-    </div>
-    <div class="flex flex-col py-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
-        <dd class="text-lg font-semibold">Srah Chak, Doun Penh, Phnom Penh, Cambodia</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
-        <dd class="text-lg font-semibold">1,302</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
-        <dd class="text-lg font-semibold">$4,390</dd>
-    </div>
-</dl>
-</div>
-<div data-popper-arrow></div>
+        var popup_ad934309f94dc82963b9bdfb67c36a0d = L.popup({"maxWidth": "100%"});
+
+        
             
+                var html_f0f9f591a9891351d4e5d2c038423dd0 = $(`<div id="html_f0f9f591a9891351d4e5d2c038423dd0" style="width: 100.0%; height: 100.0%;">                 <b>Price:</b> $5,715,986<br>                 <b>Address:</b> Srah Chak, Doun Penh, Phnom Penh, Cambodia<br>                 <b>Land Area:</b> 1302.0<br>                 <b>Price/m²:</b> 4390.15771484375             </div>`)[0];
+                popup_ad934309f94dc82963b9bdfb67c36a0d.setContent(html_f0f9f591a9891351d4e5d2c038423dd0);
+            
+        
+
+        marker_d23c8dda9518561e72e29957b649ed7f.bindPopup(popup_ad934309f94dc82963b9bdfb67c36a0d)
+        ;
+
+        
+    
+    
+            marker_d23c8dda9518561e72e29957b649ed7f.bindTooltip(
+                `<div>
+                     Property #1
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var marker_fde92d423294ae240013ad5317a9cbf8 = L.marker(
+            var marker_7259c651de2e63ab82d80c34be2b6641 = L.marker(
                 [11.517705009897712, 104.94415283203126],
                 {}
-            ).addTo(map_048d12f23f3d24a2c5d6b74883ebf6db);
+            ).addTo(map_3ec95b4644250b5827ad38f44c19dbc8);
         
     
-            var icon_69a43546eb814358dc4b14f486591884 = L.AwesomeMarkers.icon(
+            var icon_b12d66b9ef91e2f18470230595df7efe = L.AwesomeMarkers.icon(
                 {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
             );
-            marker_fde92d423294ae240013ad5317a9cbf8.setIcon(icon_69a43546eb814358dc4b14f486591884);
+            marker_7259c651de2e63ab82d80c34be2b6641.setIcon(icon_b12d66b9ef91e2f18470230595df7efe);
         
     
-            marker_fde92d423294ae240013ad5317a9cbf8.bindTooltip(
-                `<div>
-                     
-<div class="p-3">
-<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-    <div class="flex flex-col pb-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
-        <dd class="text-lg font-semibold text-red-600">$581,450</dd>
-    </div>
-    <div class="flex flex-col py-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
-        <dd class="text-lg font-semibold">Preaek Pra, Chbar Ampov, Phnom Penh, Cambodia</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
-        <dd class="text-lg font-semibold">784</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
-        <dd class="text-lg font-semibold">$742</dd>
-    </div>
-</dl>
-</div>
-<div data-popper-arrow></div>
+        var popup_cb5b61c71dcfdf1977316a5d49ce7947 = L.popup({"maxWidth": "100%"});
+
+        
             
+                var html_a4a6d5b3b46904331e927c467ca17752 = $(`<div id="html_a4a6d5b3b46904331e927c467ca17752" style="width: 100.0%; height: 100.0%;">                 <b>Price:</b> $581,450<br>                 <b>Address:</b> Preaek Pra, Chbar Ampov, Phnom Penh, Cambodia<br>                 <b>Land Area:</b> 783.8<br>                 <b>Price/m²:</b> 741.8349609375             </div>`)[0];
+                popup_cb5b61c71dcfdf1977316a5d49ce7947.setContent(html_a4a6d5b3b46904331e927c467ca17752);
+            
+        
+
+        marker_7259c651de2e63ab82d80c34be2b6641.bindPopup(popup_cb5b61c71dcfdf1977316a5d49ce7947)
+        ;
+
+        
+    
+    
+            marker_7259c651de2e63ab82d80c34be2b6641.bindTooltip(
+                `<div>
+                     Property #2
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var marker_1e9e482ee21858febb0ab5b3645a88ca = L.marker(
+            var marker_1b37d348c1265d8adde42bbba9e02aca = L.marker(
                 [11.55201666081867, 104.87960815429688],
                 {}
-            ).addTo(map_048d12f23f3d24a2c5d6b74883ebf6db);
+            ).addTo(map_3ec95b4644250b5827ad38f44c19dbc8);
         
     
-            var icon_5e83c9bc854a36cc4de68a6136459e1b = L.AwesomeMarkers.icon(
+            var icon_3b9514d103dcc25f4914ec7bc7564c96 = L.AwesomeMarkers.icon(
                 {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
             );
-            marker_1e9e482ee21858febb0ab5b3645a88ca.setIcon(icon_5e83c9bc854a36cc4de68a6136459e1b);
+            marker_1b37d348c1265d8adde42bbba9e02aca.setIcon(icon_3b9514d103dcc25f4914ec7bc7564c96);
         
     
-            marker_1e9e482ee21858febb0ab5b3645a88ca.bindTooltip(
-                `<div>
-                     
-<div class="p-3">
-<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-    <div class="flex flex-col pb-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
-        <dd class="text-lg font-semibold text-red-600">$2,067,642</dd>
-    </div>
-    <div class="flex flex-col py-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
-        <dd class="text-lg font-semibold">Tuek Thla, Saensokh, Phnom Penh, Cambodia</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
-        <dd class="text-lg font-semibold">606</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
-        <dd class="text-lg font-semibold">$3,411</dd>
-    </div>
-</dl>
-</div>
-<div data-popper-arrow></div>
+        var popup_9697cae307e8450411fcf5fa945e63f2 = L.popup({"maxWidth": "100%"});
+
+        
             
+                var html_cbb24f0123b4a85977a15e823179b0ab = $(`<div id="html_cbb24f0123b4a85977a15e823179b0ab" style="width: 100.0%; height: 100.0%;">                 <b>Price:</b> $2,067,642<br>                 <b>Address:</b> Tuek Thla, Saensokh, Phnom Penh, Cambodia<br>                 <b>Land Area:</b> 606.1<br>                 <b>Price/m²:</b> 3411.386962890625             </div>`)[0];
+                popup_9697cae307e8450411fcf5fa945e63f2.setContent(html_cbb24f0123b4a85977a15e823179b0ab);
+            
+        
+
+        marker_1b37d348c1265d8adde42bbba9e02aca.bindPopup(popup_9697cae307e8450411fcf5fa945e63f2)
+        ;
+
+        
+    
+    
+            marker_1b37d348c1265d8adde42bbba9e02aca.bindTooltip(
+                `<div>
+                     Property #3
                  </div>`,
                 {"sticky": true}
             );
         
     
-            var marker_8ef3a689143db1e8b9786060d7918408 = L.marker(
+            var marker_aec1205088658e318cf3e8420425eefe = L.marker(
                 [11.53587052394645, 104.91050720214844],
                 {}
-            ).addTo(map_048d12f23f3d24a2c5d6b74883ebf6db);
+            ).addTo(map_3ec95b4644250b5827ad38f44c19dbc8);
         
     
-            var icon_c5da8d31be8320f39ffef28e3dd86a97 = L.AwesomeMarkers.icon(
+            var icon_359aa20ec039a930593b68e64269ef83 = L.AwesomeMarkers.icon(
                 {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
             );
-            marker_8ef3a689143db1e8b9786060d7918408.setIcon(icon_c5da8d31be8320f39ffef28e3dd86a97);
+            marker_aec1205088658e318cf3e8420425eefe.setIcon(icon_359aa20ec039a930593b68e64269ef83);
         
     
-            marker_8ef3a689143db1e8b9786060d7918408.bindTooltip(
-                `<div>
-                     
-<div class="p-3">
-<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-    <div class="flex flex-col pb-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price</dt>
-        <dd class="text-lg font-semibold text-red-600">$5,210,270</dd>
-    </div>
-    <div class="flex flex-col py-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Property address</dt>
-        <dd class="text-lg font-semibold">Boeng Tumpun, Mean Chey, Phnom Penh, Cambodia</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land Area</dt>
-        <dd class="text-lg font-semibold">1,651</dd>
-    </div>
-    <div class="flex flex-col pt-3">
-        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Price Per Unit</dt>
-        <dd class="text-lg font-semibold">$3,156</dd>
-    </div>
-</dl>
-</div>
-<div data-popper-arrow></div>
+        var popup_46ef1c55889551efef467354671d343f = L.popup({"maxWidth": "100%"});
+
+        
             
+                var html_b1ac9b164e4b3a9625dbffe514cce67a = $(`<div id="html_b1ac9b164e4b3a9625dbffe514cce67a" style="width: 100.0%; height: 100.0%;">                 <b>Price:</b> $5,210,270<br>                 <b>Address:</b> Boeng Tumpun, Mean Chey, Phnom Penh, Cambodia<br>                 <b>Land Area:</b> 1651.1<br>                 <b>Price/m²:</b> 3155.635498046875             </div>`)[0];
+                popup_46ef1c55889551efef467354671d343f.setContent(html_b1ac9b164e4b3a9625dbffe514cce67a);
+            
+        
+
+        marker_aec1205088658e318cf3e8420425eefe.bindPopup(popup_46ef1c55889551efef467354671d343f)
+        ;
+
+        
+    
+    
+            marker_aec1205088658e318cf3e8420425eefe.bindTooltip(
+                `<div>
+                     Property #4
                  </div>`,
                 {"sticky": true}
             );

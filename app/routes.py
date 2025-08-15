@@ -25,6 +25,33 @@ latest_batch_results = []
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# Helper function to get prediction as number
+def get_prediction_data():
+    global last_prediction
+    return last_prediction
+def get_latest_batch_predictions_data():
+    return {'results': latest_batch_results}
+def get_nearby_properties_data(train_df_param):
+    nearby = get_neighbours(train_df_param, 0.5)
+    if nearby.empty:
+        return {
+            "status": "error",
+            "message": "Could not find nearby properties"
+        }
+    result = {
+        "target_property": {
+            "h_id": nearby.iloc[0]['h_id'],
+            "latitude": nearby.iloc[0]['latitude'],
+            "longitude": nearby.iloc[0]['longitude']
+        },
+        "nearby_properties": nearby.iloc[1:].to_dict(orient='records')
+    }
+    return {
+        "status": "success",
+        "count": len(nearby) - 1,
+        "results": result
+    }
+
 def map_routes(app, train_df_param: pd.DataFrame):
     # Helper function to get features as dict
     def get_features_data():
@@ -38,15 +65,6 @@ def map_routes(app, train_df_param: pd.DataFrame):
         except Exception as e:
             logger.error(f"Error getting features: {str(e)}")
             return {}
-
-    # Helper function to get prediction as number
-    def get_prediction_data():
-        global last_prediction
-        if not last_prediction:
-            logger.warning("No prediction available")
-            return {}
-        return last_prediction
-
     # Helper function to get nearby properties as list
     def get_nearby_data():
         try:
@@ -62,13 +80,11 @@ def map_routes(app, train_df_param: pd.DataFrame):
 
     @app.route("/detail")
     def detail():
-        api_response = requests.get("http://127.0.0.1:5000/run-model")
-        
-        if api_response.status_code == 400:
+        try:
+            create_folium_map_for_detial(train_df_param)
+            return render_template("detail.html")
+        except Exception as e:
             return redirect(url_for('index'))
-        api_response.raise_for_status()
-        create_folium_map_for_detial()
-        return render_template("detail.html")
     
     @app.route("/batch_detail")
     def batch_details():
@@ -368,38 +384,8 @@ def map_routes(app, train_df_param: pd.DataFrame):
             return jsonify([])
     @app.route('/nearby-properties', methods=['GET'])
     def get_nearby_properties_route():
-        try:
-            nearby = get_neighbours(train_df_param, 0.5)
-            
-            if nearby.empty:
-                return jsonify({
-                    "status": "error",
-                    "message": "Could not find nearby properties"
-                }), 404
-            
-            # Convert to JSON-friendly format
-            result = {
-                "target_property": {
-                    "h_id": nearby.iloc[0]['h_id'],
-                    "latitude": nearby.iloc[0]['latitude'],
-                    "longitude": nearby.iloc[0]['longitude']
-                },
-                "nearby_properties": nearby.iloc[1:].to_dict(orient='records')  # Skip target property
-            }
-            
-            return jsonify({
-                "status": "success",
-                "count": len(nearby) - 1,  # Exclude target property
-                "results": result
-            })
-            
-        except Exception as e:
-            logger.error(f"Nearby properties error: {str(e)}")
-            return jsonify({
-                "status": "error",
-                "message": str(e)
-            }), 500
-            
+        return jsonify(get_nearby_properties_data(train_df_param))
+                
     @app.route('/upload', methods=['POST'])
     def upload_csv():
         global latest_batch_results 
