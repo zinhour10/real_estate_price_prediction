@@ -7,7 +7,6 @@ from .shared import stored_coords
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-print(BASE_DIR)
 
 # Load your training data (the same used for feature selection)
 TRAIN_CSV = os.path.join(BASE_DIR, '..', 'data', 'processed', 'mockup_dataset_road_min_max.csv')
@@ -34,10 +33,16 @@ def get_h_id_price_stats(h_id):
         'h_id_price_min': stats['h_id_price_min']
     }
 
-# Load roads data ONCE at the top of your file
-ROADS_PATH = os.path.join(BASE_DIR, '..', 'data', 'gis', 'gis_osm_roads_free_1.shp')
-roads = gpd.read_file(ROADS_PATH)
-roads = roads.to_crs(epsg=32648)  # Project to metric CRS for distance calculation
+# Load roads data robustly
+ROADS_BASE = os.path.join(BASE_DIR, '..', 'data', 'gis', 'gis_osm_roads_free_1')
+required_exts = ['.shp', '.shx', '.dbf']
+missing = [ext for ext in required_exts if not os.path.exists(ROADS_BASE + ext)]
+if missing:
+    print(f"Warning: Missing shapefile components: {', '.join(missing)} in {ROADS_BASE}. Road features will be skipped.")
+    roads = None
+else:
+    roads = gpd.read_file(ROADS_BASE + '.shp')
+    roads = roads.to_crs(epsg=32648)  # Project to metric CRS for distance calculation
 
 # Define road types to flag
 road_types = [
@@ -47,6 +52,9 @@ road_types = [
 ]
 
 def get_road_type_features(lat, lon, distance=100):
+    if roads is None:
+        # Return zeros for all road types if file is missing
+        return {f'f_{road_type}': 0 for road_type in road_types}
     # Create point and project to metric CRS
     point = gpd.GeoDataFrame(
         [{'geometry': Point(lon, lat)}],
@@ -136,8 +144,8 @@ def get_central_place_features(lat, lon):
     return features
 
 # Load population and commune data ONCE at the top of your file
-KONTUR_PATH = os.path.join(BASE_DIR, '..', '..', 'gis', 'population_clip_cambodia.gpkg')
-COMMUNE_PATH = os.path.join(BASE_DIR, '..', '..', 'gis', 'CambodiaCommune_Fixed.gpkg')
+KONTUR_PATH = os.path.join(BASE_DIR, '..', 'data', 'gis', 'population_clip_cambodia.gpkg')
+COMMUNE_PATH = os.path.join(BASE_DIR, '..', 'data', 'gis', 'CambodiaCommune_Fixed.gpkg')
 
 kontur = gpd.read_file(KONTUR_PATH, layer='population_clip_cambodia')
 communes = gpd.read_file(COMMUNE_PATH)
