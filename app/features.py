@@ -7,6 +7,7 @@ from .shared import stored_coords
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print(BASE_DIR)
 
 # Load your training data (the same used for feature selection)
 TRAIN_CSV = os.path.join(BASE_DIR, '..', 'data', 'processed', 'mockup_dataset_road_min_max.csv')
