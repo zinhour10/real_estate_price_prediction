@@ -4,10 +4,13 @@ import geopandas as gpd
 from shapely.geometry import Point
 import time
 from .shared import stored_coords
+import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Load your training data (the same used for feature selection)
-train_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\processed\mockup_dataset_road_min_max.csv')
+TRAIN_CSV = os.path.join(BASE_DIR, '..', 'data', 'processed', 'mockup_dataset_road_min_max.csv')
+train_df = pd.read_csv(TRAIN_CSV)
 
 # Build the lookup table for h_id statistics (use existing columns)
 h_id_stats = (
@@ -29,8 +32,9 @@ def get_h_id_price_stats(h_id):
         'h_id_price_median': stats['h_id_price_median'],
         'h_id_price_min': stats['h_id_price_min']
     }
+
 # Load roads data ONCE at the top of your file
-ROADS_PATH = r"D:\CADT\cambodia-latest-free.shp\gis_osm_roads_free_1.shp"
+ROADS_PATH = os.path.join(BASE_DIR, '..', 'data', 'gis', 'gis_osm_roads_free_1.shp')
 roads = gpd.read_file(ROADS_PATH)
 roads = roads.to_crs(epsg=32648)  # Project to metric CRS for distance calculation
 
@@ -55,21 +59,22 @@ def get_road_type_features(lat, lon, distance=100):
     return features
 
 # Load all reference data ONCE 
-cafe_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\cafe_location.csv')
-gas_station_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\gas_station_location.csv')
-hospital_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\hospital_lat_lon.csv')
-hotel_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\hotel_lat_lon.csv')
-mart_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\mart_lat_lon.csv')
-pre_school_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\pre_school_lat_lon.csv')
-secondary_school_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\secondary_school_lat_lon.csv')
-primary_school_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\primary_school_lat_lon.csv')
-university_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\university_lat_lon.csv')
-seven_eleven_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\sevenevelen_lat_lon.csv')
-resturant_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\resturant_lat_lon.csv')
-super_market_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\super_market_lat_lon.csv')
-borey_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\borey_lat_lon.csv')
-bank_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\bank_lat_lon.csv')
-atm_df = pd.read_csv(r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\raw\scrape\atm_lat_lon.csv')
+RAW_DIR = os.path.join(BASE_DIR, '..', 'data', 'raw', 'scrape')
+cafe_df = pd.read_csv(os.path.join(RAW_DIR, 'cafe_location.csv'))
+gas_station_df = pd.read_csv(os.path.join(RAW_DIR, 'gas_station_location.csv'))
+hospital_df = pd.read_csv(os.path.join(RAW_DIR, 'hospital_lat_lon.csv'))
+hotel_df = pd.read_csv(os.path.join(RAW_DIR, 'hotel_lat_lon.csv'))
+mart_df = pd.read_csv(os.path.join(RAW_DIR, 'mart_lat_lon.csv'))
+pre_school_df = pd.read_csv(os.path.join(RAW_DIR, 'pre_school_lat_lon.csv'))
+secondary_school_df = pd.read_csv(os.path.join(RAW_DIR, 'secondary_school_lat_lon.csv'))
+primary_school_df = pd.read_csv(os.path.join(RAW_DIR, 'primary_school_lat_lon.csv'))
+university_df = pd.read_csv(os.path.join(RAW_DIR, 'university_lat_lon.csv'))
+seven_eleven_df = pd.read_csv(os.path.join(RAW_DIR, 'sevenevelen_lat_lon.csv'))
+resturant_df = pd.read_csv(os.path.join(RAW_DIR, 'resturant_lat_lon.csv'))
+super_market_df = pd.read_csv(os.path.join(RAW_DIR, 'super_market_lat_lon.csv'))
+borey_df = pd.read_csv(os.path.join(RAW_DIR, 'borey_lat_lon.csv'))
+bank_df = pd.read_csv(os.path.join(RAW_DIR, 'bank_lat_lon.csv'))
+atm_df = pd.read_csv(os.path.join(RAW_DIR, 'atm_lat_lon.csv'))
 # ...add more as needed
 
 def haversine(lat1, lon1, lats2, lons2):
@@ -130,8 +135,8 @@ def get_central_place_features(lat, lon):
     return features
 
 # Load population and commune data ONCE at the top of your file
-KONTUR_PATH = r"D:\CADT\kontur_population_20231101.gpkg\population_clip_cambodia.gpkg"
-COMMUNE_PATH = r"D:\CADT\kontur_population_20231101.gpkg\CambodiaCommune_Fixed.gpkg"
+KONTUR_PATH = os.path.join(BASE_DIR, '..', '..', 'gis', 'population_clip_cambodia.gpkg')
+COMMUNE_PATH = os.path.join(BASE_DIR, '..', '..', 'gis', 'CambodiaCommune_Fixed.gpkg')
 
 kontur = gpd.read_file(KONTUR_PATH, layer='population_clip_cambodia')
 communes = gpd.read_file(COMMUNE_PATH)
@@ -186,7 +191,6 @@ def get_all_features(lat, lon):
 
 if __name__ == "__main__":
     # Example coordinates (Phnom Penh)
- 
     lat = stored_coords.get('lat')
     lon = stored_coords.get('lon')
 

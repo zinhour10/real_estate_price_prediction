@@ -13,8 +13,6 @@ lon = stored_coords.get('lon')
 
 # Get project root relative to this file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Relative paths for model and label encoders
 MODEL_PATH = os.path.join(BASE_DIR, '..', 'models', 'xgboost', 'xgboost_model_label_v3.joblib')
 LABEL_ENCODERS_PATH = os.path.join(BASE_DIR, '..', 'data', 'processed', 'label_encoders.pkl')
 
@@ -67,13 +65,6 @@ def predict_with_model(model):
         X = X[model.feature_names_in_]
     result = model.predict(X)
     return float(result[0]) 
-
-if __name__ == "__main__":
-    try:
-        y_pred = predict_with_model(model)
-        print("Prediction:", y_pred)
-    except Exception as e:
-        print("Error during prediction:", e)
 
 def predict_batch_with_model(model, df):
     """

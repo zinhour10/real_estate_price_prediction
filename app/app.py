@@ -4,7 +4,6 @@ import plotly.express as px
 import os
 
 app = Flask(__name__)
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CSV_FILE = os.path.join(BASE_DIR, '..', 'data', 'processed', 'land_dataset_final_v2.csv')
 
