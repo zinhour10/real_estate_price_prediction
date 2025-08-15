@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-# Path to your CSV file
-CSV_FILE = r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\processed\land_dataset_final_v2.csv'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, '..', 'data', 'processed', 'land_dataset_final_v2.csv')
 
 @app.route('/')
 def index():

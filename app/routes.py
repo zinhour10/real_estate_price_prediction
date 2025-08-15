@@ -2,7 +2,7 @@ from flask import render_template, session, request, jsonify, Response, make_res
 from .utils import create_folium_map, create_folium_map_for_detial, create_folium_map_for_batch_detail
 from .shared import stored_coords
 from .pipeline import get_features_for_current_coords, predict_with_model, model, predict_batch_with_model
-from .features import get_all_features
+from .features_old import get_all_features
 from .find_neighbour import get_neighbour, get_neighbours, get_neighbours_param
 from .to_pdf import generate_property_valuation_pdf, generate_property_valuation_pdf_batch
 import pandas as pd
@@ -20,10 +20,41 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+
 last_prediction = {}
 latest_batch_results = []
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def get_latest_batch_predictions_data():
+    return {'results': latest_batch_results}
+
+def get_nearby_properties_data(train_df_param):
+    nearby = get_neighbours(train_df_param, 0.5)
+    if nearby.empty:
+        return {
+            "status": "error",
+            "message": "Could not find nearby properties"
+        }
+    result = {
+        "target_property": {
+            "h_id": nearby.iloc[0]['h_id'],
+            "latitude": nearby.iloc[0]['latitude'],
+            "longitude": nearby.iloc[0]['longitude']
+        },
+        "nearby_properties": nearby.iloc[1:].to_dict(orient='records')
+    }
+    return {
+        "status": "success",
+        "count": len(nearby) - 1,
+        "results": result
+    }
+    
+def get_prediction_data():
+    global last_prediction
+    return last_prediction
+
 
 def map_routes(app, train_df_param: pd.DataFrame):
     # Helper function to get features as dict
@@ -62,13 +93,12 @@ def map_routes(app, train_df_param: pd.DataFrame):
 
     @app.route("/detail")
     def detail():
-        api_response = requests.get("http://127.0.0.1:5000/run-model")
-        
-        if api_response.status_code == 400:
+        try:
+            create_folium_map_for_detial(train_df_param)
+            return render_template("detail.html")
+        except Exception as e:
+            # Handle errors as needed
             return redirect(url_for('index'))
-        api_response.raise_for_status()
-        create_folium_map_for_detial()
-        return render_template("detail.html")
     
     @app.route("/batch_detail")
     def batch_details():

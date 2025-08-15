@@ -4,7 +4,12 @@ from .routes import map_routes
 import pandas as pd
 import os
 
-CSV_FILE_PATH = r'D:\CADT\Internship\Internship-I\real_estate_price_prediction\data\processed\land_dataset_final_v3_1_keep_1.csv'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Relative path to CSV
+CSV_FILE_PATH = os.path.join(BASE_DIR, '..', 'data', 'processed', 'land_dataset_final_v3_1_keep_1.csv')
+
+
 global_train_df = pd.DataFrame() # Initialize as empty
 
 if os.path.exists(CSV_FILE_PATH):

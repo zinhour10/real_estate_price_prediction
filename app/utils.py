@@ -2,6 +2,7 @@ import folium
 import os
 from .shared import stored_coords
 import requests
+import json
 
 import folium.map
 import folium.vector_layers
@@ -319,16 +320,12 @@ def create_folium_map():
             html[pend:]
         )
     return "map.html"
-def get_prediction():
-    response = requests.get("http://127.0.0.1:5000/run-model")
-    return response.json()
 
-def get_nearby_properties():
-    response = requests.get("http://127.0.0.1:5000/nearby-properties")
-    return response.json()
 
 def create_folium_map_for_detial():
-    prediction = get_prediction()
+    from .routes import get_prediction_data, get_nearby_properties_data
+
+    prediction = get_prediction_data()
     print("Prediction Data:", prediction)  # Debug print
     
     # Set center coordinates based on prediction
@@ -361,7 +358,7 @@ def create_folium_map_for_detial():
         fill=True,
         tooltip="1km radius",
     ).add_to(vmap)
-    nearby_data = get_nearby_properties()
+    nearby_data = get_nearby_properties_data()
     if nearby_data.get('status') != 'success' or not nearby_data.get('results', {}).get('nearby_properties'):
         print("Warning: No nearby properties found or API error")
         # Save basic map anyway
@@ -411,11 +408,11 @@ def create_folium_map_for_detial():
     
     return "map_detail.html"
 def create_folium_map_for_batch_detail():
-    vmap = folium.Map(location=center_coord, zoom_start=15)
-    response = requests.get("http://127.0.0.1:5000/get_latest_batch_predictions")
-    data = response.json()
+    from .routes import get_latest_batch_predictions_data
 
-    # Access the 'results' list
+    vmap = folium.Map(location=center_coord, zoom_start=15)
+    response = get_latest_batch_predictions_data()
+    data = json.loads(response.get_data(as_text=True))
     results = data.get("results", [])
     
     for idx, prop in enumerate(results):
