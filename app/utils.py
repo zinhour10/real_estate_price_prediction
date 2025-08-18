@@ -3,7 +3,7 @@ import os
 from .shared import stored_coords
 import requests
 import json
-
+from .find_neighbour import get_nearby_properties_data
 import folium.map
 import folium.vector_layers
 
@@ -320,6 +320,7 @@ def create_folium_map():
             html[pend:]
         )
     return "map.html"
+
 
 
 def create_folium_map_for_detial():

@@ -218,6 +218,32 @@ def get_neighbours_param(df_param: pd.DataFrame, target_feature: dict, max_dista
         print(f"Missing column in data: {e}")
         return pd.DataFrame()
 
+def get_nearby_properties_data(train_df_param):
+    try:
+        nearby = get_neighbours(train_df_param, 0.5)
+        if nearby.empty:
+            return {
+                "status": "error",
+                "message": "Could not find nearby properties"
+            }
+        result = {
+            "target_property": {
+                "h_id": nearby.iloc[0]['h_id'],
+                "latitude": nearby.iloc[0]['latitude'],
+                "longitude": nearby.iloc[0]['longitude']
+            },
+            "nearby_properties": nearby.iloc[1:].to_dict(orient='records')
+        }
+        return {
+            "status": "success",
+            "count": len(nearby) - 1,
+            "results": result
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 # def get_neighbours(df_param: pd.DataFrame, max_distance_km=1.0, n_neighbours=1000):
 #     """

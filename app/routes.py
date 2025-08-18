@@ -29,32 +29,9 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def get_latest_batch_predictions_data():
     return {'results': latest_batch_results}
-
-def get_nearby_properties_data(train_df_param):
-    nearby = get_neighbours(train_df_param, 0.5)
-    if nearby.empty:
-        return {
-            "status": "error",
-            "message": "Could not find nearby properties"
-        }
-    result = {
-        "target_property": {
-            "h_id": nearby.iloc[0]['h_id'],
-            "latitude": nearby.iloc[0]['latitude'],
-            "longitude": nearby.iloc[0]['longitude']
-        },
-        "nearby_properties": nearby.iloc[1:].to_dict(orient='records')
-    }
-    return {
-        "status": "success",
-        "count": len(nearby) - 1,
-        "results": result
-    }
-    
 def get_prediction_data():
     global last_prediction
     return last_prediction
-
 
 def map_routes(app, train_df_param: pd.DataFrame):
     # Helper function to get features as dict
@@ -97,8 +74,8 @@ def map_routes(app, train_df_param: pd.DataFrame):
             create_folium_map_for_detial(train_df_param)
             return render_template("detail.html")
         except Exception as e:
-            # Handle errors as needed
-            return redirect(url_for('index'))
+            logger.error(f"Error in /detail: {e}", exc_info=True)
+            # return redirect(url_for('index'))
     
     @app.route("/batch_detail")
     def batch_details():
