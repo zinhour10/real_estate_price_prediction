@@ -324,9 +324,9 @@ def create_folium_map():
 
 
 def create_folium_map_for_detial(train_df_param):
-    from .routes import get_prediction_data, get_nearby_properties_data
+    from .routes import run_model_logic, get_nearby_properties_logic
 
-    prediction = get_prediction_data()
+    prediction = run_model_logic()
     print("Prediction Data:", prediction)  # Debug print
     
     # Set center coordinates based on prediction
@@ -359,14 +359,16 @@ def create_folium_map_for_detial(train_df_param):
         fill=True,
         tooltip="1km radius",
     ).add_to(vmap)
-    nearby_data = get_nearby_properties_data()
-    if nearby_data.get('status') != 'success' or not nearby_data.get('results', {}).get('nearby_properties'):
-        print("Warning: No nearby properties found or API error")
-        # Save basic map anyway
-        map_path = os.path.join("app", "static", "map_detail.html")
-        vmap.save(map_path)
-        return map_path    
+    nearby_data = get_nearby_properties_logic(train_df_param)
+    # print("Nearby data:", nearby_data)
+    # if not nearby_data.get('results', {}).get('nearby_properties'):
+    #     print("Warning: No nearby properties found or API error")
+    #     # Save basic map anyway
+    #     map_path = os.path.join("app", "static", "map_detail.html")
+    #     vmap.save(map_path)
+    #     return map_path    
     nearby_properties = nearby_data['results']['nearby_properties']
+    print("==============================================",nearby_properties)
     for idx, prop in enumerate(nearby_properties):
         # Different colors based on distance
         distance = prop.get('distance_km', float('inf'))

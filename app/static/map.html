@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_dfb15e1ddda38e901f729d6956396f2a {
+                #map_e2a6532e15e7e75bdaa7cffae0e6855d {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -39,14 +39,14 @@
 <body>
     
     
-            <div class="folium-map" id="map_dfb15e1ddda38e901f729d6956396f2a" ></div>
+            <div class="folium-map" id="map_e2a6532e15e7e75bdaa7cffae0e6855d" ></div>
         
 </body>
 <script>
     
     
-            var map_dfb15e1ddda38e901f729d6956396f2a = L.map(
-                "map_dfb15e1ddda38e901f729d6956396f2a",
+            var map_e2a6532e15e7e75bdaa7cffae0e6855d = L.map(
+                "map_e2a6532e15e7e75bdaa7cffae0e6855d",
                 {
                     center: [11.5750454, 104.9240291],
                     crs: L.CRS.EPSG3857,
@@ -60,16 +60,16 @@
 
         
     
-            var tile_layer_a4989db9c73a82af3b3f85342616ea5b = L.tileLayer(
+            var tile_layer_c988b80fb54a852589c2d8bcf5bf78ed = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_dfb15e1ddda38e901f729d6956396f2a);
+            ).addTo(map_e2a6532e15e7e75bdaa7cffae0e6855d);
         
     
-                var lat_lng_popup_e73a420e8d24b14497eb487b828603ee = L.popup();
+                var lat_lng_popup_233fcb83dd9ac3d099f48b374d951be5 = L.popup();
                 
         // custom code
-             window.map = map_dfb15e1ddda38e901f729d6956396f2a;
+             window.map = map_e2a6532e15e7e75bdaa7cffae0e6855d;
         //zoom to my location
         // Handle messages from parent window
         window.addEventListener('message', function(event) {
@@ -87,7 +87,7 @@
             }
         });
         // --- Add custom search box to map container ---
-        var searchDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom', map_dfb15e1ddda38e901f729d6956396f2a.getContainer());
+        var searchDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom', map_e2a6532e15e7e75bdaa7cffae0e6855d.getContainer());
         searchDiv.style.position = 'absolute';
         searchDiv.style.top = '10px';
         searchDiv.style.left = '50px';
@@ -131,7 +131,7 @@
                             li.onclick = function() {
                                 var lat = parseFloat(place.lat);
                                 var lon = parseFloat(place.lon);
-                                map_dfb15e1ddda38e901f729d6956396f2a.setView([lat, lon], 16);
+                                map_e2a6532e15e7e75bdaa7cffae0e6855d.setView([lat, lon], 16);
                                 suggestions.innerHTML = '';
                                 suggestions.style.display = 'none';
                                 searchInput.value = place.display_name;
@@ -156,7 +156,7 @@
         window.lastAddedMarker = null;
 
         function latLngPop(e) {
-            lat_lng_popup_e73a420e8d24b14497eb487b828603ee
+            lat_lng_popup_233fcb83dd9ac3d099f48b374d951be5
                 .setLatLng(e.latlng)
                 .setContent(
                     `<div style='font-family:Arial,sans-serif;'>
@@ -179,10 +179,10 @@
                                 }).then(response => response.json()).then(data => {
                                     // Remove old marker if exists
                                     if (window.lastAddedMarker) {
-                                        map_dfb15e1ddda38e901f729d6956396f2a.removeLayer(window.lastAddedMarker);
+                                        map_e2a6532e15e7e75bdaa7cffae0e6855d.removeLayer(window.lastAddedMarker);
                                     }
                                     // Add new marker and save reference
-                                    window.lastAddedMarker = L.marker([${e.latlng.lat}, ${e.latlng.lng}]).addTo(map_dfb15e1ddda38e901f729d6956396f2a);
+                                    window.lastAddedMarker = L.marker([${e.latlng.lat}, ${e.latlng.lng}]).addTo(map_e2a6532e15e7e75bdaa7cffae0e6855d);
                                     // Fetch features and fill form fields
                                     fetch('/get-features')
                                         .then(response => response.json())
@@ -224,14 +224,14 @@
                         </button>
                     </div>`
                 )
-                .openOn(map_dfb15e1ddda38e901f729d6956396f2a);
+                .openOn(map_e2a6532e15e7e75bdaa7cffae0e6855d);
             console.log("Latitude: " + e.latlng.lat.toFixed(4));
             console.log("Longitude: " + e.latlng.lng.toFixed(4));
         }
         
         // end custom code
     
-                map_dfb15e1ddda38e901f729d6956396f2a.on('click', latLngPop);
+                map_e2a6532e15e7e75bdaa7cffae0e6855d.on('click', latLngPop);
             
 </script>
 </html>
