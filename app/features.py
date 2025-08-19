@@ -136,8 +136,8 @@ def get_central_place_features(lat, lon):
     return features
 
 # Load population and commune data ONCE at the top of your file
-KONTUR_PATH = os.path.join(BASE_DIR, '..', '..', 'gis', 'population_clip_cambodia.gpkg')
-COMMUNE_PATH = os.path.join(BASE_DIR, '..', '..', 'gis', 'CambodiaCommune_Fixed.gpkg')
+KONTUR_PATH = os.path.join(BASE_DIR, '..', 'data', 'gis', 'population_clip_cambodia.gpkg')
+COMMUNE_PATH = os.path.join(BASE_DIR,'..', 'data', 'gis', 'CambodiaCommune_Fixed.gpkg')
 
 kontur = gpd.read_file(KONTUR_PATH, layer='population_clip_cambodia')
 communes = gpd.read_file(COMMUNE_PATH)
