@@ -3,13 +3,21 @@
 <head>
     
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
@@ -17,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_671fddd765b169acb7eee89806730ae0 {
+                #map_146430bca3d6e476363827e0f1a11aad {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -26,51 +34,25 @@
                 }
                 .leaflet-container { font-size: 1rem; }
             </style>
-
-            <style>html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            </style>
-
-            <style>#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            </style>
-
-            <script>
-                L_NO_TOUCH = false;
-                L_DISABLE_3D = false;
-            </script>
-
         
 </head>
 <body>
     
     
-            <div class="folium-map" id="map_671fddd765b169acb7eee89806730ae0" ></div>
+            <div class="folium-map" id="map_146430bca3d6e476363827e0f1a11aad" ></div>
         
 </body>
 <script>
     
     
-            var map_671fddd765b169acb7eee89806730ae0 = L.map(
-                "map_671fddd765b169acb7eee89806730ae0",
+            var map_146430bca3d6e476363827e0f1a11aad = L.map(
+                "map_146430bca3d6e476363827e0f1a11aad",
                 {
-                    center: [11.5712997, 104.9104259],
+                    center: [11.5688424, 104.9182275],
                     crs: L.CRS.EPSG3857,
-                    ...{
-  "zoom": 15,
-  "zoomControl": true,
-  "preferCanvas": false,
-}
-
+                    zoom: 15,
+                    zoomControl: true,
+                    preferCanvas: false,
                 }
             );
 
@@ -78,808 +60,619 @@
 
         
     
-            var tile_layer_f028034ed9ebb3e9a40f6b0e3d5ceae4 = L.tileLayer(
-                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {
-  "minZoom": 0,
-  "maxZoom": 19,
-  "maxNativeZoom": 19,
-  "noWrap": false,
-  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
-  "subdomains": "abc",
-  "detectRetina": false,
-  "tms": false,
-  "opacity": 1,
-}
-
+            var tile_layer_cb739fa612daeeb5e3fed955b9be7c16 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
+        
+    
+            var marker_379a3fd70face19d58e4cce9ac12b242 = L.marker(
+                [11.5688424, 104.9182275],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
+        
+    
+            var icon_1845c3fe856790e58d857ce484724108 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "red", "prefix": "fa"}
             );
+            marker_379a3fd70face19d58e4cce9ac12b242.setIcon(icon_1845c3fe856790e58d857ce484724108);
         
     
-            tile_layer_f028034ed9ebb3e9a40f6b0e3d5ceae4.addTo(map_671fddd765b169acb7eee89806730ae0);
-        
-    
-            var marker_553a2d1da1a2e44408ad4d2e0942d578 = L.marker(
-                [11.5712997, 104.9104259],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
-        
-    
-            var icon_57db18afc88fb9f760e24454f4749377 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "red",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_52fa9d51e642c0918004222d293f7f04 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_4fbaa4dc62809a93075e52c2ee2b1630 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_6ce08f75df0d50dd3460af4d12d7ace6 = $(`<div id="html_6ce08f75df0d50dd3460af4d12d7ace6" style="width: 100.0%; height: 100.0%;">             <b>Property Details</b><br>             Price: $4,326.10<br>             Price/m²: $4,326.10<br>             Land Area: 1.0         </div>`)[0];
-                popup_52fa9d51e642c0918004222d293f7f04.setContent(html_6ce08f75df0d50dd3460af4d12d7ace6);
+                var html_0d373e4d846d4efd6f08a6ff7fac1815 = $(`<div id="html_0d373e4d846d4efd6f08a6ff7fac1815" style="width: 100.0%; height: 100.0%;">             <b>Property Details</b><br>             Price: $5,099.04<br>             Price/m²: $5,099.04<br>             Land Area: 1.0         </div>`)[0];
+                popup_4fbaa4dc62809a93075e52c2ee2b1630.setContent(html_0d373e4d846d4efd6f08a6ff7fac1815);
             
         
 
-        marker_553a2d1da1a2e44408ad4d2e0942d578.bindPopup(popup_52fa9d51e642c0918004222d293f7f04)
+        marker_379a3fd70face19d58e4cce9ac12b242.bindPopup(popup_4fbaa4dc62809a93075e52c2ee2b1630)
         ;
 
         
     
     
-            marker_553a2d1da1a2e44408ad4d2e0942d578.bindTooltip(
+            marker_379a3fd70face19d58e4cce9ac12b242.bindTooltip(
                 `<div>
                      Click for details
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_553a2d1da1a2e44408ad4d2e0942d578.setIcon(icon_57db18afc88fb9f760e24454f4749377);
-            
-    
-            var circle_536be6912b0c713131a535d63b7f8119 = L.circle(
-                [11.5712997, 104.9104259],
+            var circle_47fe77f956115a5c0c90b6482fcb76b6 = L.circle(
+                [11.5688424, 104.9182275],
                 {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1, "radius": 500, "stroke": true, "weight": 1}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            circle_536be6912b0c713131a535d63b7f8119.bindTooltip(
+            circle_47fe77f956115a5c0c90b6482fcb76b6.bindTooltip(
                 `<div>
                      1km radius
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-            var marker_2a21c0c91a4147c914dc0e6d9d75b015 = L.marker(
-                [11.570948115293636, 104.9116109237152],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_a911321e4e3cade2b9822e6c79fe60e5 = L.marker(
+                [11.568301698011322, 104.91960142950964],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_98944eec47575b936d49f8a9f7609ecb = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_e3589d101b7db7509a53228685ca40c9 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_a911321e4e3cade2b9822e6c79fe60e5.setIcon(icon_e3589d101b7db7509a53228685ca40c9);
         
     
-        var popup_92bafcb38f8eb3ad64204b5ede7f7795 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_55375ce9632ca2abc288a3e9d200c164 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_c14dba0bfff29cb658a0ebc3b92524b1 = $(`<div id="html_c14dba0bfff29cb658a0ebc3b92524b1" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $160,894.44<br>                 Price/m²: $3,830.82<br>                 Land Area: 42 m²<br>                 Distance: 0.13 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_92bafcb38f8eb3ad64204b5ede7f7795.setContent(html_c14dba0bfff29cb658a0ebc3b92524b1);
+                var html_7e04923d10c1a4dd6a25912d5bc41766 = $(`<div id="html_7e04923d10c1a4dd6a25912d5bc41766" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $336,590.28<br>                 Price/m²: $6,472.89<br>                 Land Area: 52 m²<br>                 Distance: 0.16 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_55375ce9632ca2abc288a3e9d200c164.setContent(html_7e04923d10c1a4dd6a25912d5bc41766);
             
         
 
-        marker_2a21c0c91a4147c914dc0e6d9d75b015.bindPopup(popup_92bafcb38f8eb3ad64204b5ede7f7795)
+        marker_a911321e4e3cade2b9822e6c79fe60e5.bindPopup(popup_55375ce9632ca2abc288a3e9d200c164)
         ;
 
         
     
     
-            marker_2a21c0c91a4147c914dc0e6d9d75b015.bindTooltip(
+            marker_a911321e4e3cade2b9822e6c79fe60e5.bindTooltip(
                 `<div>
                      Nearby Property #1
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_2a21c0c91a4147c914dc0e6d9d75b015.setIcon(icon_98944eec47575b936d49f8a9f7609ecb);
-            
-    
-            var marker_9f099a5e39a1928ed6fd99d8d5cf7159 = L.marker(
-                [11.571235105929974, 104.90891309879628],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_9b483b66d95b47f3fd291311d68ff7e5 = L.marker(
+                [11.569963035220065, 104.91931090264822],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_e43a520675d370eb9bae612b8c459dcc = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_b69b290d10599f20c1d0be7c16bfba4f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_9b483b66d95b47f3fd291311d68ff7e5.setIcon(icon_b69b290d10599f20c1d0be7c16bfba4f);
         
     
-        var popup_20c7da7e72ea41a85a50517d1ee92036 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_b500cb67dbf1ca9a7735629016bc32ef = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_1efff50c70de3e918ee1ff4d22b3720e = $(`<div id="html_1efff50c70de3e918ee1ff4d22b3720e" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $554,605.28<br>                 Price/m²: $4,077.98<br>                 Land Area: 136 m²<br>                 Distance: 0.16 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_20c7da7e72ea41a85a50517d1ee92036.setContent(html_1efff50c70de3e918ee1ff4d22b3720e);
+                var html_e24184dad8f61794c969387d07ac70e4 = $(`<div id="html_e24184dad8f61794c969387d07ac70e4" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $911,950.56<br>                 Price/m²: $6,332.99<br>                 Land Area: 144 m²<br>                 Distance: 0.17 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_b500cb67dbf1ca9a7735629016bc32ef.setContent(html_e24184dad8f61794c969387d07ac70e4);
             
         
 
-        marker_9f099a5e39a1928ed6fd99d8d5cf7159.bindPopup(popup_20c7da7e72ea41a85a50517d1ee92036)
+        marker_9b483b66d95b47f3fd291311d68ff7e5.bindPopup(popup_b500cb67dbf1ca9a7735629016bc32ef)
         ;
 
         
     
     
-            marker_9f099a5e39a1928ed6fd99d8d5cf7159.bindTooltip(
+            marker_9b483b66d95b47f3fd291311d68ff7e5.bindTooltip(
                 `<div>
                      Nearby Property #2
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_9f099a5e39a1928ed6fd99d8d5cf7159.setIcon(icon_e43a520675d370eb9bae612b8c459dcc);
-            
-    
-            var marker_0cb507a5875ce270b75aade6ba780a64 = L.marker(
-                [11.573542075769806, 104.91102968084115],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_8a7e408f80285712d711e236c169a558 = L.marker(
+                [11.570351825446412, 104.91769928219836],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_dbc40e03341b28698a3195fefd55275a = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_82b822c4d7ac2b55697b8c64919bd15d = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_8a7e408f80285712d711e236c169a558.setIcon(icon_82b822c4d7ac2b55697b8c64919bd15d);
         
     
-        var popup_5b5093f6a87b72ae5b55f2b6073037cb = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_7d4fb16eb07af475182f7e3ebfd0b79a = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_df62e855e842da0835d079dc80aaccad = $(`<div id="html_df62e855e842da0835d079dc80aaccad" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $572,905.08<br>                 Price/m²: $4,340.19<br>                 Land Area: 132 m²<br>                 Distance: 0.26 km<br>                 ID: 8865846aa1fffff<br>                 <a href="/property-details/8865846aa1fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_5b5093f6a87b72ae5b55f2b6073037cb.setContent(html_df62e855e842da0835d079dc80aaccad);
+                var html_704922e8500c8a010e5dec3777852e45 = $(`<div id="html_704922e8500c8a010e5dec3777852e45" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $155,103.68<br>                 Price/m²: $4,846.99<br>                 Land Area: 32 m²<br>                 Distance: 0.18 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_7d4fb16eb07af475182f7e3ebfd0b79a.setContent(html_704922e8500c8a010e5dec3777852e45);
             
         
 
-        marker_0cb507a5875ce270b75aade6ba780a64.bindPopup(popup_5b5093f6a87b72ae5b55f2b6073037cb)
+        marker_8a7e408f80285712d711e236c169a558.bindPopup(popup_7d4fb16eb07af475182f7e3ebfd0b79a)
         ;
 
         
     
     
-            marker_0cb507a5875ce270b75aade6ba780a64.bindTooltip(
+            marker_8a7e408f80285712d711e236c169a558.bindTooltip(
                 `<div>
                      Nearby Property #3
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_0cb507a5875ce270b75aade6ba780a64.setIcon(icon_dbc40e03341b28698a3195fefd55275a);
-            
-    
-            var marker_a742d39c52bf13f4693c004f59cf213f = L.marker(
-                [11.57012792307348, 104.91275307477],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_e04c02344d50c692f6c69c308d78141b = L.marker(
+                [11.566712496798935, 104.9188837343774],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_3dc07be66d4a1201e9f4552bc79ce577 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_c3c6ad29209b00825630e31de819641d = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_e04c02344d50c692f6c69c308d78141b.setIcon(icon_c3c6ad29209b00825630e31de819641d);
         
     
-        var popup_f84d72de5de6e0162c73073f03b96d7d = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_2c544575f7188978212dd31a4d5db55e = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_8af7e60bff7e64fa96504f1d04cb27ee = $(`<div id="html_8af7e60bff7e64fa96504f1d04cb27ee" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $187,606.86<br>                 Price/m²: $4,466.83<br>                 Land Area: 42 m²<br>                 Distance: 0.29 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_f84d72de5de6e0162c73073f03b96d7d.setContent(html_8af7e60bff7e64fa96504f1d04cb27ee);
+                var html_42f9e761cdd1a7ca5a91c79f98f572e6 = $(`<div id="html_42f9e761cdd1a7ca5a91c79f98f572e6" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $856,747.30<br>                 Price/m²: $5,039.69<br>                 Land Area: 170 m²<br>                 Distance: 0.25 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_2c544575f7188978212dd31a4d5db55e.setContent(html_42f9e761cdd1a7ca5a91c79f98f572e6);
             
         
 
-        marker_a742d39c52bf13f4693c004f59cf213f.bindPopup(popup_f84d72de5de6e0162c73073f03b96d7d)
+        marker_e04c02344d50c692f6c69c308d78141b.bindPopup(popup_2c544575f7188978212dd31a4d5db55e)
         ;
 
         
     
     
-            marker_a742d39c52bf13f4693c004f59cf213f.bindTooltip(
+            marker_e04c02344d50c692f6c69c308d78141b.bindTooltip(
                 `<div>
                      Nearby Property #4
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_a742d39c52bf13f4693c004f59cf213f.setIcon(icon_3dc07be66d4a1201e9f4552bc79ce577);
-            
-    
-            var marker_2b3144276b69c5f490aaceaac9926f72 = L.marker(
-                [11.568909320805773, 104.9090201021158],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_e71c8cc7e0be91227ac09fbdbbc012c9 = L.marker(
+                [11.570147071296612, 104.91601248477885],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_0b6f26f918cf9ce156560a8abcb4931f = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_d8913871bea2530a09b036ebb2960371 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_e71c8cc7e0be91227ac09fbdbbc012c9.setIcon(icon_d8913871bea2530a09b036ebb2960371);
         
     
-        var popup_d7d69ede960d7646782b3ca6458ae38b = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_25f260f51b7b9412f33bfff0f8680d0f = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_fbcb70711a98a99c0fba8f0d605978ba = $(`<div id="html_fbcb70711a98a99c0fba8f0d605978ba" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $266,387.52<br>                 Price/m²: $4,756.92<br>                 Land Area: 56 m²<br>                 Distance: 0.31 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_d7d69ede960d7646782b3ca6458ae38b.setContent(html_fbcb70711a98a99c0fba8f0d605978ba);
+                var html_e90f3a96b645ded6634b0f196e55a4a5 = $(`<div id="html_e90f3a96b645ded6634b0f196e55a4a5" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $887,188.12<br>                 Price/m²: $4,874.66<br>                 Land Area: 182 m²<br>                 Distance: 0.28 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_25f260f51b7b9412f33bfff0f8680d0f.setContent(html_e90f3a96b645ded6634b0f196e55a4a5);
             
         
 
-        marker_2b3144276b69c5f490aaceaac9926f72.bindPopup(popup_d7d69ede960d7646782b3ca6458ae38b)
+        marker_e71c8cc7e0be91227ac09fbdbbc012c9.bindPopup(popup_25f260f51b7b9412f33bfff0f8680d0f)
         ;
 
         
     
     
-            marker_2b3144276b69c5f490aaceaac9926f72.bindTooltip(
+            marker_e71c8cc7e0be91227ac09fbdbbc012c9.bindTooltip(
                 `<div>
                      Nearby Property #5
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_2b3144276b69c5f490aaceaac9926f72.setIcon(icon_0b6f26f918cf9ce156560a8abcb4931f);
-            
-    
-            var marker_50b2fe096b64302e68b0a0059e5780fb = L.marker(
-                [11.574096142649902, 104.90974712982629],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_4fced687f71e1465298dfc9c406041b8 = L.marker(
+                [11.566087543870886, 104.9176100863154],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_75bc138a1ec13c93e5dba3bead0b3d95 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_a32a4b2129c99815fae77cc647de6fd2 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_4fced687f71e1465298dfc9c406041b8.setIcon(icon_a32a4b2129c99815fae77cc647de6fd2);
         
     
-        var popup_e4f395c6722e9487ae94f5f46313d7a1 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_1f0a3f5dbcc1a31cd6623a4f0c7d6b89 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_0d68488f1f7b96d41311bd38b2976c5b = $(`<div id="html_0d68488f1f7b96d41311bd38b2976c5b" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $722,983.12<br>                 Price/m²: $4,355.32<br>                 Land Area: 166 m²<br>                 Distance: 0.32 km<br>                 ID: 8865846aa1fffff<br>                 <a href="/property-details/8865846aa1fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_e4f395c6722e9487ae94f5f46313d7a1.setContent(html_0d68488f1f7b96d41311bd38b2976c5b);
+                var html_ae0aeb246d5cf55ada9bda08b28abb08 = $(`<div id="html_ae0aeb246d5cf55ada9bda08b28abb08" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $403,355.26<br>                 Price/m²: $6,505.73<br>                 Land Area: 62 m²<br>                 Distance: 0.31 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_1f0a3f5dbcc1a31cd6623a4f0c7d6b89.setContent(html_ae0aeb246d5cf55ada9bda08b28abb08);
             
         
 
-        marker_50b2fe096b64302e68b0a0059e5780fb.bindPopup(popup_e4f395c6722e9487ae94f5f46313d7a1)
+        marker_4fced687f71e1465298dfc9c406041b8.bindPopup(popup_1f0a3f5dbcc1a31cd6623a4f0c7d6b89)
         ;
 
         
     
     
-            marker_50b2fe096b64302e68b0a0059e5780fb.bindTooltip(
+            marker_4fced687f71e1465298dfc9c406041b8.bindTooltip(
                 `<div>
                      Nearby Property #6
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_50b2fe096b64302e68b0a0059e5780fb.setIcon(icon_75bc138a1ec13c93e5dba3bead0b3d95);
-            
-    
-            var marker_91826878a0d2a91d06edffa912e6e25b = L.marker(
-                [11.568109624450576, 104.91034023418032],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_440faa5aff2d863d9cd673966d74b888 = L.marker(
+                [11.567502872009811, 104.91560261635315],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_858a3468fc9248067919a9d153d9205a = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_c9a5713400cadf6d33abc37e877fe80a = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_440faa5aff2d863d9cd673966d74b888.setIcon(icon_c9a5713400cadf6d33abc37e877fe80a);
         
     
-        var popup_b01c357e75e2f3faf09f03a4b1b92daa = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_298786ba8f0bc54cd9e23ffed8811a9a = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_85e2882685fea16af8b55f0cbb6f9742 = $(`<div id="html_85e2882685fea16af8b55f0cbb6f9742" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $172,539.76<br>                 Price/m²: $4,540.52<br>                 Land Area: 38 m²<br>                 Distance: 0.35 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_b01c357e75e2f3faf09f03a4b1b92daa.setContent(html_85e2882685fea16af8b55f0cbb6f9742);
+                var html_f5a59d0cf5693547c56026ee4d20c480 = $(`<div id="html_f5a59d0cf5693547c56026ee4d20c480" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $545,419.60<br>                 Price/m²: $4,622.20<br>                 Land Area: 118 m²<br>                 Distance: 0.32 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_298786ba8f0bc54cd9e23ffed8811a9a.setContent(html_f5a59d0cf5693547c56026ee4d20c480);
             
         
 
-        marker_91826878a0d2a91d06edffa912e6e25b.bindPopup(popup_b01c357e75e2f3faf09f03a4b1b92daa)
+        marker_440faa5aff2d863d9cd673966d74b888.bindPopup(popup_298786ba8f0bc54cd9e23ffed8811a9a)
         ;
 
         
     
     
-            marker_91826878a0d2a91d06edffa912e6e25b.bindTooltip(
+            marker_440faa5aff2d863d9cd673966d74b888.bindTooltip(
                 `<div>
                      Nearby Property #7
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_91826878a0d2a91d06edffa912e6e25b.setIcon(icon_858a3468fc9248067919a9d153d9205a);
-            
-    
-            var marker_2f018bf990de969bb6420e64164f2453 = L.marker(
-                [11.571557700506029, 104.90680931000097],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_d3c8763e79831eef9cd81668fcf6e82c = L.marker(
+                [11.571835435998691, 104.91678328346389],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_a73e0742d4b43e0498c098b195042432 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_6521ba3114b9b51f168a76247e66d849 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_d3c8763e79831eef9cd81668fcf6e82c.setIcon(icon_6521ba3114b9b51f168a76247e66d849);
         
     
-        var popup_374f0829dea5d1a225d8f02b96ff8412 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_34da2ab0d7c611fadda9880964dcf3cd = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_8061d16742e600f13cf6d8816127e3ca = $(`<div id="html_8061d16742e600f13cf6d8816127e3ca" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $214,741.52<br>                 Price/m²: $3,702.44<br>                 Land Area: 58 m²<br>                 Distance: 0.40 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_374f0829dea5d1a225d8f02b96ff8412.setContent(html_8061d16742e600f13cf6d8816127e3ca);
+                var html_95ad328f0776c1bb9fa3746f1d1f4c20 = $(`<div id="html_95ad328f0776c1bb9fa3746f1d1f4c20" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $445,596.36<br>                 Price/m²: $5,863.11<br>                 Land Area: 76 m²<br>                 Distance: 0.37 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_34da2ab0d7c611fadda9880964dcf3cd.setContent(html_95ad328f0776c1bb9fa3746f1d1f4c20);
             
         
 
-        marker_2f018bf990de969bb6420e64164f2453.bindPopup(popup_374f0829dea5d1a225d8f02b96ff8412)
+        marker_d3c8763e79831eef9cd81668fcf6e82c.bindPopup(popup_34da2ab0d7c611fadda9880964dcf3cd)
         ;
 
         
     
     
-            marker_2f018bf990de969bb6420e64164f2453.bindTooltip(
+            marker_d3c8763e79831eef9cd81668fcf6e82c.bindTooltip(
                 `<div>
                      Nearby Property #8
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_2f018bf990de969bb6420e64164f2453.setIcon(icon_a73e0742d4b43e0498c098b195042432);
-            
-    
-            var marker_ae60fa73aa9dce489268e3826476bb61 = L.marker(
-                [11.572583284724235, 104.91382289413664],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_7e9b101bf1633b9221eb9ef343a0ec75 = L.marker(
+                [11.567322445774314, 104.92127799798207],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_63e1bd3d27613e4eb02124d9207bfd98 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_263000b658d7f685d6e4151d64731241 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_7e9b101bf1633b9221eb9ef343a0ec75.setIcon(icon_263000b658d7f685d6e4151d64731241);
         
     
-        var popup_d4f5e1f5c7b181bf50db81da2f11f80c = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_db67d5cadbf35ba9fa6a6af6d60afef9 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_4a1361ade21e5d4749b0a931e3bd9686 = $(`<div id="html_4a1361ade21e5d4749b0a931e3bd9686" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $593,630.86<br>                 Price/m²: $5,030.77<br>                 Land Area: 118 m²<br>                 Distance: 0.40 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_d4f5e1f5c7b181bf50db81da2f11f80c.setContent(html_4a1361ade21e5d4749b0a931e3bd9686);
+                var html_6f3374c9b9a5e0331bbaedd0333d6ab0 = $(`<div id="html_6f3374c9b9a5e0331bbaedd0333d6ab0" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $1,558,616.14<br>                 Price/m²: $10,976.17<br>                 Land Area: 142 m²<br>                 Distance: 0.37 km<br>                 ID: 8865846ae7fffff<br>                 <a href="/property-details/8865846ae7fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_db67d5cadbf35ba9fa6a6af6d60afef9.setContent(html_6f3374c9b9a5e0331bbaedd0333d6ab0);
             
         
 
-        marker_ae60fa73aa9dce489268e3826476bb61.bindPopup(popup_d4f5e1f5c7b181bf50db81da2f11f80c)
+        marker_7e9b101bf1633b9221eb9ef343a0ec75.bindPopup(popup_db67d5cadbf35ba9fa6a6af6d60afef9)
         ;
 
         
     
     
-            marker_ae60fa73aa9dce489268e3826476bb61.bindTooltip(
+            marker_7e9b101bf1633b9221eb9ef343a0ec75.bindTooltip(
                 `<div>
                      Nearby Property #9
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_ae60fa73aa9dce489268e3826476bb61.setIcon(icon_63e1bd3d27613e4eb02124d9207bfd98);
-            
-    
-            var marker_de467b9f109a246a5bf0208dd45dfc3c = L.marker(
-                [11.56904651116946, 104.91384814148836],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_1c9238d1f70aaae694e243f946965ea2 = L.marker(
+                [11.56581240683831, 104.9199438783297],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_3d8a93071100895f060a3e5b43906cbf = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_c091b70e83db18718eea3181584f1415 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_1c9238d1f70aaae694e243f946965ea2.setIcon(icon_c091b70e83db18718eea3181584f1415);
         
     
-        var popup_98571ecdfbcf56a950b678098221e972 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_2ddef24c95fbafb49df080182a9fea65 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_a9b2b44610ca1f97aad6e81c9df75e70 = $(`<div id="html_a9b2b44610ca1f97aad6e81c9df75e70" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $453,320.80<br>                 Price/m²: $2,463.70<br>                 Land Area: 184 m²<br>                 Distance: 0.45 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_98571ecdfbcf56a950b678098221e972.setContent(html_a9b2b44610ca1f97aad6e81c9df75e70);
+                var html_07444572bea566454985c61949c5bfbe = $(`<div id="html_07444572bea566454985c61949c5bfbe" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $200,471.36<br>                 Price/m²: $6,264.73<br>                 Land Area: 32 m²<br>                 Distance: 0.39 km<br>                 ID: 8865846ae7fffff<br>                 <a href="/property-details/8865846ae7fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_2ddef24c95fbafb49df080182a9fea65.setContent(html_07444572bea566454985c61949c5bfbe);
             
         
 
-        marker_de467b9f109a246a5bf0208dd45dfc3c.bindPopup(popup_98571ecdfbcf56a950b678098221e972)
+        marker_1c9238d1f70aaae694e243f946965ea2.bindPopup(popup_2ddef24c95fbafb49df080182a9fea65)
         ;
 
         
     
     
-            marker_de467b9f109a246a5bf0208dd45dfc3c.bindTooltip(
+            marker_1c9238d1f70aaae694e243f946965ea2.bindTooltip(
                 `<div>
                      Nearby Property #10
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_de467b9f109a246a5bf0208dd45dfc3c.setIcon(icon_3d8a93071100895f060a3e5b43906cbf);
-            
-    
-            var marker_91d8aecde4887bfae577a08d7290202e = L.marker(
-                [11.56987425835674, 104.90641509390323],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_243a9aa52226ec273f70aa2d99d50409 = L.marker(
+                [11.57230074872153, 104.91889554044158],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_a5b4cece1018b531edb469caef2f2de7 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_a630c74995d17ae03509ef1661723353 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_243a9aa52226ec273f70aa2d99d50409.setIcon(icon_a630c74995d17ae03509ef1661723353);
         
     
-        var popup_8dfa91a0e8beda2bfe2a54801fd42a42 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_fa4f6fb706bf95d1f8a04845de0dce59 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_3d6f4ce53938094f87099404b74130a6 = $(`<div id="html_3d6f4ce53938094f87099404b74130a6" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $373,075.20<br>                 Price/m²: $3,886.20<br>                 Land Area: 96 m²<br>                 Distance: 0.46 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_8dfa91a0e8beda2bfe2a54801fd42a42.setContent(html_3d6f4ce53938094f87099404b74130a6);
+                var html_8e430033bdf6487886fcbeaccfff0d46 = $(`<div id="html_8e430033bdf6487886fcbeaccfff0d46" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $1,777,735.08<br>                 Price/m²: $8,978.46<br>                 Land Area: 198 m²<br>                 Distance: 0.39 km<br>                 ID: 8865846aadfffff<br>                 <a href="/property-details/8865846aadfffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_fa4f6fb706bf95d1f8a04845de0dce59.setContent(html_8e430033bdf6487886fcbeaccfff0d46);
             
         
 
-        marker_91d8aecde4887bfae577a08d7290202e.bindPopup(popup_8dfa91a0e8beda2bfe2a54801fd42a42)
+        marker_243a9aa52226ec273f70aa2d99d50409.bindPopup(popup_fa4f6fb706bf95d1f8a04845de0dce59)
         ;
 
         
     
     
-            marker_91d8aecde4887bfae577a08d7290202e.bindTooltip(
+            marker_243a9aa52226ec273f70aa2d99d50409.bindTooltip(
                 `<div>
                      Nearby Property #11
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_91d8aecde4887bfae577a08d7290202e.setIcon(icon_a5b4cece1018b531edb469caef2f2de7);
-            
-    
-            var marker_412790809245546467c953b45cb553fe = L.marker(
-                [11.5749423232906, 104.91274758212305],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_2e56291066c28686924dd956ffc508f5 = L.marker(
+                [11.571406611771495, 104.92084994911367],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_135f60fdbf36f438a3edf6ea05e6286a = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_a6ce7a0cb27340b1fd5ca555356d50fa = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_2e56291066c28686924dd956ffc508f5.setIcon(icon_a6ce7a0cb27340b1fd5ca555356d50fa);
         
     
-        var popup_11c4387e92a8f13a65b663455895605a = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_f719236086819a07358bee5b1205bda3 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_5bf421d073ad24eb375ca19da7436774 = $(`<div id="html_5bf421d073ad24eb375ca19da7436774" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $801,173.10<br>                 Price/m²: $4,402.05<br>                 Land Area: 182 m²<br>                 Distance: 0.48 km<br>                 ID: 8865846aa1fffff<br>                 <a href="/property-details/8865846aa1fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_11c4387e92a8f13a65b663455895605a.setContent(html_5bf421d073ad24eb375ca19da7436774);
+                var html_f840b0862b1fe57767eeaf5cfc666feb = $(`<div id="html_f840b0862b1fe57767eeaf5cfc666feb" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $671,969.88<br>                 Price/m²: $5,694.66<br>                 Land Area: 118 m²<br>                 Distance: 0.40 km<br>                 ID: 8865846aadfffff<br>                 <a href="/property-details/8865846aadfffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_f719236086819a07358bee5b1205bda3.setContent(html_f840b0862b1fe57767eeaf5cfc666feb);
             
         
 
-        marker_412790809245546467c953b45cb553fe.bindPopup(popup_11c4387e92a8f13a65b663455895605a)
+        marker_2e56291066c28686924dd956ffc508f5.bindPopup(popup_f719236086819a07358bee5b1205bda3)
         ;
 
         
     
     
-            marker_412790809245546467c953b45cb553fe.bindTooltip(
+            marker_2e56291066c28686924dd956ffc508f5.bindTooltip(
                 `<div>
                      Nearby Property #12
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_412790809245546467c953b45cb553fe.setIcon(icon_135f60fdbf36f438a3edf6ea05e6286a);
-            
-    
-            var marker_989811fcdff1ef2a43999f26fdfac588 = L.marker(
-                [11.567114441677209, 104.91171132253804],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_d9e7c07119ef051b8ffe7230f29eda9c = L.marker(
+                [11.568780781927227, 104.921999501153],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_185330f10d9a915a9c60bf9f9f54ea42 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_fd408624b1908884929fd61a1f85645f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_d9e7c07119ef051b8ffe7230f29eda9c.setIcon(icon_fd408624b1908884929fd61a1f85645f);
         
     
-        var popup_eada30e9f94264da949e49127bb91870 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_8d84c861c3d180743e9a183de35ccee2 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_4a798a37610f16f8409adf2c6ce1fb24 = $(`<div id="html_4a798a37610f16f8409adf2c6ce1fb24" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $475,532.40<br>                 Price/m²: $5,661.10<br>                 Land Area: 84 m²<br>                 Distance: 0.49 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_eada30e9f94264da949e49127bb91870.setContent(html_4a798a37610f16f8409adf2c6ce1fb24);
+                var html_10548e9e55e488ecfa724bd74467048c = $(`<div id="html_10548e9e55e488ecfa724bd74467048c" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $1,705,369.14<br>                 Price/m²: $10,526.97<br>                 Land Area: 162 m²<br>                 Distance: 0.41 km<br>                 ID: 8865846ae7fffff<br>                 <a href="/property-details/8865846ae7fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_8d84c861c3d180743e9a183de35ccee2.setContent(html_10548e9e55e488ecfa724bd74467048c);
             
         
 
-        marker_989811fcdff1ef2a43999f26fdfac588.bindPopup(popup_eada30e9f94264da949e49127bb91870)
+        marker_d9e7c07119ef051b8ffe7230f29eda9c.bindPopup(popup_8d84c861c3d180743e9a183de35ccee2)
         ;
 
         
     
     
-            marker_989811fcdff1ef2a43999f26fdfac588.bindTooltip(
+            marker_d9e7c07119ef051b8ffe7230f29eda9c.bindTooltip(
                 `<div>
                      Nearby Property #13
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_989811fcdff1ef2a43999f26fdfac588.setIcon(icon_185330f10d9a915a9c60bf9f9f54ea42);
-            
-    
-            var marker_1e2e1f303958aa180ab18b7f3ceef5c5 = L.marker(
-                [11.568043432184188, 104.90741116833208],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_53604047d153efffa9ab5526804bae33 = L.marker(
+                [11.57167205050308, 104.9153342780474],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_50264b05dc798a5bfa09c64a51fb6bb4 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_03192c3042706390dfe138e23ca1397a = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_53604047d153efffa9ab5526804bae33.setIcon(icon_03192c3042706390dfe138e23ca1397a);
         
     
-        var popup_37df81a97c72fa1a404440cb0ed86db0 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_83a587d3d0974104b31498b91f9e5016 = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_fbf09a6e68f776429aac2f752c4fddf7 = $(`<div id="html_fbf09a6e68f776429aac2f752c4fddf7" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $723,640.72<br>                 Price/m²: $3,932.83<br>                 Land Area: 184 m²<br>                 Distance: 0.49 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_37df81a97c72fa1a404440cb0ed86db0.setContent(html_fbf09a6e68f776429aac2f752c4fddf7);
+                var html_8c41c44e633a0521dd1897603eced030 = $(`<div id="html_8c41c44e633a0521dd1897603eced030" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $1,347,184.56<br>                 Price/m²: $7,742.44<br>                 Land Area: 174 m²<br>                 Distance: 0.45 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_83a587d3d0974104b31498b91f9e5016.setContent(html_8c41c44e633a0521dd1897603eced030);
             
         
 
-        marker_1e2e1f303958aa180ab18b7f3ceef5c5.bindPopup(popup_37df81a97c72fa1a404440cb0ed86db0)
+        marker_53604047d153efffa9ab5526804bae33.bindPopup(popup_83a587d3d0974104b31498b91f9e5016)
         ;
 
         
     
     
-            marker_1e2e1f303958aa180ab18b7f3ceef5c5.bindTooltip(
+            marker_53604047d153efffa9ab5526804bae33.bindTooltip(
                 `<div>
                      Nearby Property #14
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_1e2e1f303958aa180ab18b7f3ceef5c5.setIcon(icon_50264b05dc798a5bfa09c64a51fb6bb4);
-            
-    
-            var marker_c799192076034c9393064dff63e0a4ed = L.marker(
-                [11.56689710482883, 104.90968123651564],
-                {
-}
-            ).addTo(map_671fddd765b169acb7eee89806730ae0);
+            var marker_883425842aa61bf82273feb8fda138a3 = L.marker(
+                [11.565722563347263, 104.91560281022043],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
         
     
-            var icon_f9d370388fc62c74ed9916f0dc82ecde = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "home",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
+            var icon_badd6d95fd80b542a7c0896abba8db32 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
             );
+            marker_883425842aa61bf82273feb8fda138a3.setIcon(icon_badd6d95fd80b542a7c0896abba8db32);
         
     
-        var popup_c53d01fb338bbef5a868879f282eac12 = L.popup({
-  "maxWidth": "100%",
-});
+        var popup_737689ccae79591f3816be59ecf2791f = L.popup({"maxWidth": "100%"});
 
         
             
-                var html_e25fb7effd5c11aeb37a5ecc314cecdd = $(`<div id="html_e25fb7effd5c11aeb37a5ecc314cecdd" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $818,649.12<br>                 Price/m²: $4,449.18<br>                 Land Area: 184 m²<br>                 Distance: 0.50 km<br>                 ID: 8865846aabfffff<br>                 <a href="/property-details/8865846aabfffff" target="_blank">More Details</a>             </div>`)[0];
-                popup_c53d01fb338bbef5a868879f282eac12.setContent(html_e25fb7effd5c11aeb37a5ecc314cecdd);
+                var html_2ef0b1eb70d1bf2051c33c60c442af8c = $(`<div id="html_2ef0b1eb70d1bf2051c33c60c442af8c" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $1,097,191.58<br>                 Price/m²: $4,854.83<br>                 Land Area: 226 m²<br>                 Distance: 0.45 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_737689ccae79591f3816be59ecf2791f.setContent(html_2ef0b1eb70d1bf2051c33c60c442af8c);
             
         
 
-        marker_c799192076034c9393064dff63e0a4ed.bindPopup(popup_c53d01fb338bbef5a868879f282eac12)
+        marker_883425842aa61bf82273feb8fda138a3.bindPopup(popup_737689ccae79591f3816be59ecf2791f)
         ;
 
         
     
     
-            marker_c799192076034c9393064dff63e0a4ed.bindTooltip(
+            marker_883425842aa61bf82273feb8fda138a3.bindTooltip(
                 `<div>
                      Nearby Property #15
                  </div>`,
-                {
-  "sticky": true,
-}
+                {"sticky": true}
             );
         
     
-                marker_c799192076034c9393064dff63e0a4ed.setIcon(icon_f9d370388fc62c74ed9916f0dc82ecde);
+            var marker_92e3d1b04e8d96d40b9ceba43e23d358 = L.marker(
+                [11.56904651116946, 104.91384814148836],
+                {}
+            ).addTo(map_146430bca3d6e476363827e0f1a11aad);
+        
+    
+            var icon_1d287e75a9f36fc1fba0fc2e8a3858f2 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
+            );
+            marker_92e3d1b04e8d96d40b9ceba43e23d358.setIcon(icon_1d287e75a9f36fc1fba0fc2e8a3858f2);
+        
+    
+        var popup_bf89500992f901b91908d9b7777af2f7 = L.popup({"maxWidth": "100%"});
+
+        
             
+                var html_cb70a42307fadfe174a2314343cd6e4a = $(`<div id="html_cb70a42307fadfe174a2314343cd6e4a" style="width: 100.0%; height: 100.0%;">                 <b>Nearby Property</b><br>                 Price: $453,320.80<br>                 Price/m²: $2,463.70<br>                 Land Area: 184 m²<br>                 Distance: 0.48 km<br>                 ID: 8865846aa9fffff<br>                 <a href="/property-details/8865846aa9fffff" target="_blank">More Details</a>             </div>`)[0];
+                popup_bf89500992f901b91908d9b7777af2f7.setContent(html_cb70a42307fadfe174a2314343cd6e4a);
+            
+        
+
+        marker_92e3d1b04e8d96d40b9ceba43e23d358.bindPopup(popup_bf89500992f901b91908d9b7777af2f7)
+        ;
+
+        
+    
+    
+            marker_92e3d1b04e8d96d40b9ceba43e23d358.bindTooltip(
+                `<div>
+                     Nearby Property #16
+                 </div>`,
+                {"sticky": true}
+            );
+        
 </script>
 </html>
