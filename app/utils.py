@@ -323,7 +323,7 @@ def create_folium_map():
 
 
 
-def create_folium_map_for_detial():
+def create_folium_map_for_detial(train_df_param):
     from .routes import get_prediction_data, get_nearby_properties_data
 
     prediction = get_prediction_data()
